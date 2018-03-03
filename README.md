@@ -7,7 +7,7 @@ Validating handlebars helpers syntax using handlebars AST tokens.
 Consider you have the following helpers:
 ```hbs
 {{helper1 foobar='goo'}}
-{{helper2 'zoo'}}
+{{helper2 'zoo' 'goo'}}
 ```
 
 The validation configuration would be:
