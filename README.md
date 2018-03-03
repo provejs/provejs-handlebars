@@ -2,7 +2,7 @@
 
 > Under active development.
 
-Validating handlebars helpers syntax using handlebars AST tokens.
+Validating handlebars helpers syntax using handlebars AST tokens for purpose of inclusion in handlebars linters.
 
 Consider you have the following helpers:
 ```hbs
