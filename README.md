@@ -13,27 +13,29 @@ Consider you have the following helpers:
 The validation configuration would be:
 ```js
 var config = {
-  helper1: {
-    hash: {
-      foobar: {
-        formats: ['string', 'number', 'variable'],
-        value: function(value) {
-          return true;
+  helpers: {
+    helper1: {
+      hash: {
+        foobar: {
+          formats: ['string', 'number', 'variable'],
+          value: function(value) {
+            return true;
+          }
         }
       }
+    },
+    helper2: {
+      params: {
+        0: {
+          name: 'param1', 
+          formats: ['string', 'number']
+          },
+        1: {
+          name: 'param2',
+          formats: ['number']
+        }
+      ]
     }
-  },
-  helper2: {
-    params: {
-      0: {
-        name: 'param1', 
-        formats: ['string', 'number']
-        },
-      1: {
-        name: 'param2',
-        formats: ['number']
-      }
-    ]
   }
 };
 ```
