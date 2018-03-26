@@ -41,7 +41,7 @@ var config = {
 ```
 You would invoke the module like:
 ```js
-var html = '...';
+var html = '{{helper1 foobar='goo'}}\n{{helper2 'zoo' 'goo'}}';
 var Handlebars = require('handlebars');
 var Prove = require('provejs-handlebars');
 var ast = Handlebars.parse(html);
