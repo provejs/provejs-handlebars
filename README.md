@@ -41,9 +41,9 @@ var config = {
 ```
 You would invoke the module like:
 ```js
+var html = '...';
 var Handlebars = require('handlebars');
 var Prove = require('provejs-handlebars');
-var html = '...';
 var ast = Handlebars.parse(html);
 var errors = Prove(ast, config);
 ```
