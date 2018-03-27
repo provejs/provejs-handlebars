@@ -127,5 +127,24 @@ describe('Linting helper positional parameters', function () {
 		var actual = Linter(config, ast);
 		Assert.equal(actual.length, 1);
 	});
+	it('block helper positional parameter with wrong value format should generate error', function () {
+		var html = "{{#helper1 42}}{{/helper1}}";
+		var config = {
+			helpers: {
+				helper1: {
+					params: [{
+						name: 'param1',
+						type: 'positional',
+						formats: ['string'],
+						position: 0,
+						required: true
+					}]
+				}
+			}
+		};
+		var ast = Handlebars.parse(html);
+		var actual = Linter(config, ast);
+		Assert.equal(actual.length, 1);
+	});
 	it('extra helper positional parameter should generate warning');
 });

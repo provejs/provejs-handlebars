@@ -178,8 +178,8 @@ function filterHelpersNodes(nodes, rules) {
 	var helperNames = _.keys(rules.helpers);
 
 	var helpers = nodes.filter(function(node) {
-		//log('node:', node);
-		if (node.type !== 'MustacheStatement') return false;
+		// log('node:', node);
+		if (node.type !== 'MustacheStatement' && node.type !== 'BlockStatement') return false;
 		if (node.params.length > 0) return true;
 		if (node.hash !== undefined) return true;
 		if (_.includes(helperNames, node.path.original)) return true; // helper with no hash or params
@@ -187,7 +187,7 @@ function filterHelpersNodes(nodes, rules) {
 	});
 
 	helpers = helpers.map(pruneHelpers);
-	//log('* helpers:'.gray, helpers);
+	log('* helpers:'.gray, helpers);
 	return helpers;
 }
 
