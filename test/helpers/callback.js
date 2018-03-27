@@ -11,7 +11,7 @@ function callback(positionalParms, namedParams, loc) {
 			message: 'Your custom linter error message here.',
 			start: loc.start,
 			end: loc.end
-		}
+		};
 	}
 }
 
