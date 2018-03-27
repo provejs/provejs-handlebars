@@ -2,7 +2,7 @@
 
 var Assert = require('assert');
 var Handlebars = require('handlebars');
-var Linter = require('../index').linter;
+var Linter = require('../../index').linter;
 
 describe('Linting helper named parameters', function () {
 	it('empty html should not generate any errors', function () {
