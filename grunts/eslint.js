@@ -14,16 +14,7 @@ module.exports = function(grunt) {
 			src: [
 				'*.js',
 				'grunts/**/*.js',
-				'controllers/**/*.js',
-				'config/**/*.js',
-				'dbs/**/*.js',
-				'logger/**/*.js',
-				'models/**/*.js',
-				'hbs/**/*.js',
-				'middlewares/**/*.js',
-				'views/helpers/**/*.js',
-				'validators/**/*.js',
-				'!models/dox/fixes/logic.js'
+				'test/**/*.js'
 			]
 		}
 	});
