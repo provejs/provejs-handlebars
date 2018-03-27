@@ -2,7 +2,7 @@
 
 var Assert = require('assert');
 var Handlebars = require('handlebars');
-var Linter = require('../index').linter;
+var Linter = require('../../index').linter;
 
 function callback(positionalParms, namedParams, loc) {
 	if (positionalParms.length !== 7) {
