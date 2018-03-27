@@ -136,29 +136,41 @@ function validateRuleParamPositional(astHelper, rule) {
 	return error;
 }
 
+function validateHelperCallback(astHelper, callback) {
+	var positionalParams = [];
+	var namedParams = [];
+	return callback(positionalParams, namedParams);
+}
+
 function validateHelper(astHelper, ruleHelper) {
 	var error;
+	var params = ruleHelper.params;
 
 	log('validateHelper():'.magenta);
 	log('* astHelper:'.gray, astHelper);
 	log('* ruleHelper:'.gray, ruleHelper);
 
-	// loop rule params
-	ruleHelper.params.forEach(function(rule) {
-		var type = rule.type.toLowerCase();
-		if (type === 'named') {
-			error = validateRuleParamNamed(astHelper, rule);
-		} else if (type === 'positional') {
-			error = validateRuleParamPositional(astHelper, rule);
-		} else {
-			error = {
-				severity: 'error',
-				message: 'Invalid param type in linter configuration.',
-				start: astHelper.loc.start,
-				end: astHelper.loc.end
-			};
-		}
-	});
+	if (_.isArray(params)) {
+		// loop rule params
+		params.forEach(function(rule) {
+			var type = rule.type.toLowerCase();
+			if (type === 'named') {
+				error = validateRuleParamNamed(astHelper, rule);
+			} else if (type === 'positional') {
+				error = validateRuleParamPositional(astHelper, rule);
+			} else {
+				error = {
+					severity: 'error',
+					message: 'Invalid param type in linter configuration.',
+					start: astHelper.loc.start,
+					end: astHelper.loc.end
+				};
+			}
+		});
+	} else if (_.isFunction(params)) {
+		error = validateHelperCallback(astHelper, params);
+	}
+
 	return error;
 }
 
