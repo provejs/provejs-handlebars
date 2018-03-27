@@ -109,8 +109,8 @@ The validation configuration would be:
 var config = {
   helpers: {
     ifCompound: {
-      params: function(p1, p2, p3, p4, p5, p6, p7) {
-
+      params: function(positionalParams, namedParms) {
+        // positionalParams and namedParams are an array of params
       }
     }
   }
