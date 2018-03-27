@@ -20,7 +20,7 @@ var config = {
     helper1: {
       params: [{
         name: 'foobar',
-        named: true,
+        type: 'named',
         formats: ['string', 'number', 'variable'],
         required: true
       }]
@@ -28,8 +28,9 @@ var config = {
     helper2: {
        params: [{
         name: 'param1',
-        postional: true,
+        type: 'postional',
         formats: ['string', 'number'],
+        position: 0,
         required: true
       },
       {

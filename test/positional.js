@@ -12,8 +12,9 @@ describe('Linting helper positional parameters', function () {
 				helper1: {
 					params: [{
 						name: 'template',
-						hashed: false,
+						type: 'positional',
 						formats: ['string', 'variable'],
+						position: 0,
 						required: true
 					}]
 				}
@@ -24,15 +25,16 @@ describe('Linting helper positional parameters', function () {
 		var expected = [];
 		Assert.deepEqual(actual, expected);
 	});
-	it.only('correct helper should not generate any errors', function () {
+	it('correct helper should not generate any errors', function () {
 		var html = "{{helper1 value1}}";
 		var config = {
 			helpers: {
 				helper1: {
 					params: [{
 						name: 'param1',
-						hashed: false,
+						type: 'positional',
 						formats: ['string', 'variable'],
+						position: 0,
 						required: true
 					}]
 				}
@@ -42,5 +44,68 @@ describe('Linting helper positional parameters', function () {
 		var actual = Linter(config, ast);
 		var expected = [];
 		Assert.deepEqual(actual, expected);
+	});
+	it('missing required helper positional parameter should generate error', function () {
+		var html = "{{helper1}}";
+		var config = {
+			helpers: {
+				helper1: {
+					params: [{
+						name: 'param1',
+						type: 'positional',
+						formats: ['string', 'variable'],
+						position: 0,
+						required: true
+					}]
+				}
+			}
+		};
+		var ast = Handlebars.parse(html);
+		var actual = Linter(config, ast);
+		Assert.equal(actual.length, 1);
+	});
+	it('missing optional helper positional parameter should NOT generate error', function () {
+		var html = "{{helper1}}";
+		var config = {
+			helpers: {
+				helper1: {
+					params: [{
+						name: 'param1',
+						type: 'positional',
+						formats: ['string', 'variable'],
+						position: 0,
+						required: false
+					}]
+				}
+			}
+		};
+		var ast = Handlebars.parse(html);
+		var actual = Linter(config, ast);
+		Assert.equal(actual.length, 0);
+	});
+	it.only('missing second optional helper positional parameter should NOT generate error', function () {
+		var html = "{{helper1 value1}}";
+		var config = {
+			helpers: {
+				helper1: {
+					params: [{
+						name: 'param1',
+						type: 'positional',
+						formats: ['string', 'variable'],
+						position: 0,
+						required: true
+					}, {
+						name: 'param2',
+						type: 'positional',
+						formats: ['string', 'variable'],
+						position: 1,
+						required: false
+					}]
+				}
+			}
+		};
+		var ast = Handlebars.parse(html);
+		var actual = Linter(config, ast);
+		Assert.equal(actual.length, 0);
 	});
 });

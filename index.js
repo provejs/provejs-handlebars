@@ -97,10 +97,11 @@ function validateRuleParamNamed(astHelper, rule) {
 	return error;
 }
 
-function validateRuleParamPositional(astHelper, rule, index) {
+function validateRuleParamPositional(astHelper, rule) {
 
 	var loc = astHelper.loc;
 	var params = astHelper.params || [];
+	var index = rule.position;
 	var param = params[index];
 	var missingRequired = rule.required && !param;
 	var missingOptional = !rule.required && !param;
@@ -143,11 +144,11 @@ function validateHelper(astHelper, ruleHelper) {
 	log('* ruleHelper:'.gray, ruleHelper);
 
 	// loop rule params
-	ruleHelper.params.forEach(function(rule, position) {
-		if (rule.named) {
+	ruleHelper.params.forEach(function(rule) {
+		if (rule.type === 'named') {
 			error = validateRuleParamNamed(astHelper, rule);
-		} else if (rule.positional) {
-			error = validateRuleParamPositional(astHelper, rule, position);
+		} else if (rule.type === 'positional') {
+			error = validateRuleParamPositional(astHelper, rule);
 		}
 	});
 	return error;

@@ -12,7 +12,7 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: [{
 						name: 'template',
-						hashed: true,
+						type: 'named',
 						formats: ['string', 'variable'],
 						required: true
 					}]
@@ -31,7 +31,7 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: [{
 						name: 'template',
-						hashed: true,
+						type: 'named',
 						formats: ['string', 'variable'],
 						required: true
 					}]
@@ -50,7 +50,7 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: [{
 						name: 'template',
-						hashed: true,
+						type: 'named',
 						formats: ['string', 'variable'],
 						required: true
 					}]
@@ -68,7 +68,7 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: [{
 						name: 'template',
-						hashed: true,
+						type: 'named',
 						formats: ['string', 'variable'],
 						required: false
 					}]
@@ -86,12 +86,12 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: [{
 						name: 'param1',
-						hashed: true,
+						type: 'named',
 						formats: ['string', 'variable'],
 						required: true
 					}, {
 						name: 'param2',
-						hashed: true,
+						type: 'named',
 						formats: ['string', 'variable'],
 						required: false
 					}]
@@ -109,7 +109,7 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: [{
 						name: 'param1',
-						hashed: true,
+						type: 'named',
 						formats: ['string'],
 						required: true
 					}]
