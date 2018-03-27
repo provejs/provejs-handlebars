@@ -5,8 +5,8 @@ var _ = require('lodash');
 
 function log(val1, val2) {
 	var debug = false;
-	if (!debug) {
-	} else if (val2) {
+	if (!debug) return;
+	if (val2) {
 		console.log(val1, val2);
 	} else {
 		console.log(val1);
@@ -59,20 +59,20 @@ function popMsg(str, helperName, hashName) {
 
 function validateRuleParam(astHelper, rule) {
 
+	var loc = (astHelper.hash)? astHelper.hash.loc : astHelper.loc;
 	var hash = astHelper.hash || {};
 	var pairs = hash.pairs || [];
 	var pair = _.find(pairs, {key: rule.name});
-	var missing = rule.required && !pair;
+	var missingRequired = rule.required && !pair;
+	var missingOptional = !rule.required && !pair;
 	var message;
 	var error;
-
-	var loc = (astHelper.hash)? astHelper.hash.loc : astHelper.loc;
 
 	log('validateRuleParam()'.magenta);
 	log('* rule:'.gray, rule);
 	log('* pair'.gray, pair);
 
-	if (missing) {
+	if (missingRequired) {
 		message = popMsg('The `@helperName` helper requires a named parameter of `@hashName`, but non was found.', astHelper.name, rule.name);
 		error = {
 			severity: 'error',
@@ -80,6 +80,8 @@ function validateRuleParam(astHelper, rule) {
 			start: loc.start,
 			end: loc.end
 		};
+	} else if (missingOptional) {
+		// do nothing
 	} else if (incorrectHashValueFormat(rule.formats, pair.value.type)) {
 		message = popMsg('The `@helperName` helper named parameter `@hashName` has an invalid value.', astHelper.name, rule.name);
 		error = {

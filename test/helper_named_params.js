@@ -4,7 +4,7 @@ var Assert = require('assert');
 var Handlebars = require('handlebars');
 var Linter = require('../index').linter;
 
-describe('Linting', function () {
+describe('Linting helper named parameters', function () {
 	it('empty html should not generate any errors', function () {
 		var html = '';
 		var config = {
@@ -43,7 +43,7 @@ describe('Linting', function () {
 		var expected = [];
 		Assert.deepEqual(actual, expected);
 	});
-	it('missing helper named parameters', function () {
+	it('missing required helper named parameter should generate error', function () {
 		var html = "{{helper1}}";
 		var config = {
 			helpers: {
@@ -59,7 +59,24 @@ describe('Linting', function () {
 		};
 		var ast = Handlebars.parse(html);
 		var actual = Linter(config, ast);
-		// console.log('actual:', actual);
 		Assert.notEqual(actual.length, 0);
+	});
+	it('missing optional helper named parameter should NOT generate error', function () {
+		var html = "{{helper1}}";
+		var config = {
+			helpers: {
+				helper1: {
+					params: [{
+						name: 'template',
+						hashed: true,
+						formats: ['string', 'variable'],
+						required: false
+					}]
+				}
+			}
+		};
+		var ast = Handlebars.parse(html);
+		var actual = Linter(config, ast);
+		Assert.equal(actual.length, 0);
 	});
 });
