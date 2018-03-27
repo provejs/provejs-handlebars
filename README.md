@@ -10,7 +10,7 @@ Consider you have the following helpers:
 {{helper2 'zoo' 'goo'}}
 ```
 
-The validation configuration would be:
+OPTION 1: The validation configuration would be:
 ```js
 var config = {
   helpers: {
@@ -27,7 +27,7 @@ var config = {
     helper2: {
       params: {
         0: {
-          name: 'param1', 
+          name: 'param1',
           formats: ['string', 'number']
           },
         1: {
@@ -35,6 +35,36 @@ var config = {
           formats: ['number']
         }
       ]
+    }
+  }
+};
+```
+
+OPTION 2: The validation configuration would be:
+```js
+var config = {
+  helpers: {
+    helper1: {
+      params: [{
+          name: 'foobar',
+          hashed: true,
+          formats: ['string', 'number', 'variable'],
+          required: true
+        }]
+    },
+    helper2: {
+       params: [{
+          name: 'param1',
+          hashed: false,
+          formats: ['string', 'number'],
+          required: true
+        },
+        {
+          name: 'param2',
+          hashed: false,
+          formats: ['number'],
+          required: true
+        }]
     }
   }
 };
