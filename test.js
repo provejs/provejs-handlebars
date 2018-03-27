@@ -5,30 +5,18 @@ var Linter = require('./index').linter;
 
 var config = {
 	helpers: {
-		helper1: {
+		nest: {
 			hash: {
-				foobar: {
-					formats: ['string', 'number', 'variable'],
-					value: function (value) {
-						return true;
-					}
-				}
-			}
-		},
-		helper2: {
-			params: {
-				0: {
-					name: 'param1',
-					formats: ['string', 'number']
-				},
-				1: {
-					name: 'param2',
-					formats: ['number']
+				template: {
+					required: true,
+					formats: ['StringLiteral', 'NumberLiteral', 'PathExpression']
+					//value: function (value) {return true;}
 				}
 			}
 		}
 	}
 };
-var html = "{{field1}}{{helper1 foobar='goo'}}\n{{helper2 'zoo' 'goo'}}";
+// var html = "{{field1}}{{helper1 foobar='goo'}}\n{{helper2 'zoo' 'goo'}}";
+var html = "{{nest template=foobar}}";
 var ast = Handlebars.parse(html);
 Linter(config, ast);
