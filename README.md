@@ -9,6 +9,10 @@ Consider you have the following helpers:
 {{helper1 foobar='goo'}}
 {{helper2 'zoo' 'goo'}}
 ```
+Helper params are either:
+- named: the helper is using named parameters.
+- positional: the helper is using ordered position of parameters.
+
 The validation configuration would be:
 ```js
 var config = {

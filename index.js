@@ -143,11 +143,11 @@ function validateHelper(astHelper, ruleHelper) {
 	log('* ruleHelper:'.gray, ruleHelper);
 
 	// loop rule params
-	ruleHelper.params.forEach(function(rule, index) {
+	ruleHelper.params.forEach(function(rule, position) {
 		if (rule.named) {
 			error = validateRuleParamNamed(astHelper, rule);
-		} else {
-			error = validateRuleParamPositional(astHelper, rule, index);
+		} else if (rule.positional) {
+			error = validateRuleParamPositional(astHelper, rule, position);
 		}
 	});
 	return error;
