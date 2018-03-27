@@ -2,7 +2,7 @@
 
 > Under active development.
 
-Validating handlebars helpers syntax using handlebars AST tokens for purpose of inclusion in handlebars linters.
+Validating handlebars helpers syntax using handlebars AST tokens for purpose of inclusion in custom handlebars linters.
 
 Consider you have the following helpers:
 ```hbs
@@ -47,7 +47,7 @@ var ast = Handlebars.parse(html);
 var errors = Prove(ast, config);
 ```
 
-The output will be something like:
+The error output will be something like:
 ```js
 [ { severity: 'error',
     message: 'The `nest` helper requires a named parameter of `template`, but non was found.',

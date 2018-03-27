@@ -3,22 +3,22 @@
 require('colors');
 var _ = require('lodash');
 
-function printNode(node) {
-	var name = node.path.original;
-	var params = node.params;
-	var hash = node.hash;
-	// console.log('node:'.cyan, node);
-	console.log();
-	console.log('name:'.magenta, name);
-	if (params.length) console.log('params:'.cyan, JSON.stringify(params));
-	if (hash) console.log('hash:'.cyan, JSON.stringify(hash));
-};
+// function printNode(node) {
+// 	var name = node.path.original;
+// 	var params = node.params;
+// 	var hash = node.hash;
+// 	// console.log('node:'.cyan, node);
+// 	console.log();
+// 	console.log('name:'.magenta, name);
+// 	if (params.length) console.log('params:'.cyan, JSON.stringify(params));
+// 	if (hash) console.log('hash:'.cyan, JSON.stringify(hash));
+// };
 
-function printHelper(helper) {
-	console.log();
-	console.log('helper.name:'.magenta, helper.name);
-	console.log('helpler.params:'.cyan, helper.params);
-};
+// function printHelper(helper) {
+// 	console.log();
+// 	console.log('helper.name:'.magenta, helper.name);
+// 	console.log('helpler.params:'.cyan, helper.params);
+// };
 
 function isHelper(node) {
 	if (node.params.length > 0) return true;
@@ -50,12 +50,12 @@ function pruneHelpers(node) {
 
 function incorrectHashValueFormat(allowed2, actual2) {
 	var actual = actual2
-	.replace('PathExpression', 'variable')
-	.replace('StringLiteral', 'string')
-	.replace('NumberLiteral', 'number')
-	.toLowerCase();
+		.replace('PathExpression', 'variable')
+		.replace('StringLiteral', 'string')
+		.replace('NumberLiteral', 'number')
+		.toLowerCase();
 
-	var allowed = allowed2.map(function(str){
+	var allowed = allowed2.map(function(str) {
 		return str.toLowerCase();
 	});
 
