@@ -97,3 +97,22 @@ var config = {
   }
 };
 ```
+
+# Example: Custom Parameters Helper
+
+Consider you have helper that does compound logic:
+```hbs
+{{#ifCompund param1 '=' 42 'AND' param2 '!=' 42}}{{else}}{{/ifCompound}}
+```
+The validation configuration would be:
+```js
+var config = {
+  helpers: {
+    ifCompound: {
+      params: function(p1, p2, p3, p4, p5, p6, p7) {
+
+      }
+    }
+  }
+};
+```
