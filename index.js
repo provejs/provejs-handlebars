@@ -3,32 +3,16 @@
 require('colors');
 var _ = require('lodash');
 
-// function printNode(node) {
-// 	var name = node.path.original;
-// 	var params = node.params;
-// 	var hash = node.hash;
-// 	// console.log('node:'.cyan, node);
-// 	console.log();
-// 	console.log('name:'.magenta, name);
-// 	if (params.length) console.log('params:'.cyan, JSON.stringify(params));
-// 	if (hash) console.log('hash:'.cyan, JSON.stringify(hash));
-// };
-
-// function printHelper(helper) {
-// 	console.log();
-// 	console.log('helper.name:'.magenta, helper.name);
-// 	console.log('helpler.params:'.cyan, helper.params);
-// };
-
-function isHelper(node) {
-	if (node.params.length > 0) return true;
-	if (node.hash !== undefined) return true;
-	return false;
+function log(val1, val2) {
+	var debug = false;
+	if (!debug) {
+	} else if (val2) {
+		console.log(val1, val2);
+	} else {
+		console.log(val1);
+	}
 }
 
-function isStatement(node) {
-	return node.type === 'MustacheStatement';
-}
 
 function pruneHelpers(node) {
 
@@ -42,9 +26,9 @@ function pruneHelpers(node) {
 		hash: hash,
 		loc: node.loc
 	};
-	// console.log('pruneHelpers()'.magenta);
-	// console.log('node:'.gray, node);
-	// console.log('helper:'.gray, helper);
+	// log('pruneHelpers()'.magenta);
+	// log('node:'.gray, node);
+	// log('helper:'.gray, helper);
 	return helper;
 }
 
@@ -59,9 +43,9 @@ function incorrectHashValueFormat(allowed2, actual2) {
 		return str.toLowerCase();
 	});
 
-	// console.log('incorrectHashValueFormat()'.magenta);
-	// console.log('* allowed:'.gray, allowed);
-	// console.log('* actual:'.gray, actual);
+	// log('incorrectHashValueFormat()'.magenta);
+	// log('* allowed:'.gray, allowed);
+	// log('* actual:'.gray, actual);
 
 	var ok =_.includes(allowed, actual);
 	return !ok;
@@ -73,33 +57,39 @@ function popMsg(str, helperName, hashName) {
 		.replace('@hashName', hashName);
 }
 
-function validateHashRule(astHelper, rule, hash) {
-	var missing = rule.required && !hash;
+function validateRuleParam(astHelper, rule) {
+
+	var hash = astHelper.hash || {};
+	var pairs = hash.pairs || [];
+	var pair = _.find(pairs, {key: rule.name});
+	var missing = rule.required && !pair;
 	var message;
 	var error;
 
-	console.log('validateHashRule()'.magenta);
-	console.log('* rule:'.gray, rule);
-	console.log('* hash:'.gray, hash);
+	var loc = (astHelper.hash)? astHelper.hash.loc : astHelper.loc;
+
+	log('validateRuleParam()'.magenta);
+	log('* rule:'.gray, rule);
+	log('* pair'.gray, pair);
 
 	if (missing) {
 		message = popMsg('The `@helperName` helper requires a named parameter of `@hashName`, but non was found.', astHelper.name, rule.name);
 		error = {
 			severity: 'error',
 			message: message,
-			start: astHelper.hash.loc.start,
-			end: astHelper.hash.loc.end
+			start: loc.start,
+			end: loc.end
 		};
-	} else if (incorrectHashValueFormat(rule.formats, hash.value.type)) {
+	} else if (incorrectHashValueFormat(rule.formats, pair.value.type)) {
 		message = popMsg('The `@helperName` helper named parameter `@hashName` has an invalid value.', astHelper.name, rule.name);
 		error = {
 			severity: 'error',
 			message: message,
-			start: hash.loc.start,
-			end: hash.loc.end
+			start: loc.start,
+			end: loc.end
 		};
 	}
-	console.log('* error:'.yellow, error);
+	log('* error:'.yellow, error);
 
 	return error;
 }
@@ -107,31 +97,55 @@ function validateHashRule(astHelper, rule, hash) {
 function validateHelper(astHelper, ruleHelper) {
 	var error;
 
-	console.log('validateHelper():'.magenta);
-	console.log('* astHelper:'.gray, astHelper);
-	console.log('* ruleHelper:'.gray, ruleHelper);
+	log('validateHelper():'.magenta);
+	log('* astHelper:'.gray, astHelper);
+	log('* ruleHelper:'.gray, ruleHelper);
 
 	// loop rule params
 	ruleHelper.params.forEach(function(rule) {
-		var hash = _.find(astHelper.hash.pairs, {key: rule.name});
-		error = validateHashRule(astHelper, rule, hash);
+		log('got here');
+		error = validateRuleParam(astHelper, rule);
 	});
 	return error;
 }
 
-exports.linter = function (rules, ast) {
+function validateHelpers(helpers, rules) {
+	log('validateHelpers()'.magenta);
 	var errors = [];
-	var nodes = ast.body || ast;
-	var statements = nodes.filter(isStatement);
-	var helpers = statements.filter(isHelper);
-	helpers = helpers.map(pruneHelpers);
-
-	// loop helpers and validate
 	helpers.forEach(function(helper) {
 		var config = rules.helpers[helper.name];
 		var err = validateHelper(helper, config);
 		if (err) errors.push(err);
 	});
+	return errors;
+}
+
+function filterHelpersNodes(nodes, rules) {
+	log('filterHelpersNodes()'.magenta);
+	var helperNames = _.keys(rules.helpers);
+
+	var helpers = nodes.filter(function(node) {
+		//log('node:', node);
+		if (node.type !== 'MustacheStatement') return false;
+		if (node.params.length > 0) return true;
+		if (node.hash !== undefined) return true;
+		if (_.includes(helperNames, node.path.original)) return true; // helper with no hash or params
+		return false;
+	});
+
+	helpers = helpers.map(pruneHelpers);
+	//log('* helpers:'.gray, helpers);
+	return helpers;
+}
+
+exports.linter = function (rules, ast) {
+
+	log('linter():'.magenta);
+	var errors = [];
+	var nodes = ast.body || ast;
+	var helpers = filterHelpersNodes(nodes, rules);
+
+	errors = _.concat(errors, validateHelpers(helpers, rules));
 
 	return errors;
 };
