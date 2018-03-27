@@ -4,7 +4,7 @@ require('colors');
 var _ = require('lodash');
 
 function log(val1, val2) {
-	var debug = false;
+	var debug = true;
 	if (!debug) return;
 	if (val2) {
 		console.log(val1, val2);
@@ -32,7 +32,7 @@ function pruneHelpers(node) {
 	return helper;
 }
 
-function incorrectHashValueFormat(allowed2, actual2) {
+function incorrectValueFormat(allowed2, actual2) {
 	var actual = actual2
 		.replace('PathExpression', 'variable')
 		.replace('StringLiteral', 'string')
@@ -43,7 +43,7 @@ function incorrectHashValueFormat(allowed2, actual2) {
 		return str.toLowerCase();
 	});
 
-	// log('incorrectHashValueFormat()'.magenta);
+	// log('incorrectValueFormat()'.magenta);
 	// log('* allowed:'.gray, allowed);
 	// log('* actual:'.gray, actual);
 
@@ -57,7 +57,16 @@ function popMsg(str, helperName, hashName) {
 		.replace('@hashName', hashName);
 }
 
-function validateRuleParam(astHelper, rule) {
+// function validateRuleParam(astHelper, rule) {
+// 	log('validateRuleParam()'.magenta);
+// 	if (rule.hashed) {
+// 		return validateRuleParamHash(astHelper, rule);
+// 	} else {
+// 		return validateRuleParamPositional(astHelper, rule);
+// 	}
+// }
+
+function validateRuleParamHash(astHelper, rule) {
 
 	var loc = (astHelper.hash)? astHelper.hash.loc : astHelper.loc;
 	var hash = astHelper.hash || {};
@@ -68,8 +77,9 @@ function validateRuleParam(astHelper, rule) {
 	var message;
 	var error;
 
-	log('validateRuleParam()'.magenta);
+	log('validateRuleParamHash()'.magenta);
 	log('* rule:'.gray, rule);
+	log('* pairs'.gray, pairs);
 	log('* pair'.gray, pair);
 
 	if (missingRequired) {
@@ -82,13 +92,51 @@ function validateRuleParam(astHelper, rule) {
 		};
 	} else if (missingOptional) {
 		// do nothing
-	} else if (incorrectHashValueFormat(rule.formats, pair.value.type)) {
+	} else if (incorrectValueFormat(rule.formats, pair.value.type)) {
 		message = popMsg('The `@helperName` helper named parameter `@hashName` has an invalid value.', astHelper.name, rule.name);
 		error = {
 			severity: 'error',
 			message: message,
 			start: loc.start,
 			end: loc.end
+		};
+	}
+	log('* error:'.yellow, error);
+
+	return error;
+}
+
+function validateRuleParamPositional(astHelper, rule, index) {
+
+	var loc = astHelper.loc;
+	var params = astHelper.params || [];
+	var param = params[index];
+	var missingRequired = rule.required && !param;
+	var missingOptional = !rule.required && !param;
+	var message;
+	var error;
+
+	log('validateRuleParamPositional()'.magenta);
+	log('* rule:'.gray, rule);
+	log('* param:'.gray, param);
+
+	if (missingRequired) {
+		message = popMsg('The `@helperName` helper requires a positional parameter of `@hashName`, but non was found.', astHelper.name, rule.name);
+		error = {
+			severity: 'error',
+			message: message,
+			start: loc.start,
+			end: loc.end
+		};
+	} else if (missingOptional) {
+		// do nothing
+	} else if (incorrectValueFormat(rule.formats, param.type)) {
+		message = popMsg('The `@helperName` helper positional parameter `@hashName` has an invalid value.', astHelper.name, rule.name);
+		error = {
+			severity: 'error',
+			message: message,
+			start: param.loc.start,
+			end: param.loc.end
 		};
 	}
 	log('* error:'.yellow, error);
@@ -104,9 +152,12 @@ function validateHelper(astHelper, ruleHelper) {
 	log('* ruleHelper:'.gray, ruleHelper);
 
 	// loop rule params
-	ruleHelper.params.forEach(function(rule) {
-		log('got here');
-		error = validateRuleParam(astHelper, rule);
+	ruleHelper.params.forEach(function(rule, index) {
+		if (rule.hashed) {
+			error = validateRuleParamHash(astHelper, rule);
+		} else {
+			error = validateRuleParamPositional(astHelper, rule, index);
+		}
 	});
 	return error;
 }
