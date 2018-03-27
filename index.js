@@ -57,16 +57,7 @@ function popMsg(str, helperName, hashName) {
 		.replace('@hashName', hashName);
 }
 
-// function validateRuleParam(astHelper, rule) {
-// 	log('validateRuleParam()'.magenta);
-// 	if (rule.hashed) {
-// 		return validateRuleParamHash(astHelper, rule);
-// 	} else {
-// 		return validateRuleParamPositional(astHelper, rule);
-// 	}
-// }
-
-function validateRuleParamHash(astHelper, rule) {
+function validateRuleParamNamed(astHelper, rule) {
 
 	var loc = (astHelper.hash)? astHelper.hash.loc : astHelper.loc;
 	var hash = astHelper.hash || {};
@@ -77,7 +68,7 @@ function validateRuleParamHash(astHelper, rule) {
 	var message;
 	var error;
 
-	log('validateRuleParamHash()'.magenta);
+	log('validateRuleParamNamed()'.magenta);
 	log('* rule:'.gray, rule);
 	log('* pairs'.gray, pairs);
 	log('* pair'.gray, pair);
@@ -153,8 +144,8 @@ function validateHelper(astHelper, ruleHelper) {
 
 	// loop rule params
 	ruleHelper.params.forEach(function(rule, index) {
-		if (rule.hashed) {
-			error = validateRuleParamHash(astHelper, rule);
+		if (rule.named) {
+			error = validateRuleParamNamed(astHelper, rule);
 		} else {
 			error = validateRuleParamPositional(astHelper, rule, index);
 		}

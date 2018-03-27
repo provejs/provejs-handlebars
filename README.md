@@ -16,7 +16,7 @@ var config = {
     helper1: {
       params: [{
         name: 'foobar',
-        hashed: true,
+        named: true,
         formats: ['string', 'number', 'variable'],
         required: true
       }]
@@ -24,13 +24,13 @@ var config = {
     helper2: {
        params: [{
         name: 'param1',
-        hashed: false,
+        postional: true,
         formats: ['string', 'number'],
         required: true
       },
       {
         name: 'param2',
-        hashed: false,
+        postional: true,
         formats: ['number'],
         required: true
       }]
