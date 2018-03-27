@@ -137,9 +137,14 @@ function validateRuleParamPositional(astHelper, rule) {
 }
 
 function validateHelperCallback(astHelper, callback) {
-	var positionalParams = [];
-	var namedParams = [];
-	return callback(positionalParams, namedParams);
+	log('validateHelperCallback():'.magenta);
+	log('* astHelper:'.gray, astHelper);
+
+	var positionalParams = astHelper.params;
+	var namedParams = astHelper.hash && astHelper.hash.pairs;
+	var loc = astHelper.loc;
+
+	return callback(positionalParams, namedParams, loc);
 }
 
 function validateHelper(astHelper, ruleHelper) {
