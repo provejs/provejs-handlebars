@@ -16,9 +16,8 @@ function printNode(node) {
 
 function printHelper(helper) {
 	console.log();
-	console.log('name:'.magenta, helper.name);
-	if (helper.params.length) console.log('params:'.cyan, helper.params);
-	if (helper.hash) console.log('hash:'.cyan, helper.hash);
+	console.log('helper.name:'.magenta, helper.name);
+	console.log('helpler.params:'.cyan, helper.params);
 };
 
 function isHelper(node) {
@@ -32,82 +31,90 @@ function isStatement(node) {
 }
 
 function pruneHelpers(node) {
-	// console.log('pruneHelpers()');
-	// console.log('node:', node);
+
 	var name = node.path.original;
 	var params = node.params;
 	var hash = node.hash;
 
-	return {
+	var helper = {
 		name: name,
 		params: params,
 		hash: hash,
 		loc: node.loc
-	}
+	};
+	// console.log('pruneHelpers()'.magenta);
+	// console.log('node:'.gray, node);
+	// console.log('helper:'.gray, helper);
+	return helper;
 }
 
-function incorrectHashValueFormat(allowed, actual) {
-	console.log('incorrectHashValueFormat()');
-	console.log('allowed:', allowed);
-	console.log('actual:', actual);
+function incorrectHashValueFormat(allowed2, actual2) {
+	var actual = actual2
+	.replace('PathExpression', 'variable')
+	.replace('StringLiteral', 'string')
+	.replace('NumberLiteral', 'number')
+	.toLowerCase();
+
+	var allowed = allowed2.map(function(str){
+		return str.toLowerCase();
+	});
+
+	// console.log('incorrectHashValueFormat()'.magenta);
+	// console.log('* allowed:'.gray, allowed);
+	// console.log('* actual:'.gray, actual);
+
 	var ok =_.includes(allowed, actual);
 	return !ok;
 }
 
-function validateHelper(helper, config) {
-	printHelper(helper);
-	console.log('config:'.magenta, JSON.stringify(config));
-	var hash = helper.hash;
-	var params = helper.params;
+function popMsg(str, helperName, hashName) {
+	return str
+		.replace('@helperName', helperName)
+		.replace('@hashName', hashName);
+}
+
+function validateHashRule(astHelper, rule, hash) {
+	var missing = rule.required && !hash;
+	var message;
 	var error;
 
-	function popMsg(str, helperName, hashName) {
-		return str
-			.replace('@helperName', helperName)
-			.replace('@hashName', hashName);
+	console.log('validateHashRule()'.magenta);
+	console.log('* rule:'.gray, rule);
+	console.log('* hash:'.gray, hash);
+
+	if (missing) {
+		message = popMsg('The `@helperName` helper requires a named parameter of `@hashName`, but non was found.', astHelper.name, rule.name);
+		error = {
+			severity: 'error',
+			message: message,
+			start: astHelper.hash.loc.start,
+			end: astHelper.hash.loc.end
+		};
+	} else if (incorrectHashValueFormat(rule.formats, hash.value.type)) {
+		message = popMsg('The `@helperName` helper named parameter `@hashName` has an invalid value.', astHelper.name, rule.name);
+		error = {
+			severity: 'error',
+			message: message,
+			start: hash.loc.start,
+			end: hash.loc.end
+		};
 	}
+	console.log('* error:'.yellow, error);
 
-	console.log('validateHelper():'.magenta, helper.name);
-	console.log('helper:', helper);
+	return error;
+}
 
-	// loop expected hash pairs
-	_.forOwn(config.hash, function(rule, name) {
+function validateHelper(astHelper, ruleHelper) {
+	var error;
 
-		var hash = _.find(helper.hash.pairs, {key: name});
-		var missing = rule.required && !hash;
-		var message;
+	console.log('validateHelper():'.magenta);
+	console.log('* astHelper:'.gray, astHelper);
+	console.log('* ruleHelper:'.gray, ruleHelper);
 
-		console.log('validate hash:'.yellow, name);
-		console.log('rule:'.yellow, rule);
-		console.log('hash:'.yellow, config.hash);
-
-		if (missing) {
-			message = popMsg('The `@helperName` helper requires a named parameter of `@hashName`, but non was found.', helper.name, name);
-			error = {
-				severity: 'error',
-				message: message,
-				start: helper.loc.start,
-				end: helper.loc.end
-			};
-		} else if (incorrectHashValueFormat(rule.formats, hash.value.type)) {
-			message = popMsg('The `@helperName` helper\'s named parameter `@hashName` has an invalid value.', helper.name, name);
-			error = {
-				severity: 'error',
-				message: message,
-				start: hash.loc.start,
-				end: hash.loc.end
-			};
-		}
-	});
-
-	// console.log('helper.hash.pairs', helper.hash.pairs);
-
-	// loop actual hash pairs
-	_.forOwn(helper.hash.pairs, function(pair) {
-		var hashName = pair.key;
-		var hashValue = pair.value;
-		console.log('hashName:'.cyan, hashName);
-		console.log('hashValue:'.cyan, hashValue);
+	// loop rule params
+	ruleHelper.params.forEach(function(rule) {
+		var hash = _.find(astHelper.hash.pairs, {key: rule.name});
+		error = validateHashRule(astHelper, rule, hash);
 	});
 	return error;
 }

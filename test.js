@@ -6,18 +6,17 @@ var Linter = require('./index').linter;
 var config = {
 	helpers: {
 		nest: {
-			//allowExtraHashParams: false,
-			hash: {
-				template: {
-					required: true,
-					formats: ['StringLiteral', 'NumberLiteral', 'PathExpression']
-				}
-			}
+			params: [{
+				name: 'template',
+				hashed: true,
+				formats: ['string', 'variable'],
+				required: true
+			}]
 		}
 	}
 };
 // var html = "{{field1}}{{helper1 foobar='goo'}}\n{{helper2 'zoo' 'goo'}}";
-var html = "{{nest template=foobar extra=value}}";
+var html = "{{nest templatex=foobar}}";
 var ast = Handlebars.parse(html);
 var errors = Linter(config, ast);
 console.log('errors:'.red, errors);

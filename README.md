@@ -15,25 +15,25 @@ var config = {
   helpers: {
     helper1: {
       params: [{
-          name: 'foobar',
-          hashed: true,
-          formats: ['string', 'number', 'variable'],
-          required: true
-        }]
+        name: 'foobar',
+        hashed: true,
+        formats: ['string', 'number', 'variable'],
+        required: true
+      }]
     },
     helper2: {
        params: [{
-          name: 'param1',
-          hashed: false,
-          formats: ['string', 'number'],
-          required: true
-        },
-        {
-          name: 'param2',
-          hashed: false,
-          formats: ['number'],
-          required: true
-        }]
+        name: 'param1',
+        hashed: false,
+        formats: ['string', 'number'],
+        required: true
+      },
+      {
+        name: 'param2',
+        hashed: false,
+        formats: ['number'],
+        required: true
+      }]
     }
   }
 };
@@ -45,4 +45,12 @@ var Handlebars = require('handlebars');
 var Prove = require('provejs-handlebars');
 var ast = Handlebars.parse(html);
 var errors = Prove(ast, config);
+```
+
+The output will be something like:
+```js
+[ { severity: 'error',
+    message: 'The `nest` helper requires a named parameter of `template`, but non was found.',
+    start: { line: 1, column: 7 },
+    end: { line: 1, column: 23 } } ]
 ```
