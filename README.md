@@ -29,13 +29,13 @@ The error output will be something like:
 
 Consider you have the following helpers:
 ```hbs
-{{helperName param1=42}}
+{{myHelper param1=42}}
 ```
 The validation configuration would be:
 ```js
 var config = {
   helpers: {
-    helperName: {
+    myHelper: {
       params: [{
         name: 'param1',
         type: 'named',
@@ -51,13 +51,13 @@ var config = {
 
 Consider you have the following helpers:
 ```hbs
-{{helperNamed 42}}
+{{myHelper 42}}
 ```
 The validation configuration would be:
 ```js
 var config = {
   helpers: {
-    helperName: {
+    myHelper: {
       params: [{
         name: 'param1',
         type: 'positional',
@@ -74,13 +74,13 @@ var config = {
 
 Consider you have the following helpers:
 ```hbs
-{{helperNamed param1=42 43}}
+{{myHelper param1=42 43}}
 ```
 The validation configuration would be:
 ```js
 var config = {
   helpers: {
-    helperName: {
+    myHelper: {
       params: [{
         name: 'param1',
         type: 'named',
