@@ -9,38 +9,7 @@ Consider you have the following helpers:
 {{helper1 foobar='goo'}}
 {{helper2 'zoo' 'goo'}}
 ```
-
-OPTION 1: The validation configuration would be:
-```js
-var config = {
-  helpers: {
-    helper1: {
-      hash: {
-        foobar: {
-          formats: ['string', 'number', 'variable'],
-          value: function(value) {
-            return true;
-          }
-        }
-      }
-    },
-    helper2: {
-      params: {
-        0: {
-          name: 'param1',
-          formats: ['string', 'number']
-          },
-        1: {
-          name: 'param2',
-          formats: ['number']
-        }
-      ]
-    }
-  }
-};
-```
-
-OPTION 2: The validation configuration would be:
+The validation configuration would be:
 ```js
 var config = {
   helpers: {
