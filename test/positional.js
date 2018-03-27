@@ -83,7 +83,7 @@ describe('Linting helper positional parameters', function () {
 		var actual = Linter(config, ast);
 		Assert.equal(actual.length, 0);
 	});
-	it.only('missing second optional helper positional parameter should NOT generate error', function () {
+	it('missing second optional helper positional parameter should NOT generate error', function () {
 		var html = "{{helper1 value1}}";
 		var config = {
 			helpers: {
@@ -108,4 +108,24 @@ describe('Linting helper positional parameters', function () {
 		var actual = Linter(config, ast);
 		Assert.equal(actual.length, 0);
 	});
+	it('helper positional parameter with wrong value format should generate error', function () {
+		var html = "{{helper1 42}}";
+		var config = {
+			helpers: {
+				helper1: {
+					params: [{
+						name: 'param1',
+						type: 'positional',
+						formats: ['string'],
+						position: 0,
+						required: true
+					}]
+				}
+			}
+		};
+		var ast = Handlebars.parse(html);
+		var actual = Linter(config, ast);
+		Assert.equal(actual.length, 1);
+	});
+	it('extra helper positional parameter should generate warning');
 });

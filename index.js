@@ -4,7 +4,7 @@ require('colors');
 var _ = require('lodash');
 
 function log(val1, val2) {
-	var debug = true;
+	var debug = false;
 	if (!debug) return;
 	if (val2) {
 		console.log(val1, val2);
@@ -43,9 +43,9 @@ function incorrectValueFormat(allowed2, actual2) {
 		return str.toLowerCase();
 	});
 
-	// log('incorrectValueFormat()'.magenta);
-	// log('* allowed:'.gray, allowed);
-	// log('* actual:'.gray, actual);
+	log('incorrectValueFormat()'.magenta);
+	log('* allowed:'.gray, allowed);
+	log('* actual:'.gray, actual);
 
 	var ok =_.includes(allowed, actual);
 	return !ok;
@@ -84,7 +84,7 @@ function validateRuleParamNamed(astHelper, rule) {
 	} else if (missingOptional) {
 		// do nothing
 	} else if (incorrectValueFormat(rule.formats, pair.value.type)) {
-		message = popMsg('The `@helperName` helper named parameter `@hashName` has an invalid value.', astHelper.name, rule.name);
+		message = popMsg('The `@helperName` helper named parameter `@hashName` has an invalid value format.', astHelper.name, rule.name);
 		error = {
 			severity: 'error',
 			message: message,
@@ -123,7 +123,7 @@ function validateRuleParamPositional(astHelper, rule) {
 	} else if (missingOptional) {
 		// do nothing
 	} else if (incorrectValueFormat(rule.formats, param.type)) {
-		message = popMsg('The `@helperName` helper positional parameter `@hashName` has an invalid value.', astHelper.name, rule.name);
+		message = popMsg('The `@helperName` helper positional parameter `@hashName` has an invalid value format.', astHelper.name, rule.name);
 		error = {
 			severity: 'error',
 			message: message,
@@ -145,10 +145,18 @@ function validateHelper(astHelper, ruleHelper) {
 
 	// loop rule params
 	ruleHelper.params.forEach(function(rule) {
-		if (rule.type === 'named') {
+		var type = rule.type.toLowerCase();
+		if (type === 'named') {
 			error = validateRuleParamNamed(astHelper, rule);
-		} else if (rule.type === 'positional') {
+		} else if (type === 'positional') {
 			error = validateRuleParamPositional(astHelper, rule);
+		} else {
+			error = {
+				severity: 'error',
+				message: 'Invalid param type in linter configuration.',
+				start: astHelper.loc.start,
+				end: astHelper.loc.end
+			};
 		}
 	});
 	return error;
