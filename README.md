@@ -2,11 +2,16 @@
 
 > Under active development.
 
-Validating handlebars helpers syntax using handlebars AST tokens for purpose of inclusion in custom handlebars linters.
+Validating Handlebars helpers syntax using handlebars AST tokens for purpose of inclusion in custom handlebars linters. However, you can use it to lint the built-in Handlebars helpers.
 
 Helper parameters are either:
 - named: the helper is using named parameters.
 - positional: the helper is using ordered position of parameters.
+
+# Install
+```js
+npm install provejs-handlebars --save
+```
 
 # Usage
 You would invoke the module like:
