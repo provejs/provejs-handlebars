@@ -211,6 +211,7 @@ function filterHelpersNodes(nodes, rules) {
 exports.linter = function (rules, ast) {
 
 	log('linter():'.magenta);
+	log('* ast.body:'.gray, JSON.stringify(ast.body));
 	var errors = [];
 	var nodes = ast.body || ast;
 	var helpers = filterHelpersNodes(nodes, rules);
