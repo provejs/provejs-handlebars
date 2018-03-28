@@ -33,6 +33,11 @@ function pruneHelpers(node) {
 }
 
 function incorrectValueFormat(allowed2, actual2) {
+
+	// if the formats are not specified then accept
+	// param value format.
+	if (!_.isArray(allowed2)) return false;
+
 	var actual = actual2
 		.replace('PathExpression', 'variable')
 		.replace('StringLiteral', 'string')
