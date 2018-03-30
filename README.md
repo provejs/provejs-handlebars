@@ -185,14 +185,14 @@ var config = {
 
 Consider you have helper that does compound logic:
 ```hbs
-{{#ifCompund param1 '=' 42 'AND' param2 '!=' 42}}{{else}}{{/ifCompound}}
+{{#ifCompound param1 '=' 42 'AND' param2 '!=' 42}}{{else}}{{/ifCompound}}
 ```
 The validation configuration would be:
 ```js
 var config = {
   helpers: {
     ifCompound: {
-      params: function(positionalParams, namedParms) {
+      params: function(positionalParams, namedParms, helperLocation) {
           // Validate the array of parameters here. On errror or warning return something like below.
           // The start and end data for each param will be found in the positionalParms and namedParams nodes.
           // However you also have the overall helper location to use as well. 
