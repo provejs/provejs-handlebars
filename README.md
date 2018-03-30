@@ -85,6 +85,78 @@ params: function(positionalParams, namedParameters, helperLocation) {
 }
 ```
 
+
+## Example: one or more positional params
+```hbs
+{{#ifAny case1 case2 case3}}{{/ifAny}}
+```
+There needs to be one or more case positional parameter
+```js
+var config = {
+  helpers: {
+    ifAny: {
+      params: {
+        cases: {
+            selector: 'eq(*)',
+            required: 1
+        }
+      }]
+    }
+  }
+};
+```
+## Example: one required, and one or more positional params
+```hbs
+{{#isAny var1 case1 case2 case3}}{{/isAny}}
+```
+```js
+var params = {
+    var1: {
+        selector: 'eq(0)',
+        required: 1
+    },
+    cases: {
+        selector: 'gt(0)',
+        required: 1
+    }
+};
+var config = {
+    helpers: {
+        isAny: {
+            params: params
+        }
+    }
+```
+
+## Example 3
+```hbs
+{{nest template='subtemplate'}}
+```
+```js
+var params: {
+  template: {
+    selector: '#template',
+    formats: ['string'],
+    required: 1
+  }
+}
+```
+
+## Example 4
+```hbs
+{{#if condition}}{{/if}}
+```
+```js
+params: {
+  condition: {
+    selector: 'eq(0)',
+    required: 1
+  }
+}
+```
+
+
+
 # Example: Positional Parameters Helper
 
 Consider you have the following helpers:
