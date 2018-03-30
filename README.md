@@ -20,7 +20,7 @@ var html = '{{helper1 foobar='goo'}}\n{{helper2 'zoo' 'goo'}}';
 var Handlebars = require('handlebars');
 var Prove = require('provejs-handlebars');
 var ast = Handlebars.parse(html);  // could throw an error
-var errors = Prove(ast, config);
+var errors = Prove(config, ast);
 ```
 The error output will be something like:
 ```js
