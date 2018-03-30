@@ -126,85 +126,58 @@ var config = {
             params: params
         }
     }
+};
 ```
 
-## Example 3
+## Example: one required named param
 ```hbs
 {{nest template='subtemplate'}}
 ```
 ```js
 var params: {
   template: {
-    selector: '#template',
-    formats: ['string'],
     required: 1
   }
 }
-```
-
-## Example 4
-```hbs
-{{#if condition}}{{/if}}
-```
-```js
-params: {
-  condition: {
-    selector: 'eq(0)',
-    required: 1
-  }
-}
-```
-
-
-
-# Example: Positional Parameters Helper
-
-Consider you have the following helpers:
-```hbs
-{{myHelper 42}}
-```
-The validation configuration would be:
-```js
 var config = {
-  helpers: {
-    myHelper: {
-      params: [{
-        name: 'param1',
-        type: 'positional',
-        formats: ['string', 'number', 'variable'],
-        position: 0,
-        required: true
-      }]
+    helpers: {
+        isAny: {
+            params: params
+        }
     }
-  }
 };
 ```
 
-# Example: Mixed Positional & Named Parameters Helper
-
-Consider you have the following helpers:
+## Example: built-in handlebars helpers
 ```hbs
-{{myHelper param1=42 43}}
+{{#if condition}}{{/if}}
+{{lookup this 'foo'}}
+{{#each arr}}{{/each}}
 ```
-The validation configuration would be:
 ```js
+var params1 = {
+    condition: {required: 1}
+};
+
+var params2 = {
+    value1: {required: 1},
+    value2: {required: 1}
+};
+var params3 = {
+    condition: {required: 1}
+};
 var config = {
-  helpers: {
-    myHelper: {
-      params: [{
-        name: 'param1',
-        type: 'named',
-        formats: ['string', 'number', 'variable'],
-        required: true
-      },{
-        name: 'param2',
-        type: 'positional',
-        formats: ['string', 'number', 'variable'],
-        position: 0,
-        required: true
-      }]
+    helpers: {
+        if: {
+            params: params1
+        },
+        lookup: {
+            params: params2
+        },
+        each: {
+            params: params3
+        }
     }
-  }
 };
 ```
 
@@ -220,7 +193,15 @@ var config = {
   helpers: {
     ifCompound: {
       params: function(positionalParams, namedParms) {
-        // positionalParams and namedParams are an array of params
+          // Validate the array of parameters here. On errror or warning return something like below.
+          // The start and end data for each param will be found in the positionalParms and namedParams nodes.
+          // However you also have the overall helper location to use as well. 
+          return {
+            severity: 'error',
+            message: '...',
+            start: helperLocation.start,
+            end: helperLocation.end
+          }
       }
     }
   }
