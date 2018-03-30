@@ -46,7 +46,7 @@ var config = {
             formats: ['string', 'number', 'variable'],
             required: true
         }
-      }]
+      }
     }
   }
 };
