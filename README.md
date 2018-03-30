@@ -5,8 +5,8 @@
 Validating Handlebars helpers syntax using handlebars AST tokens for purpose of inclusion in custom handlebars linters. However, you can use it to lint the built-in Handlebars helpers.
 
 Helper parameters are either:
-- named: the helper is using named parameters.
-- positional: the helper is using ordered position of parameters.
+- **Named:** the helper is using named parameters.
+- **Positional:** the helper is using ordered position of parameters.
 
 # Install
 ```js
@@ -58,16 +58,16 @@ The params config can be:
 When the params config is an object:
 
 - name (**string**): optional name of parameter. Used in the linter error messages.
-- selector (**string**| **number**|**function**): required selector which borrows ideas from jQuery selector syntax.
-- formats (**array**|**function**): optional param value types. If formats is undefined then any param is accepted.
+- selector (**string**| **number**|**function**): optional selector which specifies positional params. The selector borrows ideas from jQuery selector syntax. If selector is unspecified then a named param will be used.
+- formats (**array**|**function**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness.
 - required (**number**): required indicator of if the number of params that are required.
 - message (**string**): custom linter message.
 
-The param selector would accept the following:
+The param selector accepts the following:
 - '*' : all parameters including both positional and named parameters
 - '#paramName' : a named parameter
 - 'eq(nth)': positional nth parameter
-- 'gt(nth)' : greater than nth parameter
+- 'gt(nth)': greater than nth parameter
 
 When the params config is a function:
 
