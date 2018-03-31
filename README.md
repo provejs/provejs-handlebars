@@ -70,34 +70,9 @@ When the params config is an object:
   - **'!'**: any (both named and positional) params not already linted.
   - **'named(!)'**: any named params not already linted.
   - **'positional(!)'**: any positional params not already linted.
-- formats (**array**|**function**|**boolean**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness. Array values include: ['string', 'number', 'variable', 'subexpression']. A bool value of false will always fail linting and a bool value of true will always pass linting.
+- formats (**array**|**function**|**boolean**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness. Array values include: ['string', 'number', 'variable', 'subexpression']. A bool value of false will always fail linting and a bool value of true will always pass linting. When a formats is a function the function arguements are: postionalParams, namedParams, helperLocation.
 - required (**boolean**|**number**): required indicator of if the number of params that are required.
 - message (**string**): custom linter message.
-
-The param selector accepts the following:
-- **'*'**: all parameters including both positional and named parameters
-- **'named(*)'**: all named parameters
-- **'named()'**: a named parameter as identified by the param rule key
-- **'positional(*)'**: all positional parameters
-- **'positional(nth)'**: positional nth parameter
-- **'positionalGreaterThan(nth)'**: greater than nth parameter
-
-When the params config is a function:
-
-```js
-params: function(positionalParams, namedParameters, helperLocation) {
-  // Validate the array of parameters here. On errror or warning return something like below.
-  // The start and end data for each param will be found in the positionalParms and namedParams nodes.
-  // However you also have the overall helper location to use as well.
-  return {
-    severity: 'error',
-    message: '...',
-    start: helperLocation.start,
-    end: helperLocation.end
-  }
-}
-```
-
 
 ## Example: one or more positional params
 ```hbs
