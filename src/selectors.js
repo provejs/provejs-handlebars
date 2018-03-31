@@ -10,9 +10,13 @@ function getSelectorNum(selector) {
 		.replace(')', '');
 }
 
+function notLinted(param) {
+	return !param._linted;
+}
+
 exports.params = function(astHelper, selector, ruleKey) {
 
-	log('getParams()');
+	log('params()');
 
 	var params = [];
 	var param;
@@ -33,7 +37,23 @@ exports.params = function(astHelper, selector, ruleKey) {
 		num = getSelectorNum(selector);
 		param = exports.positional(astHelper, num);
 		if (param) params.push(param);
+	} else if (selector === '!') {
+		params = exports.all(astHelper);
+		params = params.filter(notLinted);
+	} else if (selector === 'named(!)') {
+		params = exports.allNamed(astHelper);
+		params = params.filter(notLinted);
+	} else if (selector === 'positional(!)') {
+		params = exports.allPositional(astHelper);
+		params = params.filter(notLinted);
 	}
+
+	// mark each param as being selected for linting
+	params = params.map(function(param) {
+		param = param._linted = true;
+		return param;
+	});
+
 	return params;
 };
 
