@@ -30,8 +30,8 @@ function popMsg(str, helperName, hashName) {
 		.replace('@hashName', hashName);
 }
 
-function validateHelperCallback(astHelper, callback) {
-	log('validateHelperCallback():'.magenta);
+function lintHelperCallback(astHelper, callback) {
+	log('lintHelperCallback():'.magenta);
 	log('* astHelper:'.gray, astHelper);
 
 	var posParams = Selectors.allPositional(astHelper);
@@ -41,8 +41,8 @@ function validateHelperCallback(astHelper, callback) {
 	return callback(posParams, namParams, loc);
 }
 
-function validate(rule, param) {
-	log('validate()');
+function lint(rule, param) {
+	log('lint()');
 	log('* rule:', rule);
 	log('* param:', param);
 
@@ -62,9 +62,9 @@ function validate(rule, param) {
 	return error;
 }
 
-function validateHelperParam(astHelper, rule, ruleKey) {
+function lintHelperParam(astHelper, rule, ruleKey) {
 
-	log('validateHelperParam():');
+	log('lintHelperParam():');
 
 	var error;
 	var selector = rule.selector;
@@ -72,10 +72,10 @@ function validateHelperParam(astHelper, rule, ruleKey) {
 
 	log('* params:', params);
 
-	// validate each param against the config rule
+	// lint each param against the config rule
 	params.forEach(function(param) {
 		if (error) return false; //break loop
-		error = validate(rule, param);
+		error = lint(rule, param);
 	});
 
 	// return early
@@ -83,7 +83,7 @@ function validateHelperParam(astHelper, rule, ruleKey) {
 	if (rule.required === false) return;
 	if (rule.required === 0) return;
 
-	// validate missing params
+	// lint missing params
 	if (rule.required === true && params.length === 0) {
 		return {
 			severity: 'error',
@@ -101,34 +101,34 @@ function validateHelperParam(astHelper, rule, ruleKey) {
 	}
 }
 
-function validateHelper(astHelper, objRules) {
+function lintHelper(astHelper, objRules) {
 	var error;
 	var params = objRules.params;
 
-	log('validateHelper():'.magenta);
+	log('lintHelper():'.magenta);
 	log('* astHelper:'.gray, astHelper);
 	log('* objRules:'.gray, objRules);
 
 	if (_.isFunction(params)) {
-		error = validateHelperCallback(astHelper, params);
+		error = lintHelperCallback(astHelper, params);
 	} else if (_.isObject(params)) {
 		_.forOwn(params, function(rule, ruleKey) {
 			if (!rule.name) rule.name = ruleKey;
 			if (!rule.helper) rule.helper = astHelper.name;
 			if (error) return false; // break loop
-			error = validateHelperParam(astHelper, rule, ruleKey);
+			error = lintHelperParam(astHelper, rule, ruleKey);
 		});
 	}
 
 	return error;
 }
 
-function validateHelpers(helpers, rules) {
-	log('validateHelpers()'.magenta);
+function lintHelpers(helpers, rules) {
+	log('lintHelpers()'.magenta);
 	var errors = [];
 	helpers.forEach(function(helper) {
 		var config = rules.helpers[helper.name];
-		var err = validateHelper(helper, config);
+		var err = lintHelper(helper, config);
 		if (err) errors.push(err);
 	});
 	return errors;
@@ -160,7 +160,7 @@ exports.linter = function (rules, ast) {
 	var nodes = ast.body || ast;
 	var helpers = filterHelpersNodes(nodes, rules);
 
-	errors = _.concat(errors, validateHelpers(helpers, rules));
+	errors = _.concat(errors, lintHelpers(helpers, rules));
 
 	return errors;
 };
