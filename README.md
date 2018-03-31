@@ -216,10 +216,10 @@ var config = {
 				// The start and end data for each param will be found in the positionalParms and namedParams nodes.
 				// However you also have the overall helper location to use as well.
 				return {
-				severity: 'error',
-				message: '...',
-				start: helperLocation.start,
-				end: helperLocation.end
+					severity: 'error',
+					message: '...',
+					start: helperLocation.start,
+					end: helperLocation.end
 				}
 			}
 		}
