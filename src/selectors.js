@@ -14,9 +14,16 @@ function notLinted(param) {
 	return !param._linted;
 }
 
+function linted(param) {
+	param._linted = true;
+	return param;
+}
+
 exports.params = function(astHelper, selector, ruleKey) {
 
 	log('params()');
+	log('* selector:', selector);
+	log('* ruleKey:', ruleKey);
 
 	var params = [];
 	var param;
@@ -27,7 +34,7 @@ exports.params = function(astHelper, selector, ruleKey) {
 		params = exports.allPositional(astHelper);
 	} else if (selector === 'named(*)') {
 		params = exports.allNamed(astHelper);
-	} else if (selector.indexOf('named(') === 0) {
+	} else if (selector === 'named()') {
 		param = exports.named(astHelper, ruleKey);
 		if (param) params.push(param);
 	} else if (selector.indexOf('positionalGreaterThan(') === 0) {
@@ -49,10 +56,7 @@ exports.params = function(astHelper, selector, ruleKey) {
 	}
 
 	// mark each param as being selected for linting
-	params = params.map(function(param) {
-		param = param._linted = true;
-		return param;
-	});
+	params = params.map(linted);
 
 	return params;
 };
@@ -78,6 +82,7 @@ exports.allPositional = function(astHelper) {
 };
 
 exports.named = function(astHelper, named) {
+	log('named()');
 	var hash = astHelper.hash || {};
 	var pairs = hash.pairs || [];
 	var pair = _.find(pairs, {key: named});

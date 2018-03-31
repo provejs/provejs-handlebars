@@ -4,6 +4,7 @@ require('colors');
 var _ = require('lodash');
 var Selectors = require('./src/selectors');
 var log = require('./src/utilities').log;
+var Formats = require('./src/formats');
 
 function pruneHelpers(node) {
 
@@ -23,81 +24,11 @@ function pruneHelpers(node) {
 	return helper;
 }
 
-function getValueType(param) {
-	if (param.type === 'PathExpression') return 'variable';
-	if (param.value.type === 'SubExpression') return 'subexpression';
-	if (param.value.type === 'PathExpression') return 'variable';
-	if (param.value.type === 'StringLiteral') return 'string';
-	if (param.value.type === 'NumberLiteral') return 'number';
-	return;
-}
-
-function incorrectValueFormat(rule, param) {
-
-	log('incorrectValueFormat()');
-
-	var formats = rule.formats;
-	var actual = getValueType(param);
-
-	// if the formats are not specified then
-	// accept param value format.
-	if (!_.isArray(formats)) return false;
-
-	log('* formats:', formats);
-	log('* actual:', actual);
-
-	var allowed = formats.map(function(str) {
-		return str.toLowerCase();
-	});
-
-	var ok =_.includes(allowed, actual);
-	return !ok;
-}
-
 function popMsg(str, helperName, hashName) {
 	return str
 		.replace('@helperName', helperName)
 		.replace('@hashName', hashName);
 }
-
-// function validateRuleParamPositional(astHelper, rule) {
-
-// 	var loc = astHelper.loc;
-// 	var params = astHelper.params || [];
-// 	var index = rule.position;
-// 	var param = params[index];
-// 	var missingRequired = rule.required && !param;
-// 	var missingOptional = !rule.required && !param;
-// 	var message;
-// 	var error;
-
-// 	log('validateRuleParamPositional()'.magenta);
-// 	log('* rule:'.gray, rule);
-// 	log('* param:'.gray, param);
-
-// 	if (missingRequired) {
-// 		message = popMsg('The `@helperName` helper requires a positional parameter of `@hashName`, but non was found.', astHelper.name, rule.name);
-// 		error = {
-// 			severity: 'error',
-// 			message: message,
-// 			start: loc.start,
-// 			end: loc.end
-// 		};
-// 	} else if (missingOptional) {
-// 		// do nothing
-// 	} else if (incorrectValueFormat(rule.formats, param.type)) {
-// 		message = popMsg('The `@helperName` helper positional parameter `@hashName` has an invalid value format.', astHelper.name, rule.name);
-// 		error = {
-// 			severity: 'error',
-// 			message: message,
-// 			start: param.loc.start,
-// 			end: param.loc.end
-// 		};
-// 	}
-// 	log('* error:'.yellow, error);
-
-// 	return error;
-// }
 
 function validateHelperCallback(astHelper, callback) {
 	log('validateHelperCallback():'.magenta);
@@ -115,10 +46,10 @@ function validate(rule, param) {
 	log('* rule:', rule);
 	log('* param:', param);
 
-	var incorrect = incorrectValueFormat(rule, param);
+	var ok = Formats.lint(rule, param);
 	var message = rule.message || 'The `@helperName` helper positional parameter `@hashName` has an invalid value format.';
 	var error;
-	if (incorrect) {
+	if (!ok) {
 		message = popMsg(message, rule.helper, rule.name);
 		error = {
 			severity: 'error',

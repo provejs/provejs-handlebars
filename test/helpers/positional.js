@@ -75,7 +75,7 @@ describe('Linting helper positional parameters', function () {
 		Assert.equal(actual.length, 0);
 	});
 	it('missing second optional helper positional parameter should NOT generate error', function () {
-		var html = "{{helper1 value1}}";
+		var html = "{{helper1 42}}";
 		var config = {
 			helpers: {
 				helper1: {
