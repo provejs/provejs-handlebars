@@ -73,6 +73,7 @@ When the params config is an object:
 - formats (**array**|**function**|**boolean**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness. Array values include: ['string', 'number', 'variable', 'subexpression']. A bool value of false will always fail linting and a bool value of true will always pass linting. When a formats is a function the function arguments are: postionalParams, namedParams, helperLocation.
 - required (**boolean**|**number**): required indicator of if the number of params that are required.
 - message (**string**): custom linter message.
+- severity (**string**): optional severity of the linting error. Either 'error' or 'warning'. Defaults to 'error'.
 
 ## Example: one or more positional params
 ```hbs

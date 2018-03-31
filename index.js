@@ -52,7 +52,7 @@ function lint(rule, param) {
 	if (!ok) {
 		message = popMsg(message, rule.helper, rule.name);
 		error = {
-			severity: 'error',
+			severity: rule.severity,
 			message: message,
 			start: param.loc.start,
 			end: param.loc.end
@@ -87,14 +87,14 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 	// lint missing params
 	if (rule.required === true && params.length === 0) {
 		return {
-			severity: 'error',
+			severity: rule.severity,
 			message: popMsg('The `@helperName` helper requires a positional parameter of `@hashName`, but non was found.', rule.helper, rule.name),
 			start: astHelper.loc.start,
 			end: astHelper.loc.end
 		};
 	} else if (rule.required > params.length) {
 		return {
-			severity: 'error',
+			severity: rule.severity,
 			message: popMsg('The `@helperName` helper requires ' + rule.required + ' `@hashName` params, but only ' + params.length + 1 + ' were found.', rule.helper, rule.name),
 			start: astHelper.loc.start,
 			end: astHelper.loc.end
@@ -116,6 +116,7 @@ function lintHelper(astHelper, objRules) {
 		_.forOwn(params, function(rule, ruleKey) {
 			if (!rule.name) rule.name = ruleKey;
 			if (!rule.helper) rule.helper = astHelper.name;
+			if (!rule.severity) rule.severity = 'error';
 			if (error) return false; // break loop
 			error = lintHelperParam(astHelper, rule, ruleKey);
 		});

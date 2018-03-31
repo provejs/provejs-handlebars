@@ -15,10 +15,10 @@ describe('Linting unlinted params', function () {
 							selector: 'named()',
 							required: true
 						},
-						extra: {
+						extraneous: {
 							selector: 'named(!)',
-							formats: false,
-							required: true
+							severity: 'warning',
+							formats: false
 						}
 					}
 				}
@@ -32,6 +32,6 @@ describe('Linting unlinted params', function () {
 		Assert.equal(error.end.line, 1);
 		Assert.equal(error.start.column, 20);
 		Assert.equal(error.end.column, 28);
-
+		Assert.equal(error.severity, 'warning');
 	});
 });
