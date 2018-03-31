@@ -11,7 +11,7 @@ function getSelectorNum(selector) {
 
 exports.params = function(astHelper, selector) {
 
-	log('getParams():'.magenta);
+	log('getParams()');
 
 	var params = [];
 	var param;
@@ -25,10 +25,10 @@ exports.params = function(astHelper, selector) {
 		named = selector.replace('#', '');
 		param = exports.named(astHelper, named);
 		if (param) params.push(param);
-	} else if (selector.index('gt(') === 0) {
+	} else if (selector.indexOf('gt(') === 0) {
 		num = getSelectorNum(selector);
 		params = exports.positionalGreaterThan(astHelper, num);
-	} else if (selector.index('eq(') === 0) {
+	} else if (selector.indexOf('eq(') === 0) {
 		num = getSelectorNum(selector);
 		param = exports.positional(astHelper, num);
 		if (param) params.push(param);
@@ -38,11 +38,22 @@ exports.params = function(astHelper, selector) {
 
 
 exports.all = function(astHelper) {
-	log('all():'.magenta);
+	log('all()');
+	var arr1 = exports.allPositional(astHelper);
+	var arr2 = exports.allNamed(astHelper);
+	return [].concat(arr1, arr2);
+};
+
+exports.allNamed = function(astHelper) {
+	log('allNamed()');
+	var hash = astHelper.hash || {};
+	var pairs = hash.pairs || [];
+	return pairs;
 };
 
 exports.allPositional = function(astHelper) {
-	log('allPositional():'.magenta);
+	log('allPositional()');
+	return astHelper.params || [];
 };
 
 exports.named = function(astHelper, named) {
@@ -52,10 +63,14 @@ exports.named = function(astHelper, named) {
 	return pair;
 };
 
-exports.positionalGreaterThan = function(astHelper) {
-	log('positionaGreatThan():'.magenta);
+exports.positionalGreaterThan = function(astHelper, num) {
+	log('positionaGreatThan()');
+	var params = astHelper.params || [];
+	return params.slice(num);
 };
 
-exports.positional = function(astHelper) {
-	log('positional():'.magenta);
+exports.positional = function(astHelper, num) {
+	log('positional()');
+	var params = astHelper.params || [];
+	return params[num];
 };

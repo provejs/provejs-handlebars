@@ -4,8 +4,8 @@ var Assert = require('assert');
 var Handlebars = require('handlebars');
 var Linter = require('../../index').linter;
 
-function callback(positionalParms, namedParams, loc) {
-	if (positionalParms.length !== 7) {
+function callback(posParms, namParams, loc) {
+	if (posParms.length !== 7) {
 		return {
 			severity: 'error',
 			message: 'Your custom linter error message here.',

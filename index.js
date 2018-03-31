@@ -23,21 +23,26 @@ function pruneHelpers(node) {
 	return helper;
 }
 
+function getValueType(param) {
+	if (param.type === 'PathExpression') return 'variable';
+	if (param.value.type === 'SubExpression') return 'subexpression';
+	if (param.value.type === 'PathExpression') return 'variable';
+	if (param.value.type === 'StringLiteral') return 'string';
+	if (param.value.type === 'NumberLiteral') return 'number';
+	return;
+}
+
 function incorrectValueFormat(rule, param) {
+
+	log('incorrectValueFormat()');
+
 	var formats = rule.formats;
-	var actual = param.value.type;
+	var actual = getValueType(param);
 
 	// if the formats are not specified then
 	// accept param value format.
 	if (!_.isArray(formats)) return false;
 
-	actual = actual
-		.replace('PathExpression', 'variable')
-		.replace('StringLiteral', 'string')
-		.replace('NumberLiteral', 'number')
-		.toLowerCase();
-
-	log('incorrectValueFormat()');
 	log('* formats:', formats);
 	log('* actual:', actual);
 
@@ -54,46 +59,6 @@ function popMsg(str, helperName, hashName) {
 		.replace('@helperName', helperName)
 		.replace('@hashName', hashName);
 }
-
-// function validateRuleParamNamed(astHelper, rule) {
-
-// 	var loc = (astHelper.hash)? astHelper.hash.loc : astHelper.loc;
-// 	var hash = astHelper.hash || {};
-// 	var pairs = hash.pairs || [];
-// 	var pair = _.find(pairs, {key: rule.name});
-// 	var missingRequired = rule.required && !pair;
-// 	var missingOptional = !rule.required && !pair;
-// 	var message;
-// 	var error;
-
-// 	log('validateRuleParamNamed()'.magenta);
-// 	log('* rule:'.gray, rule);
-// 	log('* pairs'.gray, pairs);
-// 	log('* pair'.gray, pair);
-
-// 	if (missingRequired) {
-// 		message = popMsg('The `@helperName` helper requires a named parameter of `@hashName`, but non was found.', astHelper.name, rule.name);
-// 		error = {
-// 			severity: 'error',
-// 			message: message,
-// 			start: loc.start,
-// 			end: loc.end
-// 		};
-// 	} else if (missingOptional) {
-// 		// do nothing
-// 	} else if (incorrectValueFormat(rule.formats, pair.value.type)) {
-// 		message = popMsg('The `@helperName` helper named parameter `@hashName` has an invalid value format.', astHelper.name, rule.name);
-// 		error = {
-// 			severity: 'error',
-// 			message: message,
-// 			start: loc.start,
-// 			end: loc.end
-// 		};
-// 	}
-// 	log('* error:'.yellow, error);
-
-// 	return error;
-// }
 
 // function validateRuleParamPositional(astHelper, rule) {
 
@@ -138,11 +103,11 @@ function validateHelperCallback(astHelper, callback) {
 	log('validateHelperCallback():'.magenta);
 	log('* astHelper:'.gray, astHelper);
 
-	var positionalParams = astHelper.params;
-	var namedParams = astHelper.hash && astHelper.hash.pairs;
+	var posParams = Selectors.allPositional(astHelper);
+	var namParams = Selectors.allNamed(astHelper);
 	var loc = astHelper.loc;
 
-	return callback(positionalParams, namedParams, loc);
+	return callback(posParams, namParams, loc);
 }
 
 function validate(rule, param) {
@@ -205,16 +170,17 @@ function validateHelperParam(astHelper, rule) {
 	}
 }
 
-function validateHelper(astHelper, ruleHelper) {
+function validateHelper(astHelper, objRules) {
 	var error;
-	var params = ruleHelper.params;
+	var params = objRules.params;
 
 	log('validateHelper():'.magenta);
 	log('* astHelper:'.gray, astHelper);
-	log('* ruleHelper:'.gray, ruleHelper);
+	log('* objRules:'.gray, objRules);
 
-
-	if (_.isObject(params)) {
+	if (_.isFunction(params)) {
+		error = validateHelperCallback(astHelper, params);
+	} else if (_.isObject(params)) {
 		_.forOwn(params, function(rule, name) {
 			if (!rule.name) rule.name = name;
 			if (!rule.selector) rule.selector = '#' + name;
@@ -222,8 +188,6 @@ function validateHelper(astHelper, ruleHelper) {
 			if (error) return false; // break loop
 			error = validateHelperParam(astHelper, rule);
 		});
-	} else if (_.isFunction(params)) {
-		error = validateHelperCallback(astHelper, params);
 	}
 
 	return error;

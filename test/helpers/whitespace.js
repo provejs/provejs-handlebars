@@ -10,12 +10,11 @@ describe('Linting helper whitespace around parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'named',
-						formats: ['string', 'number', 'variable'],
-						required: true
-					}]
+					params: {
+						param1: {
+							required: true
+						}
+					}
 				}
 			}
 		};

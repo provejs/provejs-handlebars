@@ -10,12 +10,12 @@ describe('Linting helper params with subexpressions', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'named',
-						formats: ['string', 'number', 'variable', 'subexpression'],
-						required: true
-					}]
+					params: {
+						param1: {
+							formats: ['string', 'number', 'variable', 'subexpression'],
+							required: true
+						}
+					}
 				}
 			}
 		};

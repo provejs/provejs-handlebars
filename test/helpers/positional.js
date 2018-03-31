@@ -10,13 +10,7 @@ describe('Linting helper positional parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'template',
-						type: 'positional',
-						formats: ['string', 'variable'],
-						position: 0,
-						required: true
-					}]
+					paras: {}
 				}
 			}
 		};
@@ -30,13 +24,12 @@ describe('Linting helper positional parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'positional',
-						formats: ['string', 'variable'],
-						position: 0,
-						required: true
-					}]
+					params: {
+						param1: {
+							selector: 'eq(0)',
+							required: true
+						}
+					}
 				}
 			}
 		};
@@ -50,13 +43,12 @@ describe('Linting helper positional parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'positional',
-						formats: ['string', 'variable'],
-						position: 0,
-						required: true
-					}]
+					params: {
+						param1: {
+							selector: 'eq(0)',
+							required: true
+						}
+					}
 				}
 			}
 		};
@@ -69,13 +61,12 @@ describe('Linting helper positional parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'positional',
-						formats: ['string', 'variable'],
-						position: 0,
-						required: false
-					}]
+					params: {
+						param1: {
+							selector: 'eq(0)',
+							required: false
+						}
+					}
 				}
 			}
 		};
@@ -88,19 +79,16 @@ describe('Linting helper positional parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'positional',
-						formats: ['string', 'variable'],
-						position: 0,
-						required: true
-					}, {
-						name: 'param2',
-						type: 'positional',
-						formats: ['string', 'variable'],
-						position: 1,
-						required: false
-					}]
+					params: {
+						param1: {
+							selector: 'eq(0)',
+							required: true
+						},
+						param2: {
+							selector: 'eq(1)',
+							required: false
+						}
+					}
 				}
 			}
 		};
@@ -113,13 +101,13 @@ describe('Linting helper positional parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'positional',
-						formats: ['string'],
-						position: 0,
-						required: true
-					}]
+					params: {
+						param1: {
+							selector: 'eq(0)',
+							formats: ['string'],
+							required: true
+						}
+					}
 				}
 			}
 		};
@@ -132,13 +120,13 @@ describe('Linting helper positional parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'positional',
-						formats: ['string'],
-						position: 0,
-						required: true
-					}]
+					params: {
+						param1: {
+							selector: 'eq(0)',
+							formats: ['string'],
+							required: true
+						}
+					}
 				}
 			}
 		};
