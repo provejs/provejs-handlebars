@@ -99,11 +99,11 @@ var config = {
 	helpers: {
 		ifAny: {
 			params: {
-			cases: {
-				selector: 'positional(*)',
-				required: 1
+				cases: {
+					selector: 'positional(*)',
+					required: 1
+				}
 			}
-			}]
 		}
 	}
 };
