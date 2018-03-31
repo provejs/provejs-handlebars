@@ -178,7 +178,7 @@ var config = {
         extraneous: {
           selector: '!',
           severity: 'warning',
-          message: 'The {{#lookup}} helper only supports a two parameters.',
+          message: 'The {{#lookup}} helper only supports two parameters.',
           formats: false
         }
       }
