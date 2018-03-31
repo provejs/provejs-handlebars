@@ -40,17 +40,17 @@ Consider you have the following helpers with a single named param:
 The validation configuration would be:
 ```js
 var config = {
-	helpers: {
-		myHelper: {
-			params: {
-				param1: {
-					selector: 'named()',
-					formats: ['string', 'number', 'variable'],
-					required: true
-				}
-			}
-		}
-	}
+  helpers: {
+    myHelper: {
+      params: {
+        param1: {
+          selector: 'named()',
+          formats: ['string', 'number', 'variable'],
+          required: true
+        }
+      }
+    }
+  }
 };
 ```
 
@@ -77,15 +77,15 @@ When the params config is a function:
 
 ```js
 params: function(positionalParams, namedParameters, helperLocation) {
-	// Validate the array of parameters here. On errror or warning return something like below.
-	// The start and end data for each param will be found in the positionalParms and namedParams nodes.
-	// However you also have the overall helper location to use as well.
-	return {
-		severity: 'error',
-		message: '...',
-		start: helperLocation.start,
-		end: helperLocation.end
-	}
+  // Validate the array of parameters here. On errror or warning return something like below.
+  // The start and end data for each param will be found in the positionalParms and namedParams nodes.
+  // However you also have the overall helper location to use as well.
+  return {
+    severity: 'error',
+    message: '...',
+    start: helperLocation.start,
+    end: helperLocation.end
+  }
 }
 ```
 
@@ -97,16 +97,16 @@ params: function(positionalParams, namedParameters, helperLocation) {
 There needs to be one or more case positional parameter
 ```js
 var config = {
-	helpers: {
-		ifAny: {
-			params: {
-				cases: {
-					selector: 'positional(*)',
-					required: 1
-				}
-			}
-		}
-	}
+  helpers: {
+    ifAny: {
+      params: {
+        cases: {
+          selector: 'positional(*)',
+          required: 1
+        }
+      }
+    }
+  }
 };
 ```
 ## Example: one required, and one or more positional params
@@ -115,21 +115,21 @@ var config = {
 ```
 ```js
 var params = {
-	var1: {
-		selector: 'positional(0)',
-		required: 1
-	},
-	cases: {
-		selector: 'positionalGreaterThan(0)',
-		required: 1
-	}
+  var1: {
+    selector: 'positional(0)',
+    required: 1
+  },
+  cases: {
+    selector: 'positionalGreaterThan(0)',
+    required: 1
+  }
 };
 var config = {
-	helpers: {
-		isAny: {
-			params: params
-		}
-	}
+  helpers: {
+    isAny: {
+      params: params
+    }
+  }
 };
 ```
 
@@ -142,16 +142,16 @@ var params: {
 
 };
 var config = {
-	helpers: {
-		isAny: {
-			params: {
-				template: {
-					selector: 'named()',
-					required: 1
-				}
-			}
-		}
-	}
+  helpers: {
+    isAny: {
+      params: {
+        template: {
+          selector: 'named()',
+          required: 1
+        }
+      }
+    }
+  }
 };
 ```
 
@@ -164,40 +164,40 @@ var config = {
 ```
 ```js
 var config = {
-	helpers: {
-		if: {
-			params: {
-				value1: {
-					selector: 'positional(0)',
-					required: 1
-				}
-			}
-		},
-		lookup: {
-			params: {
-				value1: {
-					selector: 'positional(0)',
-					required: 1
-				}
-			}
-		},
-		each: {
-			params: {
-				value1: {
-					selector: 'positional(0)',
-					required: 1
-				}
-			}
-		},
-		unless: {
-			params: {
-				value1: {
-					selector: 'positional(0)',
-					required: 1
-				}
-			}
-		}
-	}
+  helpers: {
+    if: {
+      params: {
+        value1: {
+          selector: 'positional(0)',
+          required: 1
+        }
+      }
+    },
+    lookup: {
+      params: {
+        value1: {
+          selector: 'positional(0)',
+          required: 1
+        }
+      }
+    },
+    each: {
+      params: {
+        value1: {
+          selector: 'positional(0)',
+          required: 1
+        }
+      }
+    },
+    unless: {
+      params: {
+        value1: {
+          selector: 'positional(0)',
+          required: 1
+        }
+      }
+    }
+  }
 };
 ```
 
@@ -210,20 +210,20 @@ Consider you have helper that does compound logic:
 The validation configuration would be:
 ```js
 var config = {
-	helpers: {
-		ifCompound: {
-			params: function(positionalParams, namedParms, helperLocation) {
-				// Validate the array of parameters here. On errror or warning return something like below.
-				// The start and end data for each param will be found in the positionalParms and namedParams nodes.
-				// However you also have the overall helper location to use as well.
-				return {
-					severity: 'error',
-					message: '...',
-					start: helperLocation.start,
-					end: helperLocation.end
-				}
-			}
-		}
-	}
+  helpers: {
+    ifCompound: {
+      params: function(positionalParams, namedParms, helperLocation) {
+        // Validate the array of parameters here. On errror or warning return something like below.
+        // The start and end data for each param will be found in the positionalParms and namedParams nodes.
+        // However you also have the overall helper location to use as well.
+        return {
+          severity: 'error',
+          message: '...',
+          start: helperLocation.start,
+          end: helperLocation.end
+        }
+      }
+    }
+  }
 };
 ```
