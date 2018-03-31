@@ -61,7 +61,16 @@ When the params config is an object:
 
 - name (**string**): optional name of parameter. Used in the linter error messages. If name  is undefined we will use the config key.
 - selector (**string**| **number**|**function**): required selector which specifies positional params. The selector borrows ideas from jQuery selector syntax. If selector is unspecified then a named param will be used.
-- formats (**array**|**function**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness. Array values include: ['string', 'number', 'variable', 'subexpression'].
+  - **'*'**: all parameters including both positional and named parameters
+  - **'named(*)'**: all named parameters
+  - **'named()'**: a named parameter as identified by the param rule key
+  - **'positional(*)'**: all positional parameters
+  - **'positional(nth)'**: positional nth parameter
+  - **'positionalGreaterThan(nth)'**: greater than nth parameter
+  - **'!'**: any (both named and positional) params not already linted.
+  - **'named(!)'**: any named params not already linted.
+  - **'positional(!)'**: any positional params not already linted.
+- formats (**array**|**function**|**boolean**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness. Array values include: ['string', 'number', 'variable', 'subexpression']. A bool value of false will always fail linting and a bool value of true will always pass linting.
 - required (**boolean**|**number**): required indicator of if the number of params that are required.
 - message (**string**): custom linter message.
 
