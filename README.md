@@ -39,16 +39,16 @@ Consider you have the following helpers with a single named param:
 The validation configuration would be:
 ```js
 var config = {
-  helpers: {
-    myHelper: {
-      params: {
-        param1: {
-            formats: ['string', 'number', 'variable'],
-            required: true
-        }
-      }
-    }
-  }
+	helpers: {
+		myHelper: {
+			params: {
+				param1: {
+					formats: ['string', 'number', 'variable'],
+					required: true
+				}
+			}
+		}
+	}
 };
 ```
 
@@ -73,15 +73,15 @@ When the params config is a function:
 
 ```js
 params: function(positionalParams, namedParameters, helperLocation) {
-  // Validate the array of parameters here. On errror or warning return something like below.
-  // The start and end data for each param will be found in the positionalParms and namedParams nodes.
-  // However you also have the overall helper location to use as well. 
-  return {
-    severity: 'error',
-    message: '...',
-    start: helperLocation.start,
-    end: helperLocation.end
-  }
+	// Validate the array of parameters here. On errror or warning return something like below.
+	// The start and end data for each param will be found in the positionalParms and namedParams nodes.
+	// However you also have the overall helper location to use as well.
+	return {
+		severity: 'error',
+		message: '...',
+		start: helperLocation.start,
+		end: helperLocation.end
+	}
 }
 ```
 
@@ -93,16 +93,16 @@ params: function(positionalParams, namedParameters, helperLocation) {
 There needs to be one or more case positional parameter
 ```js
 var config = {
-  helpers: {
-    ifAny: {
-      params: {
-        cases: {
-            selector: 'eq(*)',
-            required: 1
-        }
-      }]
-    }
-  }
+	helpers: {
+		ifAny: {
+			params: {
+			cases: {
+				selector: 'eq(*)',
+				required: 1
+			}
+			}]
+		}
+	}
 };
 ```
 ## Example: one required, and one or more positional params
@@ -111,21 +111,21 @@ var config = {
 ```
 ```js
 var params = {
-    var1: {
-        selector: 'eq(0)',
-        required: 1
-    },
-    cases: {
-        selector: 'gt(0)',
-        required: 1
-    }
+	var1: {
+		selector: 'eq(0)',
+		required: 1
+	},
+	cases: {
+		selector: 'gt(0)',
+		required: 1
+	}
 };
 var config = {
-    helpers: {
-        isAny: {
-            params: params
-        }
-    }
+	helpers: {
+		isAny: {
+			params: params
+		}
+	}
 };
 ```
 
@@ -135,16 +135,16 @@ var config = {
 ```
 ```js
 var params: {
-  template: {
-    required: 1
-  }
-}
+	template: {
+		required: 1
+	}
+	}
 var config = {
-    helpers: {
-        isAny: {
-            params: params
-        }
-    }
+	helpers: {
+		isAny: {
+			params: params
+		}
+	}
 };
 ```
 
@@ -153,31 +153,38 @@ var config = {
 {{#if condition}}{{/if}}
 {{lookup this 'foo'}}
 {{#each arr}}{{/each}}
+{{#unless foo}}{{/unless}}
 ```
 ```js
 var params1 = {
-    condition: {required: 1}
+	condition: {required: 1}
 };
 
 var params2 = {
-    value1: {required: 1},
-    value2: {required: 1}
+	value1: {required: 1},
+	value2: {required: 1}
 };
 var params3 = {
-    condition: {required: 1}
+	value1: {required: 1}
+};
+var params4 = {
+	value1: {required: 1}
 };
 var config = {
-    helpers: {
-        if: {
-            params: params1
-        },
-        lookup: {
-            params: params2
-        },
-        each: {
-            params: params3
-        }
-    }
+	helpers: {
+		if: {
+			params: params1
+		},
+		lookup: {
+			params: params2
+		},
+		each: {
+			params: params3
+		},
+		unless: {
+			params: params4
+		}
+	}
 };
 ```
 
@@ -190,20 +197,20 @@ Consider you have helper that does compound logic:
 The validation configuration would be:
 ```js
 var config = {
-  helpers: {
-    ifCompound: {
-      params: function(positionalParams, namedParms, helperLocation) {
-          // Validate the array of parameters here. On errror or warning return something like below.
-          // The start and end data for each param will be found in the positionalParms and namedParams nodes.
-          // However you also have the overall helper location to use as well. 
-          return {
-            severity: 'error',
-            message: '...',
-            start: helperLocation.start,
-            end: helperLocation.end
-          }
-      }
-    }
-  }
+	helpers: {
+		ifCompound: {
+			params: function(positionalParams, namedParms, helperLocation) {
+				// Validate the array of parameters here. On errror or warning return something like below.
+				// The start and end data for each param will be found in the positionalParms and namedParams nodes.
+				// However you also have the overall helper location to use as well.
+				return {
+				severity: 'error',
+				message: '...',
+				start: helperLocation.start,
+				end: helperLocation.end
+				}
+			}
+		}
+	}
 };
 ```
