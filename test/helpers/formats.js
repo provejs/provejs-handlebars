@@ -12,6 +12,7 @@ describe('Linting helper params without checking param value formats', function 
 				helper1: {
 					params: {
 						param1: {
+							selector: 'named()',
 							required: true
 						}
 					}

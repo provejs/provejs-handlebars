@@ -4,31 +4,32 @@ var _ = require('lodash');
 
 function getSelectorNum(selector) {
 	return +selector
-		.replace('gt(', '')
-		.replace('eq(', '')
+		.replace('positionalGreaterThan(', '')
+		.replace('positional(', '')
+		.replace('named(', '')
 		.replace(')', '');
 }
 
-exports.params = function(astHelper, selector) {
+exports.params = function(astHelper, selector, ruleKey) {
 
 	log('getParams()');
 
 	var params = [];
 	var param;
-	var named;
 	var num;
 	if (selector === '*') {
 		params = exports.all(astHelper);
-	} else if (selector === 'eq(*)') {
+	} else if (selector === 'positional(*)') {
 		params = exports.allPositional(astHelper);
-	} else if (selector[0] === '#') {
-		named = selector.replace('#', '');
-		param = exports.named(astHelper, named);
+	} else if (selector === 'named(*)') {
+		params = exports.allNamed(astHelper);
+	} else if (selector.indexOf('named(') === 0) {
+		param = exports.named(astHelper, ruleKey);
 		if (param) params.push(param);
-	} else if (selector.indexOf('gt(') === 0) {
+	} else if (selector.indexOf('positionalGreaterThan(') === 0) {
 		num = getSelectorNum(selector);
 		params = exports.positionalGreaterThan(astHelper, num);
-	} else if (selector.indexOf('eq(') === 0) {
+	} else if (selector.indexOf('positional(') === 0) {
 		num = getSelectorNum(selector);
 		param = exports.positional(astHelper, num);
 		if (param) params.push(param);

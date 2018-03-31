@@ -131,13 +131,13 @@ function validate(rule, param) {
 	return error;
 }
 
-function validateHelperParam(astHelper, rule) {
+function validateHelperParam(astHelper, rule, ruleKey) {
 
 	log('validateHelperParam():');
 
 	var error;
 	var selector = rule.selector;
-	var params = Selectors.params(astHelper, selector);
+	var params = Selectors.params(astHelper, selector, ruleKey);
 
 	log('* params:', params);
 
@@ -181,12 +181,11 @@ function validateHelper(astHelper, objRules) {
 	if (_.isFunction(params)) {
 		error = validateHelperCallback(astHelper, params);
 	} else if (_.isObject(params)) {
-		_.forOwn(params, function(rule, name) {
-			if (!rule.name) rule.name = name;
-			if (!rule.selector) rule.selector = '#' + name;
+		_.forOwn(params, function(rule, ruleKey) {
+			if (!rule.name) rule.name = ruleKey;
 			if (!rule.helper) rule.helper = astHelper.name;
 			if (error) return false; // break loop
-			error = validateHelperParam(astHelper, rule);
+			error = validateHelperParam(astHelper, rule, ruleKey);
 		});
 	}
 

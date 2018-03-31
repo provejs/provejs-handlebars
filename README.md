@@ -57,17 +57,19 @@ The params config can be:
 
 When the params config is an object:
 
-- name (**string**): optional name of parameter. Used in the linter error messages.
-- selector (**string**| **number**|**function**): optional selector which specifies positional params. The selector borrows ideas from jQuery selector syntax. If selector is unspecified then a named param will be used.
-- formats (**array**|**function**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness.
+- name (**string**): optional name of parameter. Used in the linter error messages. If name  is undefined we will use the config key.
+- selector (**string**| **number**|**function**): required selector which specifies positional params. The selector borrows ideas from jQuery selector syntax. If selector is unspecified then a named param will be used.
+- formats (**array**|**function**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness. Array values include: ['string', 'number', 'variable', 'subexpression'].
 - required (**boolean**|**number**): required indicator of if the number of params that are required.
 - message (**string**): custom linter message.
 
 The param selector accepts the following:
-- '*' : all parameters including both positional and named parameters
-- '#paramName' : a named parameter
-- 'eq(nth)': positional nth parameter
-- 'gt(nth)': greater than nth parameter
+- '*': all parameters including both positional and named parameters
+- 'named(*)': all named parameters
+- 'named()': a named parameter as identified by the param rule key
+- 'positional(*)': all positional parameters
+- 'positional(nth)': positional nth parameter
+- 'positionalGreaterThan(nth)': greater than nth parameter
 
 When the params config is a function:
 

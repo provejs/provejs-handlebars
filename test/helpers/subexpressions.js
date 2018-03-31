@@ -12,6 +12,7 @@ describe('Linting helper params with subexpressions', function () {
 				helper1: {
 					params: {
 						param1: {
+							selector: 'named()',
 							formats: ['string', 'number', 'variable', 'subexpression'],
 							required: true
 						}

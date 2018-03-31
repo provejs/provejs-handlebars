@@ -12,6 +12,7 @@ describe('Linting helper whitespace around parameters', function () {
 				helper1: {
 					params: {
 						param1: {
+							selector: 'named()',
 							required: true
 						}
 					}

@@ -11,7 +11,8 @@ describe('Linting helper named parameters', function () {
 			helpers: {
 				helper1: {
 					params: {
-						template: {
+						param1: {
+							selector: 'named()',
 							formats: ['string', 'variable'],
 							required: true
 						}
@@ -25,12 +26,13 @@ describe('Linting helper named parameters', function () {
 		Assert.deepEqual(actual, expected);
 	});
 	it('correct helper should not generate any errors', function () {
-		var html = "{{helper1 template=foobar}}";
+		var html = "{{helper1 param1=foobar}}";
 		var config = {
 			helpers: {
 				helper1: {
 					params: {
-						template: {
+						param1: {
+							selector: 'named()',
 							formats: ['string', 'variable'],
 							required: true
 						}
@@ -49,7 +51,8 @@ describe('Linting helper named parameters', function () {
 			helpers: {
 				helper1: {
 					params: {
-						template: {
+						param1: {
+							selector: 'named()',
 							required: true
 						}
 					}
@@ -66,7 +69,8 @@ describe('Linting helper named parameters', function () {
 			helpers: {
 				helper1: {
 					params: {
-						template: {
+						param1: {
+							selector: 'named()',
 							required: false
 						}
 					}
@@ -84,10 +88,12 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: {
 						param1: {
+							selector: 'named()',
 							formats: ['string', 'variable'],
 							required: true
 						},
 						param2: {
+							selector: 'named()',
 							formats: ['string', 'variable'],
 							required: false
 						}
@@ -106,6 +112,7 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: {
 						param1: {
+							selector: 'named()',
 							formats: ['string'],
 							required: true
 						}
@@ -124,6 +131,7 @@ describe('Linting helper named parameters', function () {
 				helper1: {
 					params: {
 						param1: {
+							selector: 'named()',
 							formats: ['string'],
 							required: true
 						}

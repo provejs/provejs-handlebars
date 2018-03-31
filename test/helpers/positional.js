@@ -10,7 +10,7 @@ describe('Linting helper positional parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					paras: {}
+					params: {}
 				}
 			}
 		};
@@ -26,7 +26,7 @@ describe('Linting helper positional parameters', function () {
 				helper1: {
 					params: {
 						param1: {
-							selector: 'eq(0)',
+							selector: 'positional(0)',
 							required: true
 						}
 					}
@@ -45,7 +45,7 @@ describe('Linting helper positional parameters', function () {
 				helper1: {
 					params: {
 						param1: {
-							selector: 'eq(0)',
+							selector: 'positional(0)',
 							required: true
 						}
 					}
@@ -63,7 +63,7 @@ describe('Linting helper positional parameters', function () {
 				helper1: {
 					params: {
 						param1: {
-							selector: 'eq(0)',
+							selector: 'positional(0)',
 							required: false
 						}
 					}
@@ -81,11 +81,11 @@ describe('Linting helper positional parameters', function () {
 				helper1: {
 					params: {
 						param1: {
-							selector: 'eq(0)',
+							selector: 'positional(0)',
 							required: true
 						},
 						param2: {
-							selector: 'eq(1)',
+							selector: 'positional(1)',
 							required: false
 						}
 					}
@@ -103,7 +103,7 @@ describe('Linting helper positional parameters', function () {
 				helper1: {
 					params: {
 						param1: {
-							selector: 'eq(0)',
+							selector: 'positional(0)',
 							formats: ['string'],
 							required: true
 						}
@@ -122,7 +122,7 @@ describe('Linting helper positional parameters', function () {
 				helper1: {
 					params: {
 						param1: {
-							selector: 'eq(0)',
+							selector: 'positional(0)',
 							formats: ['string'],
 							required: true
 						}
