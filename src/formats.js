@@ -18,7 +18,7 @@ function getValue(param) {
 	if (param.type === 'HashPair') {
 		if (param.value.type === 'StringLiteral') return param.value.value;
 		if (param.value.type === 'NumberLiteral') return param.value.value;
-	} else if (param.data){
+	} else if (param.data) {
 		if (param.value.type === 'StringLiteral') return param.value;
 		if (param.value.type === 'NumberLiteral') return param.value;
 	}
@@ -50,7 +50,7 @@ exports.lint = function(rule, param) {
 		ok =_.includes(allowed, type, param);
 		return ok;
 	} else if (_.isFunction(formats)) {
-		return formats(type, value);
+		return formats(type, value, param);
 	} else {
 		return false;
 	}

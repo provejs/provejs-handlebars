@@ -18,9 +18,9 @@ function pruneHelpers(node) {
 		hash: hash,
 		loc: node.loc
 	};
-	// log('pruneHelpers()'.magenta);
-	// log('node:'.gray, node);
-	// log('helper:'.gray, helper);
+	// log('pruneHelpers()');
+	// log('node:'), node);
+	// log('helper:'), helper);
 	return helper;
 }
 
@@ -31,8 +31,8 @@ function popMsg(str, helperName, hashName) {
 }
 
 function lintHelperCallback(astHelper, callback) {
-	log('lintHelperCallback():'.magenta);
-	log('* astHelper:'.gray, astHelper);
+	log('lintHelperCallback()');
+	log('* astHelper:', astHelper);
 
 	var posParams = Selectors.allPositional(astHelper);
 	var namParams = Selectors.allNamed(astHelper);
@@ -64,7 +64,8 @@ function lint(rule, param) {
 
 function lintHelperParam(astHelper, rule, ruleKey) {
 
-	log('lintHelperParam():');
+	log('lintHelperParam()');
+	log('* ruleKey:', ruleKey.yellow);
 
 	var error;
 	var selector = rule.selector;
@@ -105,9 +106,9 @@ function lintHelper(astHelper, objRules) {
 	var error;
 	var params = objRules.params;
 
-	log('lintHelper():'.magenta);
-	log('* astHelper:'.gray, astHelper);
-	log('* objRules:'.gray, objRules);
+	log('lintHelper()');
+	log('* astHelper:', astHelper);
+	log('* objRules:', objRules);
 
 	if (_.isFunction(params)) {
 		error = lintHelperCallback(astHelper, params);
@@ -124,7 +125,7 @@ function lintHelper(astHelper, objRules) {
 }
 
 function lintHelpers(helpers, rules) {
-	log('lintHelpers()'.magenta);
+	log('lintHelpers()');
 	var errors = [];
 	helpers.forEach(function(helper) {
 		var config = rules.helpers[helper.name];
@@ -135,7 +136,7 @@ function lintHelpers(helpers, rules) {
 }
 
 function filterHelpersNodes(nodes, rules) {
-	log('filterHelpersNodes()'.magenta);
+	log('filterHelpersNodes()');
 	var helperNames = _.keys(rules.helpers);
 
 	var helpers = nodes.filter(function(node) {
@@ -148,14 +149,14 @@ function filterHelpersNodes(nodes, rules) {
 	});
 
 	helpers = helpers.map(pruneHelpers);
-	log('* helpers:'.gray, helpers);
+	log('* helpers:', helpers);
 	return helpers;
 }
 
 exports.linter = function (rules, ast) {
 
-	log('linter():'.magenta);
-	log('* ast.body:'.gray, JSON.stringify(ast.body));
+	log('linter()');
+	log('* ast.body:', JSON.stringify(ast.body));
 	var errors = [];
 	var nodes = ast.body || ast;
 	var helpers = filterHelpersNodes(nodes, rules);

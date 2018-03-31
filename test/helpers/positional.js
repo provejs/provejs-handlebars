@@ -134,5 +134,4 @@ describe('Linting helper positional parameters', function () {
 		var actual = Linter(config, ast);
 		Assert.equal(actual.length, 1);
 	});
-	it('extra helper positional parameter should generate warning');
 });

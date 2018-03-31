@@ -105,6 +105,30 @@ describe('Linting helper named parameters', function () {
 		var actual = Linter(config, ast);
 		Assert.equal(actual.length, 0);
 	});
+	it('2 named parameter should generate error', function () {
+		var html = "{{helper1 param1='foo' param2='bar'}}";
+		var config = {
+			helpers: {
+				helper1: {
+					params: {
+						param1: {
+							selector: 'named()',
+							formats: true,
+							required: true
+						},
+						param2: {
+							selector: 'named()',
+							formats: false,
+							required: true
+						}
+					}
+				}
+			}
+		};
+		var ast = Handlebars.parse(html);
+		var actual = Linter(config, ast);
+		Assert.equal(actual.length, 1);
+	});
 	it('helper named parameter with wrong value format should generate error', function () {
 		var html = "{{helper1 param1=42}}";
 		var config = {
@@ -143,5 +167,4 @@ describe('Linting helper named parameters', function () {
 		var actual = Linter(config, ast);
 		Assert.equal(actual.length, 1);
 	});
-	it('extra helper named parameter should generate warning');
 });
