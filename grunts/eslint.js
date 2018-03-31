@@ -13,6 +13,7 @@ module.exports = function(grunt) {
 			},
 			src: [
 				'*.js',
+				'src/**/*.js',
 				'grunts/**/*.js',
 				'test/**/*.js'
 			]

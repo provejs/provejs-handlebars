@@ -4,18 +4,18 @@ var Assert = require('assert');
 var Handlebars = require('handlebars');
 var Linter = require('../../index').linter;
 
-describe('Linting helper named parameters', function () {
+describe.only('Linting helper named parameters', function () {
 	it('empty html should not generate any errors', function () {
 		var html = '';
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'template',
-						type: 'named',
-						formats: ['string', 'variable'],
-						required: true
-					}]
+					params: {
+						template: {
+							formats: ['string', 'variable'],
+							required: true
+						}
+					}
 				}
 			}
 		};
@@ -29,12 +29,12 @@ describe('Linting helper named parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'template',
-						type: 'named',
-						formats: ['string', 'variable'],
-						required: true
-					}]
+					params: {
+						template: {
+							formats: ['string', 'variable'],
+							required: true
+						}
+					}
 				}
 			}
 		};
@@ -48,12 +48,11 @@ describe('Linting helper named parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'template',
-						type: 'named',
-						formats: ['string', 'variable'],
-						required: true
-					}]
+					params: {
+						template: {
+							required: true
+						}
+					}
 				}
 			}
 		};
@@ -66,12 +65,11 @@ describe('Linting helper named parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'template',
-						type: 'named',
-						formats: ['string', 'variable'],
-						required: false
-					}]
+					params: {
+						template: {
+							required: false
+						}
+					}
 				}
 			}
 		};
@@ -84,17 +82,16 @@ describe('Linting helper named parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'named',
-						formats: ['string', 'variable'],
-						required: true
-					}, {
-						name: 'param2',
-						type: 'named',
-						formats: ['string', 'variable'],
-						required: false
-					}]
+					params: {
+						param1: {
+							formats: ['string', 'variable'],
+							required: true
+						},
+						param2: {
+							formats: ['string', 'variable'],
+							required: false
+						}
+					}
 				}
 			}
 		};
@@ -107,12 +104,12 @@ describe('Linting helper named parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'named',
-						formats: ['string'],
-						required: true
-					}]
+					params: {
+						param1: {
+							formats: ['string'],
+							required: true
+						}
+					}
 				}
 			}
 		};
@@ -125,12 +122,12 @@ describe('Linting helper named parameters', function () {
 		var config = {
 			helpers: {
 				helper1: {
-					params: [{
-						name: 'param1',
-						type: 'named',
-						formats: ['string'],
-						required: true
-					}]
+					params: {
+						param1: {
+							formats: ['string'],
+							required: true
+						}
+					}
 				}
 			}
 		};

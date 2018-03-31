@@ -60,7 +60,7 @@ When the params config is an object:
 - name (**string**): optional name of parameter. Used in the linter error messages.
 - selector (**string**| **number**|**function**): optional selector which specifies positional params. The selector borrows ideas from jQuery selector syntax. If selector is unspecified then a named param will be used.
 - formats (**array**|**function**): optional param value types. If formats is undefined then any param is accepted. If it is a function you can validate the param value for fitness.
-- required (**number**): required indicator of if the number of params that are required.
+- required (**boolean**|**number**): required indicator of if the number of params that are required.
 - message (**string**): custom linter message.
 
 The param selector accepts the following:
