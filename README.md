@@ -43,6 +43,7 @@ var config = {
 		myHelper: {
 			params: {
 				param1: {
+					selector: 'named()',
 					formats: ['string', 'number', 'variable'],
 					required: true
 				}
@@ -99,7 +100,7 @@ var config = {
 		ifAny: {
 			params: {
 			cases: {
-				selector: 'eq(*)',
+				selector: 'positional(*)',
 				required: 1
 			}
 			}]
@@ -114,11 +115,11 @@ var config = {
 ```js
 var params = {
 	var1: {
-		selector: 'eq(0)',
+		selector: 'positional(0)',
 		required: 1
 	},
 	cases: {
-		selector: 'gt(0)',
+		selector: 'positionalGreaterThan(0)',
 		required: 1
 	}
 };
@@ -137,14 +138,17 @@ var config = {
 ```
 ```js
 var params: {
-	template: {
-		required: 1
-	}
-	}
+
+};
 var config = {
 	helpers: {
 		isAny: {
-			params: params
+			params: {
+				template: {
+					selector: 'named()',
+					required: 1
+				}
+			}
 		}
 	}
 };
@@ -158,33 +162,39 @@ var config = {
 {{#unless foo}}{{/unless}}
 ```
 ```js
-var params1 = {
-	condition: {required: 1}
-};
-
-var params2 = {
-	value1: {required: 1},
-	value2: {required: 1}
-};
-var params3 = {
-	value1: {required: 1}
-};
-var params4 = {
-	value1: {required: 1}
-};
 var config = {
 	helpers: {
 		if: {
-			params: params1
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				}
+			}
 		},
 		lookup: {
-			params: params2
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				}
+			}
 		},
 		each: {
-			params: params3
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				}
+			}
 		},
 		unless: {
-			params: params4
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				}
+			}
 		}
 	}
 };
