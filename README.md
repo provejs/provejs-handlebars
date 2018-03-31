@@ -65,12 +65,12 @@ When the params config is an object:
 - message (**string**): custom linter message.
 
 The param selector accepts the following:
-- '*': all parameters including both positional and named parameters
-- 'named(*)': all named parameters
-- 'named()': a named parameter as identified by the param rule key
-- 'positional(*)': all positional parameters
-- 'positional(nth)': positional nth parameter
-- 'positionalGreaterThan(nth)': greater than nth parameter
+- **'*'**: all parameters including both positional and named parameters
+- **'named(*)'**: all named parameters
+- **'named()'**: a named parameter as identified by the param rule key
+- **'positional(*)'**: all positional parameters
+- **'positional(nth)'**: positional nth parameter
+- **'positionalGreaterThan(nth)'**: greater than nth parameter
 
 When the params config is a function:
 
