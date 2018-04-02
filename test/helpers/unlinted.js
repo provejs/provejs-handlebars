@@ -28,8 +28,8 @@ describe('Linting unlinted params', function () {
 		Assert.equal(errors.length, 1);
 		Assert.equal(error.start.line, 0);
 		Assert.equal(error.end.line, 0);
-		Assert.equal(error.start.column, 20);
-		Assert.equal(error.end.column, 28);
+		Assert.equal(error.start.column, 21);
+		Assert.equal(error.end.column, 29);
 		Assert.equal(error.severity, 'warning');
 	});
 });

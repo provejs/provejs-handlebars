@@ -21,7 +21,6 @@ function pruneHelpers(node) {
 		loc: node.loc,
 		block: (node.type === 'BlockStatement')
 	};
-	console.log('nodes:', JSON.stringify(helper));
 	return helper;
 }
 
@@ -129,9 +128,13 @@ function lintHelper(astHelper, objRules) {
 		error = lintHelperCallback(astHelper, params);
 	} else if (isObject(params)) {
 		forOwn(params, function(rule, ruleKey) {
+
+			// set defaults
 			if (!rule.name) rule.name = ruleKey;
 			if (!rule.helper) rule.helper = astHelper.name;
 			if (!rule.severity) rule.severity = 'error';
+			if (!rule.block) rule.block = false;
+
 			if (error) return false; // break loop
 			error = lintHelperParam(astHelper, rule, ruleKey);
 		});

@@ -101,6 +101,7 @@ When the params config is an object:
 - required (**boolean**|**number**): required indicator of if the number of params that are required.
 - message (**string**): custom linter message.
 - severity (**string**): optional severity of the linting error. Either 'error' or 'warning'. Defaults to 'error'.
+- block (**boolean**): optional indicator of if the helper should be a block helper or not. Defaults to false;
 
 ## Example: one or more positional params
 ```hbs
