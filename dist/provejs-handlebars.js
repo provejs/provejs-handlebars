@@ -12856,18 +12856,20 @@ var isUndefined = require('lodash.isundefined');
 
 function getValueType(param) {
 	if (param.type === 'PathExpression') return 'variable';
-	if (param.value.type === 'SubExpression') return 'subexpression';
-	if (param.value.type === 'PathExpression') return 'variable';
-	if (param.value.type === 'StringLiteral') return 'string';
-	if (param.value.type === 'NumberLiteral') return 'number';
+	if (param.value) {
+		if (param.value.type === 'SubExpression') return 'subexpression';
+		if (param.value.type === 'PathExpression') return 'variable';
+		if (param.value.type === 'StringLiteral') return 'string';
+		if (param.value.type === 'NumberLiteral') return 'number';
+	}
 	return;
 }
 
 function getValue(param) {
-	if (param.type === 'HashPair') {
+	if (param.type === 'HashPair' && param.value) {
 		if (param.value.type === 'StringLiteral') return param.value.value;
 		if (param.value.type === 'NumberLiteral') return param.value.value;
-	} else if (param.data) {
+	} else if (param.data && param.value) {
 		if (param.value.type === 'StringLiteral') return param.value;
 		if (param.value.type === 'NumberLiteral') return param.value;
 	}
