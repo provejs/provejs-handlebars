@@ -1,6 +1,5 @@
 'use strict';
 
-require('colors');
 var Selectors = require('./src/selectors');
 var log = require('./src/utilities').log;
 var Formats = require('./src/formats');

@@ -1,6 +1,6 @@
 'use strict';
 
-var log = require('./utilities').log;
+// var log = require('./utilities').log;
 var isArray = require('lodash.isarray');
 var includes = require('lodash.includes');
 var isFunction = require('lodash.isfunction');
@@ -16,8 +16,6 @@ function getValueType(param) {
 }
 
 function getValue(param) {
-	log('getValue()');
-	log('* param:', param);
 	if (param.type === 'HashPair') {
 		if (param.value.type === 'StringLiteral') return param.value.value;
 		if (param.value.type === 'NumberLiteral') return param.value.value;
@@ -30,16 +28,10 @@ function getValue(param) {
 
 exports.lint = function(rule, param) {
 
-	log('incorrectValueFormat()');
-
 	var formats = rule.formats;
 	var type = getValueType(param);
 	var value = getValue(param);
 	var allowed, ok;
-
-	log('* formats:', formats);
-	log('* type:', type);
-	log('* value:', value);
 
 	// return early
 	if (isUndefined(formats)) return true;

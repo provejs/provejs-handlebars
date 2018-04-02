@@ -1,5 +1,5 @@
 'use strict';
-var log = require('./utilities').log;
+// var log = require('./utilities').log;
 var find = require('lodash.find');
 
 function getSelectorNum(selector) {
@@ -20,10 +20,6 @@ function linted(param) {
 }
 
 exports.params = function(astHelper, selector, ruleKey) {
-
-	log('params()');
-	log('* selector:', selector);
-	log('* ruleKey:', ruleKey);
 
 	var params = [];
 	var param;
@@ -63,26 +59,22 @@ exports.params = function(astHelper, selector, ruleKey) {
 
 
 exports.all = function(astHelper) {
-	log('all()');
 	var arr1 = exports.allPositional(astHelper);
 	var arr2 = exports.allNamed(astHelper);
 	return [].concat(arr1, arr2);
 };
 
 exports.allNamed = function(astHelper) {
-	log('allNamed()');
 	var hash = astHelper.hash || {};
 	var pairs = hash.pairs || [];
 	return pairs;
 };
 
 exports.allPositional = function(astHelper) {
-	log('allPositional()');
 	return astHelper.params || [];
 };
 
 exports.named = function(astHelper, named) {
-	log('named()');
 	var hash = astHelper.hash || {};
 	var pairs = hash.pairs || [];
 	var pair = find(pairs, {key: named});
@@ -90,13 +82,11 @@ exports.named = function(astHelper, named) {
 };
 
 exports.positionalGreaterThan = function(astHelper, num) {
-	log('positionaGreatThan()');
 	var params = astHelper.params || [];
 	return params.slice(num);
 };
 
 exports.positional = function(astHelper, num) {
-	log('positional()');
 	var params = astHelper.params || [];
 	return params[num];
 };
