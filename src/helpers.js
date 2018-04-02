@@ -97,7 +97,7 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 	} else if (rule.required > params.length) {
 		return {
 			severity: rule.severity,
-			message: popMsg('The `@helperName` helper requires ' + rule.required + ' `@hashName` params, but only ' + params.length + 1 + ' were found.', rule.helper, rule.name),
+			message: popMsg('The `@helperName` helper requires ' + words(rule.required) + ' `@hashName` params, but only ' + params.length + ' were found.', rule.helper, rule.name),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column
@@ -108,6 +108,16 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 			}
 		};
 	}
+}
+
+function words(val) {
+	if (val === false) return 'an optional';
+	if (val === true) return 'one';
+	if (val === 0) return 'an optional';
+	if (val === 1) return 'one';
+	if (val === 2) return 'two';
+	if (val === 3) return 'three';
+	return val;
 }
 
 function lintHelper(astHelper, objRules) {
@@ -167,14 +177,14 @@ exports.linter = function (nodes, rules) {
 exports.config = {
 	if: {
 		params: {
-			value1: {
+			value: {
 				selector: 'positional(0)',
 				required: 1
 			},
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#if}} helper only supports a single condition parameter.',
+				message: 'The {{#if}} helper only supports a single condition parameter. This parameter should be removed.',
 				formats: false
 			}
 		}
@@ -187,41 +197,40 @@ exports.config = {
 			},
 			needle: {
 				selector: 'positional(1)',
-				formats: ['string', 'variable'],
 				required: 1
 			},
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#lookup}} helper only supports two parameters.',
+				message: 'The {{#lookup}} helper only supports two parameters. This parameter should be removed.',
 				formats: false
 			}
 		}
 	},
 	each: {
 		params: {
-			value1: {
+			arrValue: {
 				selector: 'positional(0)',
 				required: 1
 			},
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#each}} helper only supports a single parameter and should be an array value.',
+				message: 'The {{#each}} helper only supports a single parameter and should be an array value. This parameter should be removed.',
 				formats: false
 			}
 		}
 	},
 	unless: {
 		params: {
-			value1: {
+			value: {
 				selector: 'positional(0)',
 				required: 1
 			},
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#unless}} helper only supports a single parameter.',
+				message: 'The {{#unless}} helper only supports a single parameter. This parameter should be removed.',
 				formats: false
 			}
 		}
