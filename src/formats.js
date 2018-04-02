@@ -1,6 +1,5 @@
 'use strict';
 
-// var log = require('./utilities').log;
 var includes = require('lodash.includes');
 var isFunction = require('lodash.isfunction');
 var isUndefined = require('lodash.isundefined');

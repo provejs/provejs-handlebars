@@ -1,7 +1,6 @@
 'use strict';
 
 var Selectors = require('./selectors');
-// var log = require('./utilities').log;
 var Formats = require('./formats');
 var isFunction = require('lodash.isfunction');
 var isObject = require('lodash.isobject');
@@ -19,11 +18,10 @@ function pruneHelpers(node) {
 		name: name,
 		params: params,
 		hash: hash,
-		loc: node.loc
+		loc: node.loc,
+		block: (node.type === 'BlockStatement')
 	};
-	// log('pruneHelpers()');
-	// log('node:'), node);
-	// log('helper:'), helper);
+	console.log('nodes:', JSON.stringify(helper));
 	return helper;
 }
 

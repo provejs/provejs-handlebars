@@ -1,5 +1,5 @@
 'use strict';
-// var log = require('./utilities').log;
+
 var find = require('lodash.find');
 
 function getSelectorNum(selector) {
