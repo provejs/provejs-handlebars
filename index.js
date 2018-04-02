@@ -143,7 +143,7 @@ function parse(html) {
 	try {
 		ret = Handlebars.parse(html);
 	} catch (e) {
-		ret = Exceptions.parser(e, html);
+		ret = [Exceptions.parser(e, html)];
 	}
 	return ret;
 }
