@@ -26,8 +26,7 @@ In Node.js:
 ```js
 var Linter = require('provejs-handlebars').linter;
 var html = '{{#foo}}{{/bar}}';
-var config = {...};
-var errors = Linter(config, html);
+var errors = Linter(html);
 ```
 
 The errors output will be something like:
@@ -43,16 +42,21 @@ In browser:
 <script src="dist/handlebars-linter.js"></script>
 <script>
 var html = "{{helper param1=xxx}}";
-var config = {...};
-var errors = ProveHandlebars.linter(config, html);
+var errors = ProveHandlebars.linter(html);
 </script>
 ```
 
 # Linter Signature
 
 The linter function accepts two params:
-- config (**object**): required config object which is defined below.
 - html (**html**): required html template string.
+- config (**object**): optional config object which is defined below. If the config is undefined than a default config is used.
+
+The default config lints the built-in handlebars helpers. The default config can be accessed:
+```js
+console.log(Linter.config); // node.js
+console.log(ProveHandlebars.config); // browser
+```
 
 # Helpers Configuration
 
