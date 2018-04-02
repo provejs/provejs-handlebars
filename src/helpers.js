@@ -51,8 +51,14 @@ function lint(rule, param) {
 		error = {
 			severity: rule.severity,
 			message: message,
-			start: param.loc.start,
-			end: param.loc.end
+			start: {
+				line: param.loc.start.line - 1,
+				column: param.loc.start.column - 1
+			},
+			end: {
+				line: param.loc.end.line - 1,
+				column: param.loc.end.column - 1
+			}
 		};
 	}
 	return error;
@@ -79,15 +85,27 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 		return {
 			severity: rule.severity,
 			message: popMsg('The `@helperName` helper requires a positional parameter of `@hashName`, but non was found.', rule.helper, rule.name),
-			start: astHelper.loc.start,
-			end: astHelper.loc.end
+			start: {
+				line: astHelper.loc.start.line - 1,
+				column: astHelper.loc.start.column - 1
+			},
+			end: {
+				line: astHelper.loc.end.line,
+				column: astHelper.loc.end.column
+			}
 		};
 	} else if (rule.required > params.length) {
 		return {
 			severity: rule.severity,
 			message: popMsg('The `@helperName` helper requires ' + rule.required + ' `@hashName` params, but only ' + params.length + 1 + ' were found.', rule.helper, rule.name),
-			start: astHelper.loc.start,
-			end: astHelper.loc.end
+			start: {
+				line: astHelper.loc.start.line - 1,
+				column: astHelper.loc.start.column - 1
+			},
+			end: {
+				line: astHelper.loc.end.line - 1,
+				column: astHelper.loc.end.column - 1
+			}
 		};
 	}
 }
