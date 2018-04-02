@@ -1,6 +1,6 @@
 'use strict';
 var log = require('./utilities').log;
-var _ = require('lodash');
+var find = require('lodash.find');
 
 function getSelectorNum(selector) {
 	return +selector
@@ -85,7 +85,7 @@ exports.named = function(astHelper, named) {
 	log('named()');
 	var hash = astHelper.hash || {};
 	var pairs = hash.pairs || [];
-	var pair = _.find(pairs, {key: named});
+	var pair = find(pairs, {key: named});
 	return pair;
 };
 

@@ -1,7 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
 var log = require('./utilities').log;
+var isArray = require('lodash.isarray');
+var includes = require('lodash.includes');
+var isFunction = require('lodash.isfunction');
+var isUndefined = require('lodash.isundefined');
 
 function getValueType(param) {
 	if (param.type === 'PathExpression') return 'variable';
@@ -39,17 +42,17 @@ exports.lint = function(rule, param) {
 	log('* value:', value);
 
 	// return early
-	if (_.isUndefined(formats)) return true;
+	if (isUndefined(formats)) return true;
 	if (formats === true) return true;
 	if (formats === false) return false;
 
-	if (_.isArray(formats)) {
+	if (isArray(formats)) {
 		allowed = formats.map(function(str) {
 			return str.toLowerCase();
 		});
-		ok =_.includes(allowed, type, param);
+		ok = includes(allowed, type, param);
 		return ok;
-	} else if (_.isFunction(formats)) {
+	} else if (isFunction(formats)) {
 		return formats(type, value, param);
 	} else {
 		return false;

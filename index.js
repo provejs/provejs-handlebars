@@ -1,12 +1,16 @@
 'use strict';
 
 require('colors');
-var _ = require('lodash');
 var Selectors = require('./src/selectors');
 var log = require('./src/utilities').log;
 var Formats = require('./src/formats');
 var Exceptions = require('./src/exceptions');
 var Handlebars = require('handlebars');
+var isFunction = require('lodash.isfunction');
+var isObject = require('lodash.isobject');
+var forOwn = require('lodash.forown');
+var keys = require('lodash.keys');
+var includes = require('lodash.includes');
 
 function pruneHelpers(node) {
 
@@ -112,10 +116,10 @@ function lintHelper(astHelper, objRules) {
 	log('* astHelper:', astHelper);
 	log('* objRules:', objRules);
 
-	if (_.isFunction(params)) {
+	if (isFunction(params)) {
 		error = lintHelperCallback(astHelper, params);
-	} else if (_.isObject(params)) {
-		_.forOwn(params, function(rule, ruleKey) {
+	} else if (isObject(params)) {
+		forOwn(params, function(rule, ruleKey) {
 			if (!rule.name) rule.name = ruleKey;
 			if (!rule.helper) rule.helper = astHelper.name;
 			if (!rule.severity) rule.severity = 'error';
@@ -140,14 +144,14 @@ function lintHelpers(helpers, rules) {
 
 function filterHelpersNodes(nodes, rules) {
 	log('filterHelpersNodes()');
-	var helperNames = _.keys(rules.helpers);
+	var helperNames = keys(rules.helpers);
 
 	var helpers = nodes.filter(function(node) {
 		// log('node:', node);
 		if (node.type !== 'MustacheStatement' && node.type !== 'BlockStatement') return false;
 		if (node.params.length > 0) return true;
 		if (node.hash !== undefined) return true;
-		if (_.includes(helperNames, node.path.original)) return true; // helper with no hash or params
+		if (includes(helperNames, node.path.original)) return true; // helper with no hash or params
 		return false;
 	});
 

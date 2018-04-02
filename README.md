@@ -44,7 +44,7 @@ In browser:
 <script>
 var html = "{{helper param1=xxx}}";
 var config = {...};
-var errors = HandlebarsLinter(config, html);
+var errors = ProveHandlebars.linter(config, html);
 </script>
 ```
 
@@ -275,7 +275,7 @@ grunt
 Building for use in browser:
 ```bash
 npm install browserify -g
-browserify index.js -s HandlebarsLinter> dist/handlebars-linter.js
+browserify index.js -s ProveHandlebars> dist/provejs-handlebars.js
 ```
 
 Test:
