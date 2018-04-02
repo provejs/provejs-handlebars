@@ -53,11 +53,11 @@ function lint(rule, param) {
 			message: message,
 			start: {
 				line: param.loc.start.line - 1,
-				column: param.loc.start.column - 1
+				column: param.loc.start.column
 			},
 			end: {
 				line: param.loc.end.line - 1,
-				column: param.loc.end.column - 1
+				column: param.loc.end.column
 			}
 		};
 	}
@@ -87,10 +87,10 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 			message: popMsg('The `@helperName` helper requires a positional parameter of `@hashName`, but non was found.', rule.helper, rule.name),
 			start: {
 				line: astHelper.loc.start.line - 1,
-				column: astHelper.loc.start.column - 1
+				column: astHelper.loc.start.column
 			},
 			end: {
-				line: astHelper.loc.end.line,
+				line: astHelper.loc.end.line - 1,
 				column: astHelper.loc.end.column
 			}
 		};
@@ -100,11 +100,11 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 			message: popMsg('The `@helperName` helper requires ' + rule.required + ' `@hashName` params, but only ' + params.length + 1 + ' were found.', rule.helper, rule.name),
 			start: {
 				line: astHelper.loc.start.line - 1,
-				column: astHelper.loc.start.column - 1
+				column: astHelper.loc.start.column
 			},
 			end: {
 				line: astHelper.loc.end.line - 1,
-				column: astHelper.loc.end.column - 1
+				column: astHelper.loc.end.column
 			}
 		};
 	}
@@ -181,11 +181,11 @@ exports.config = {
 	},
 	lookup: {
 		params: {
-			value1: {
+			haystack: {
 				selector: 'positional(0)',
 				required: 1
 			},
-			value2: {
+			needle: {
 				selector: 'positional(1)',
 				formats: ['string', 'variable'],
 				required: 1
