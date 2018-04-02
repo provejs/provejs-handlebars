@@ -72,7 +72,7 @@ describe('Linting helper params without checking param value formats', function 
 							formats: function(type, value, param) {
 								console.log('type:', type);
 								console.log('value:', value);
-								console.log('param', param)
+								console.log('param', param);
 								return (param && value === 42 && type === 'number');
 							},
 							required: true
