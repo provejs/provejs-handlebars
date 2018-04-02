@@ -38,7 +38,13 @@ The errors output will be something like:
     end: { line: 0, column: 23 } } ]
 ```
 
-# Configuration
+# Linter Signature
+
+The linter function accepts two params:
+- config (**object**): required config object which is defined below.
+- html (**html**): required html template string.
+
+# Helpers Configuration
 
 Consider you have the following helpers with a single named param:
 ```hbs

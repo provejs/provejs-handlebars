@@ -5,6 +5,8 @@ var _ = require('lodash');
 var Selectors = require('./src/selectors');
 var log = require('./src/utilities').log;
 var Formats = require('./src/formats');
+var Exceptions = require('./src/exceptions');
+var Handlebars = require('handlebars');
 
 function pruneHelpers(node) {
 
@@ -154,15 +156,28 @@ function filterHelpersNodes(nodes, rules) {
 	return helpers;
 }
 
-exports.linter = function (rules, ast) {
+function parse(html) {
+	var ret;
+	try {
+		ret = Handlebars.parse(html);
+	} catch (e) {
+		ret = Exceptions.parser(e, html);
+	}
+	return ret;
+}
+
+exports.linter = function (rules, html) {
 
 	log('linter()');
-	log('* ast.body:', JSON.stringify(ast.body));
-	var errors = [];
-	var nodes = ast.body || ast;
-	var helpers = filterHelpersNodes(nodes, rules);
 
-	errors = _.concat(errors, lintHelpers(helpers, rules));
+	var errors = [];
+	var helpers;
+	errors = parse(html);
+	if (errors.length) return errors;
+	var ast = errors;
+	var nodes = ast.body || ast;
+	helpers = filterHelpersNodes(nodes, rules);
+	errors = lintHelpers(helpers, rules);
 
 	return errors;
 };
