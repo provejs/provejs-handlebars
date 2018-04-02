@@ -1,7 +1,6 @@
 'use strict';
 
 var Assert = require('assert');
-var Handlebars = require('handlebars');
 var Linter = require('../../index').linter;
 
 describe('Linting unlinted params', function () {
@@ -24,8 +23,7 @@ describe('Linting unlinted params', function () {
 				}
 			}
 		};
-		var ast = Handlebars.parse(html);
-		var errors = Linter(config, ast);
+		var errors = Linter(html, config);
 		var error = errors[0];
 		Assert.equal(errors.length, 1);
 		Assert.equal(error.start.line, 1);

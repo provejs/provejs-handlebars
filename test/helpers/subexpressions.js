@@ -1,7 +1,6 @@
 'use strict';
 
 var Assert = require('assert');
-var Handlebars = require('handlebars');
 var Linter = require('../../index').linter;
 
 describe('Linting helper params with subexpressions', function () {
@@ -20,8 +19,7 @@ describe('Linting helper params with subexpressions', function () {
 				}
 			}
 		};
-		var ast = Handlebars.parse(html);
-		var actual = Linter(config, ast);
+		var actual = Linter(html, config);
 		Assert.equal(actual.length, 0);
 	});
 });

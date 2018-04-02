@@ -148,7 +148,78 @@ function parse(html) {
 	return ret;
 }
 
-exports.linter = function (rules, html) {
+
+
+exports.config = {
+	helpers: {
+		if: {
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				},
+				extraneous: {
+					selector: '!',
+					severity: 'warning',
+					message: 'The {{#if}} helper only supports a single condition parameter.',
+					formats: false
+				}
+			}
+		},
+		lookup: {
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				},
+				value2: {
+					selector: 'positional(1)',
+					formats: ['string', 'variable'],
+					required: 1
+				},
+				extraneous: {
+					selector: '!',
+					severity: 'warning',
+					message: 'The {{#lookup}} helper only supports two parameters.',
+					formats: false
+				}
+			}
+		},
+		each: {
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				},
+				extraneous: {
+					selector: '!',
+					severity: 'warning',
+					message: 'The {{#each}} helper only supports a single parameter and should be an array value.',
+					formats: false
+				}
+			}
+		},
+		unless: {
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				},
+				extraneous: {
+					selector: '!',
+					severity: 'warning',
+					message: 'The {{#unless}} helper only supports a single parameter.',
+					formats: false
+				}
+			}
+		}
+	}
+};
+
+
+exports.linter = function (html, rules) {
+
+	if (!rules) exports.config;
 
 	var errors = [];
 	var helpers;

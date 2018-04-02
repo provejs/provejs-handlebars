@@ -2,13 +2,12 @@
 
 var assert = require('assert');
 var linter = require('../../index').linter;
-var config = {helpers: {}};
 
 describe('Block Problems', function () {
 
 	it('block mismatched', function () {
 		var html = '{{#foo}}{{/bar}}';
-		var errors = linter(config, html);
+		var errors = linter(html);
 		assert.deepEqual({
 			start: {
 				line: 0,
@@ -23,10 +22,10 @@ describe('Block Problems', function () {
 		}, errors[0]);
 
 	});
-	it.only('mismatched block helpers with newline', function () {
+	it('mismatched block helpers with newline', function () {
 
 		var html = '{{#foo}}\n{{/bar}}';
-		var errors = linter(config, html);
+		var errors = linter(html);
 
 		assert.deepEqual({
 			start: {
@@ -43,7 +42,7 @@ describe('Block Problems', function () {
 	});
 	it('mismatched block helpers', function () {
 		var html = '{{foo}}{{/foo}}';
-		var errors = linter(config, html);
+		var errors = linter(html);
 
 		assert.deepEqual({
 			start: {

@@ -1,7 +1,6 @@
 'use strict';
 
 // var log = require('./utilities').log;
-var isArray = require('lodash.isarray');
 var includes = require('lodash.includes');
 var isFunction = require('lodash.isfunction');
 var isUndefined = require('lodash.isundefined');
@@ -38,7 +37,7 @@ exports.lint = function(rule, param) {
 	if (formats === true) return true;
 	if (formats === false) return false;
 
-	if (isArray(formats)) {
+	if (Array.isArray(formats)) {
 		allowed = formats.map(function(str) {
 			return str.toLowerCase();
 		});
