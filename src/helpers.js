@@ -40,6 +40,7 @@ function lintHelperCallback(astHelper, callback) {
 
 function lint(rule, param) {
 
+
 	var ok = Formats.lint(rule, param);
 	var message = rule.message || 'The `@helperName` helper positional parameter `@hashName` has an invalid value format.';
 	var error;
@@ -50,11 +51,11 @@ function lint(rule, param) {
 			message: message,
 			start: {
 				line: param.loc.start.line - 1,
-				column: param.loc.start.column + 1
+				column: param.loc.start.column
 			},
 			end: {
 				line: param.loc.end.line - 1,
-				column: param.loc.end.column + 1
+				column: param.loc.end.column
 			}
 		};
 	}
