@@ -1,7 +1,7 @@
 'use strict';
 
 var Selectors = require('./src/selectors');
-var log = require('./src/utilities').log;
+// var log = require('./src/utilities').log;
 var Formats = require('./src/formats');
 var Exceptions = require('./src/exceptions');
 var Handlebars = require('handlebars');
@@ -36,9 +36,6 @@ function popMsg(str, helperName, hashName) {
 }
 
 function lintHelperCallback(astHelper, callback) {
-	log('lintHelperCallback()');
-	log('* astHelper:', astHelper);
-
 	var posParams = Selectors.allPositional(astHelper);
 	var namParams = Selectors.allNamed(astHelper);
 	var loc = astHelper.loc;
@@ -47,9 +44,6 @@ function lintHelperCallback(astHelper, callback) {
 }
 
 function lint(rule, param) {
-	log('lint()');
-	log('* rule:', rule);
-	log('* param:', param);
 
 	var ok = Formats.lint(rule, param);
 	var message = rule.message || 'The `@helperName` helper positional parameter `@hashName` has an invalid value format.';
@@ -63,20 +57,13 @@ function lint(rule, param) {
 			end: param.loc.end
 		};
 	}
-	if (error) log('* error:', error);
 	return error;
 }
 
 function lintHelperParam(astHelper, rule, ruleKey) {
-
-	log('lintHelperParam()');
-	log('* ruleKey:', ruleKey.yellow);
-
 	var error;
 	var selector = rule.selector;
 	var params = Selectors.params(astHelper, selector, ruleKey);
-
-	log('* params:', params);
 
 	// lint each param against the config rule
 	params.forEach(function(param) {
@@ -111,10 +98,6 @@ function lintHelper(astHelper, objRules) {
 	var error;
 	var params = objRules.params;
 
-	log('lintHelper()');
-	log('* astHelper:', astHelper);
-	log('* objRules:', objRules);
-
 	if (isFunction(params)) {
 		error = lintHelperCallback(astHelper, params);
 	} else if (isObject(params)) {
@@ -131,7 +114,6 @@ function lintHelper(astHelper, objRules) {
 }
 
 function lintHelpers(helpers, rules) {
-	log('lintHelpers()');
 	var errors = [];
 	helpers.forEach(function(helper) {
 		var config = rules.helpers[helper.name];
@@ -142,11 +124,9 @@ function lintHelpers(helpers, rules) {
 }
 
 function filterHelpersNodes(nodes, rules) {
-	log('filterHelpersNodes()');
 	var helperNames = keys(rules.helpers);
 
 	var helpers = nodes.filter(function(node) {
-		// log('node:', node);
 		if (node.type !== 'MustacheStatement' && node.type !== 'BlockStatement') return false;
 		if (node.params.length > 0) return true;
 		if (node.hash !== undefined) return true;
@@ -155,7 +135,6 @@ function filterHelpersNodes(nodes, rules) {
 	});
 
 	helpers = helpers.map(pruneHelpers);
-	log('* helpers:', helpers);
 	return helpers;
 }
 
@@ -170,8 +149,6 @@ function parse(html) {
 }
 
 exports.linter = function (rules, html) {
-
-	log('linter()');
 
 	var errors = [];
 	var helpers;
