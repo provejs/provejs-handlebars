@@ -560,12 +560,83 @@ function parse(html) {
 	try {
 		ret = Handlebars.parse(html);
 	} catch (e) {
-		ret = Exceptions.parser(e, html);
+		ret = [Exceptions.parser(e, html)];
 	}
 	return ret;
 }
 
-exports.linter = function (rules, html) {
+
+
+exports.config = {
+	helpers: {
+		if: {
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				},
+				extraneous: {
+					selector: '!',
+					severity: 'warning',
+					message: 'The {{#if}} helper only supports a single condition parameter.',
+					formats: false
+				}
+			}
+		},
+		lookup: {
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				},
+				value2: {
+					selector: 'positional(1)',
+					formats: ['string', 'variable'],
+					required: 1
+				},
+				extraneous: {
+					selector: '!',
+					severity: 'warning',
+					message: 'The {{#lookup}} helper only supports two parameters.',
+					formats: false
+				}
+			}
+		},
+		each: {
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				},
+				extraneous: {
+					selector: '!',
+					severity: 'warning',
+					message: 'The {{#each}} helper only supports a single parameter and should be an array value.',
+					formats: false
+				}
+			}
+		},
+		unless: {
+			params: {
+				value1: {
+					selector: 'positional(0)',
+					required: 1
+				},
+				extraneous: {
+					selector: '!',
+					severity: 'warning',
+					message: 'The {{#unless}} helper only supports a single parameter.',
+					formats: false
+				}
+			}
+		}
+	}
+};
+
+
+exports.linter = function (html, rules) {
+
+	if (!rules) exports.config;
 
 	var errors = [];
 	var helpers;
@@ -579,7 +650,7 @@ exports.linter = function (rules, html) {
 	return errors;
 };
 
-},{"./src/exceptions":55,"./src/formats":56,"./src/selectors":57,"handlebars":35,"lodash.forown":37,"lodash.includes":38,"lodash.isfunction":40,"lodash.isobject":41,"lodash.keys":43}],5:[function(require,module,exports){
+},{"./src/exceptions":54,"./src/formats":55,"./src/selectors":56,"handlebars":35,"lodash.forown":37,"lodash.includes":38,"lodash.isfunction":39,"lodash.isobject":40,"lodash.keys":42}],5:[function(require,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 1.0.1 Copyright (c) 2011-2016, The Dojo Foundation All Rights Reserved.
@@ -1376,7 +1447,7 @@ exports['default'] = CodeGen;
 module.exports = exports['default'];
 
 
-},{"../utils":34,"source-map":44}],12:[function(require,module,exports){
+},{"../utils":34,"source-map":43}],12:[function(require,module,exports){
 /* eslint-disable new-cap */
 
 'use strict';
@@ -9293,43 +9364,6 @@ function values(object) {
 module.exports = includes;
 
 },{}],39:[function(require,module,exports){
-/**
- * lodash 4.0.0 (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="npm" -o ./`
- * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @type Function
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-module.exports = isArray;
-
-},{}],40:[function(require,module,exports){
 (function (global){
 /**
  * Lodash (Custom Build) <https://lodash.com/>
@@ -9488,7 +9522,7 @@ function isObject(value) {
 module.exports = isFunction;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],41:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /**
  * lodash 3.0.2 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9527,7 +9561,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],42:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -9559,7 +9593,7 @@ function isUndefined(value) {
 
 module.exports = isUndefined;
 
-},{}],43:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 /**
  * lodash (Custom Build) <https://lodash.com/>
  * Build: `lodash modularize exports="npm" -o ./`
@@ -9962,7 +9996,7 @@ function keys(object) {
 
 module.exports = keys;
 
-},{}],44:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -9972,7 +10006,7 @@ exports.SourceMapGenerator = require('./source-map/source-map-generator').Source
 exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":51,"./source-map/source-map-generator":52,"./source-map/source-node":53}],45:[function(require,module,exports){
+},{"./source-map/source-map-consumer":50,"./source-map/source-map-generator":51,"./source-map/source-node":52}],44:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -10081,7 +10115,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":54,"amdefine":5}],46:[function(require,module,exports){
+},{"./util":53,"amdefine":5}],45:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -10229,7 +10263,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./base64":47,"amdefine":5}],47:[function(require,module,exports){
+},{"./base64":46,"amdefine":5}],46:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -10304,7 +10338,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":5}],48:[function(require,module,exports){
+},{"amdefine":5}],47:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -10423,7 +10457,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":5}],49:[function(require,module,exports){
+},{"amdefine":5}],48:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -10511,7 +10545,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":54,"amdefine":5}],50:[function(require,module,exports){
+},{"./util":53,"amdefine":5}],49:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -10633,7 +10667,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":5}],51:[function(require,module,exports){
+},{"amdefine":5}],50:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -11712,7 +11746,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":45,"./base64-vlq":46,"./binary-search":48,"./quick-sort":50,"./util":54,"amdefine":5}],52:[function(require,module,exports){
+},{"./array-set":44,"./base64-vlq":45,"./binary-search":47,"./quick-sort":49,"./util":53,"amdefine":5}],51:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -12113,7 +12147,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":45,"./base64-vlq":46,"./mapping-list":49,"./util":54,"amdefine":5}],53:[function(require,module,exports){
+},{"./array-set":44,"./base64-vlq":45,"./mapping-list":48,"./util":53,"amdefine":5}],52:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -12529,7 +12563,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./source-map-generator":52,"./util":54,"amdefine":5}],54:[function(require,module,exports){
+},{"./source-map-generator":51,"./util":53,"amdefine":5}],53:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -12901,7 +12935,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":5}],55:[function(require,module,exports){
+},{"amdefine":5}],54:[function(require,module,exports){
 'use strict';
 
 var regex1 = /^Parse error on line ([0-9]+)+:\n([^\n].*)\n([^\n].*)\n(.*)$/;
@@ -13005,11 +13039,10 @@ var parser = function (e, html) {
 
 exports.parser = parser;
 
-},{}],56:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 // var log = require('./utilities').log;
-var isArray = require('lodash.isarray');
 var includes = require('lodash.includes');
 var isFunction = require('lodash.isfunction');
 var isUndefined = require('lodash.isundefined');
@@ -13046,7 +13079,7 @@ exports.lint = function(rule, param) {
 	if (formats === true) return true;
 	if (formats === false) return false;
 
-	if (isArray(formats)) {
+	if (Array.isArray(formats)) {
 		allowed = formats.map(function(str) {
 			return str.toLowerCase();
 		});
@@ -13059,7 +13092,7 @@ exports.lint = function(rule, param) {
 	}
 };
 
-},{"lodash.includes":38,"lodash.isarray":39,"lodash.isfunction":40,"lodash.isundefined":42}],57:[function(require,module,exports){
+},{"lodash.includes":38,"lodash.isfunction":39,"lodash.isundefined":41}],56:[function(require,module,exports){
 'use strict';
 // var log = require('./utilities').log;
 var find = require('lodash.find');
