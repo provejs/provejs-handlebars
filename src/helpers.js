@@ -177,6 +177,7 @@ exports.linter = function (nodes, rules) {
 
 exports.config = {
 	if: {
+		block: true,
 		params: {
 			value: {
 				selector: 'positional(0)',
@@ -191,6 +192,7 @@ exports.config = {
 		}
 	},
 	lookup: {
+		block: false,
 		params: {
 			haystack: {
 				selector: 'positional(0)',
@@ -209,6 +211,7 @@ exports.config = {
 		}
 	},
 	each: {
+		block: true,
 		params: {
 			arrValue: {
 				selector: 'positional(0)',
@@ -223,6 +226,7 @@ exports.config = {
 		}
 	},
 	unless: {
+		block: true,
 		params: {
 			value: {
 				selector: 'positional(0)',
