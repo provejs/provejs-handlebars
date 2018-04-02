@@ -38,6 +38,16 @@ The errors output will be something like:
     end: { line: 0, column: 23 } } ]
 ```
 
+In browser:
+```html
+<script src="dist/handlebars-linter.js"></script>
+<script>
+var html = "{{helper param1=xxx}}";
+var config = {...};
+var errors = HandlebarsLinter(config, html);
+</script>
+```
+
 # Linter Signature
 
 The linter function accepts two params:
@@ -253,4 +263,22 @@ var config = {
     }
   }
 };
+```
+
+# Contributing
+
+Linting:
+```bash
+grunt
+```
+
+Building for use in browser:
+```bash
+npm install browserify -g
+browserify index.js -s HandlebarsLinter> dist/handlebars-linter.js
+```
+
+Test:
+```bash
+npm test
 ```
