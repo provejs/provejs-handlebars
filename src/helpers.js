@@ -53,11 +53,11 @@ function lint(rule, param) {
 			message: message,
 			start: {
 				line: param.loc.start.line - 1,
-				column: param.loc.start.column
+				column: param.loc.start.column + 1
 			},
 			end: {
 				line: param.loc.end.line - 1,
-				column: param.loc.end.column
+				column: param.loc.end.column + 1
 			}
 		};
 	}
