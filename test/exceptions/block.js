@@ -15,11 +15,16 @@ describe('Block Problems', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 2,
-				maxLine: 0,
-				maxColumn: 3,
-				message: 'foo doesn\'t match bar'
+				start: {
+					line: 0,
+					column: 2
+				},
+				end: {
+					line: 0,
+					column: 2
+				},
+				message: 'foo doesn\'t match bar',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -32,11 +37,16 @@ describe('Block Problems', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 2,
-				maxLine: 0,
-				maxColumn: 3,
-				message: 'foo doesn\'t match bar'
+				start: {
+					line: 0,
+					column: 2
+				},
+				end: {
+					line: 0,
+					column: 2
+				},
+				message: 'foo doesn\'t match bar',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -49,11 +59,16 @@ describe('Block Problems', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 0,
-				maxLine: 0,
-				maxColumn: 7,
-				message: 'invalid closing block, check opening block'
+				start: {
+					line: 0,
+					column: 0
+				},
+				end: {
+					line: 0,
+					column: 7
+				},
+				message: 'invalid closing block, check opening block',
+				severity: 'error'
 			}, parsed);
 		}
 	});

@@ -66,11 +66,16 @@
 
 			//console.log('pos:', pos);
 
-			parsed.minLine = lineNum;
-			parsed.minColumn = pos.min;
-			parsed.maxLine = lineNum;
-			parsed.maxColumn = pos.max;
+			parsed.start = {
+				line: lineNum,
+				column: pos.min
+			};
+			parsed.end = {
+				line: lineNum,
+				column: pos.max
+			};
 			parsed.message = friendlyMessage(message);
+			parsed.severity = 'error';
 			return '';
 		});
 		e.message.replace(regex2, function(match, message, lineNum, columnNum) {
@@ -80,11 +85,16 @@
 			columnNum = +columnNum;
 			columnNum = columnNum - 1;
 
-			parsed.minLine = lineNum;
-			parsed.minColumn = columnNum;
-			parsed.maxLine = parsed.minLine;
-			parsed.maxColumn = parsed.minColumn + 1;
+			parsed.start = {
+				line: lineNum,
+				column: columnNum
+			};
+			parsed.end = {
+				line: parsed.start.line,
+				column: parsed.start.column
+			};
 			parsed.message = friendlyMessage(message);
+			parsed.severity = 'error';
 			return '';
 		});
 		return parsed;

@@ -14,11 +14,16 @@ describe('Incomplete Expressions', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 0,
-				maxLine: 0,
-				maxColumn: 2,
-				message: 'invalid Handlebars expression'
+				start: {
+					line: 0,
+					column: 0
+				},
+				end: {
+					line: 0,
+					column: 2
+				},
+				message: 'invalid Handlebars expression',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -31,11 +36,16 @@ describe('Incomplete Expressions', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 0,
-				maxLine: 0,
-				maxColumn: 2,
-				message: 'empty Handlebars expression'
+				start: {
+					line: 0,
+					column: 0
+				},
+				end: {
+					line: 0,
+					column: 2
+				},
+				message: 'empty Handlebars expression',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -49,11 +59,16 @@ describe('Incomplete Expressions', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 0,
-				maxLine: 0,
-				maxColumn: 3,
-				message: 'invalid Handlebars expression'
+				start: {
+					line: 0,
+					column: 0
+				},
+				end: {
+					line: 0,
+					column: 3
+				},
+				message: 'invalid Handlebars expression',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -67,11 +82,16 @@ describe('Incomplete Expressions', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 0,
-				maxLine: 0,
-				maxColumn: 4,
-				message: 'invalid Handlebars expression'
+				start: {
+					line: 0,
+					column: 0
+				},
+				end: {
+					line: 0,
+					column: 4
+				},
+				message: 'invalid Handlebars expression',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -84,11 +104,16 @@ describe('Incomplete Expressions', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 0,
-				maxLine: 0,
-				maxColumn: 2,
-				message: 'invalid Handlebars expression'
+				start: {
+					line: 0,
+					column: 0
+				},
+				end: {
+					line: 0,
+					column: 2
+				},
+				message: 'invalid Handlebars expression',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -102,11 +127,16 @@ describe('Incomplete Expressions', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 19,
-				maxLine: 0,
-				maxColumn: 39,
-				message: 'invalid Handlebars expression'
+				start: {
+					line: 0,
+					column: 19
+				},
+				end: {
+					line: 0,
+					column: 39
+				},
+				message: 'invalid Handlebars expression',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -119,11 +149,16 @@ describe('Incomplete Expressions', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 19,
-				maxLine: 0,
-				maxColumn: 39,
-				message: 'invalid Handlebars expression'
+				start: {
+					line: 0,
+					column: 19
+				},
+				end: {
+					line: 0,
+					column: 39
+				},
+				message: 'invalid Handlebars expression',
+				severity: 'error'
 			}, parsed);
 		}
 	});
@@ -136,11 +171,16 @@ describe('Incomplete Expressions', function () {
 			//console.log(e);
 			parsed = parser(e, html);
 			assert.deepEqual({
-				minLine: 0,
-				minColumn: 19,
-				maxLine: 0,
-				maxColumn: 39,
-				message: 'invalid Handlebars expression'
+				start: {
+					line: 0,
+					column: 19
+				},
+				end: {
+					line: 0,
+					column: 39
+				},
+				message: 'invalid Handlebars expression',
+				severity: 'error'
 			}, parsed);
 		}
 	});
