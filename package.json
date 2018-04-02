@@ -1,7 +1,7 @@
 {
   "name": "provejs-handlebars",
-  "version": "1.0.0",
-  "description": "> Under active development.",
+  "version": "0.0.1",
+  "description": "Handlebars linter. Under active development.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive"
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/provejs/provejs-handlebars.git"
   },
-  "author": "",
+  "author": "https://github.com/dhollenbeck",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/provejs/provejs-handlebars/issues"
