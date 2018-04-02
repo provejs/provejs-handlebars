@@ -95,6 +95,9 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 }
 
 function lintHelper(astHelper, objRules) {
+
+	if (!objRules) return;
+
 	var error;
 	var params = objRules.params;
 
@@ -116,7 +119,7 @@ function lintHelper(astHelper, objRules) {
 function lintHelpers(helpers, rules) {
 	var errors = [];
 	helpers.forEach(function(helper) {
-		var config = rules.helpers[helper.name];
+		var config = rules.helpers && rules.helpers[helper.name];
 		var err = lintHelper(helper, config);
 		if (err) errors.push(err);
 	});
