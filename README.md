@@ -6,9 +6,9 @@ Linting templates with Handlebars syntax. Supports:
 - Configurable Handlebars helpers and params to support built-in and your helpers and their params.
   - **Named:** the helper is using named parameters.
   - **Positional:** the helper is using ordered position of parameters.
-- Fields
+- Block and non-block helpers.
 
-Lints via:
+Works via:
 - Handlebars exception message parsing,
 - Handlebars AST tokens validation.
 

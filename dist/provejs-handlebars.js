@@ -12849,7 +12849,6 @@ exports.parser = parser;
 },{}],55:[function(require,module,exports){
 'use strict';
 
-// var log = require('./utilities').log;
 var includes = require('lodash.includes');
 var isFunction = require('lodash.isfunction');
 var isUndefined = require('lodash.isundefined');
@@ -12905,7 +12904,6 @@ exports.lint = function(rule, param) {
 'use strict';
 
 var Selectors = require('./selectors');
-// var log = require('./utilities').log;
 var Formats = require('./formats');
 var isFunction = require('lodash.isfunction');
 var isObject = require('lodash.isobject');
@@ -12923,11 +12921,9 @@ function pruneHelpers(node) {
 		name: name,
 		params: params,
 		hash: hash,
-		loc: node.loc
+		loc: node.loc,
+		block: (node.type === 'BlockStatement')
 	};
-	// log('pruneHelpers()');
-	// log('node:'), node);
-	// log('helper:'), helper);
 	return helper;
 }
 
@@ -12957,18 +12953,18 @@ function lint(rule, param) {
 			message: message,
 			start: {
 				line: param.loc.start.line - 1,
-				column: param.loc.start.column
+				column: param.loc.start.column + 1
 			},
 			end: {
 				line: param.loc.end.line - 1,
-				column: param.loc.end.column
+				column: param.loc.end.column + 1
 			}
 		};
 	}
 	return error;
 }
 
-function lintHelperParam(astHelper, rule, ruleKey) {
+function lintHelperParam(astHelper, rule, ruleKey, block) {
 	var error;
 	var selector = rule.selector;
 	var params = Selectors.params(astHelper, selector, ruleKey);
@@ -12984,8 +12980,25 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 	if (rule.required === false) return;
 	if (rule.required === 0) return;
 
-	// lint missing params
-	if (rule.required === true && params.length === 0) {
+	// lint block and non-block helpers
+	if (block !== astHelper.block) {
+		var message = (block)
+			? popMsg('The `@helperName` block helper requires a `#` before its name.', rule.helper)
+			: popMsg('The `@helperName` non-block helper should not have a `#` before its name.', rule.helper);
+		return {
+			severity: 'error',
+			message: message,
+			start: {
+				line: astHelper.loc.start.line - 1,
+				column: astHelper.loc.start.column
+			},
+			end: {
+				line: astHelper.loc.end.line - 1,
+				column: astHelper.loc.end.column
+			}
+		};
+	} else if (rule.required === true && params.length === 0) {  /// lint missing params
+
 		return {
 			severity: rule.severity,
 			message: popMsg('The `@helperName` helper requires a positional parameter of `@hashName`, but non was found.', rule.helper, rule.name),
@@ -13030,16 +13043,20 @@ function lintHelper(astHelper, objRules) {
 
 	var error;
 	var params = objRules.params;
+	var block = objRules.block || false;
 
 	if (isFunction(params)) {
 		error = lintHelperCallback(astHelper, params);
 	} else if (isObject(params)) {
 		forOwn(params, function(rule, ruleKey) {
+
+			// set defaults
 			if (!rule.name) rule.name = ruleKey;
 			if (!rule.helper) rule.helper = astHelper.name;
 			if (!rule.severity) rule.severity = 'error';
+
 			if (error) return false; // break loop
-			error = lintHelperParam(astHelper, rule, ruleKey);
+			error = lintHelperParam(astHelper, rule, ruleKey, block);
 		});
 	}
 
@@ -13080,6 +13097,7 @@ exports.linter = function (nodes, rules) {
 
 exports.config = {
 	if: {
+		block: true,
 		params: {
 			value: {
 				selector: 'positional(0)',
@@ -13094,6 +13112,7 @@ exports.config = {
 		}
 	},
 	lookup: {
+		block: false,
 		params: {
 			haystack: {
 				selector: 'positional(0)',
@@ -13112,6 +13131,7 @@ exports.config = {
 		}
 	},
 	each: {
+		block: true,
 		params: {
 			arrValue: {
 				selector: 'positional(0)',
@@ -13126,6 +13146,7 @@ exports.config = {
 		}
 	},
 	unless: {
+		block: true,
 		params: {
 			value: {
 				selector: 'positional(0)',
@@ -13143,7 +13164,7 @@ exports.config = {
 
 },{"./formats":55,"./selectors":57,"lodash.forown":37,"lodash.includes":38,"lodash.isfunction":39,"lodash.isobject":40,"lodash.keys":42}],57:[function(require,module,exports){
 'use strict';
-// var log = require('./utilities').log;
+
 var find = require('lodash.find');
 
 function getSelectorNum(selector) {
