@@ -148,7 +148,28 @@ function parse(html) {
 	return ret;
 }
 
+function isErrors(ast) {
+	return !!ast.length;
+}
 
+exports.linter = function (html, rules) {
+
+	if (!rules) rules = exports.config;
+
+	var errors;
+	var helpers;
+	var ast = parse(html);
+
+	if (isErrors(ast)) {
+		errors = ast;
+		return errors;
+	}
+	var nodes = ast.body || ast;
+	helpers = filterHelpersNodes(nodes, rules);
+	errors = lintHelpers(helpers, rules);
+
+	return errors;
+};
 
 exports.config = {
 	helpers: {
@@ -214,21 +235,4 @@ exports.config = {
 			}
 		}
 	}
-};
-
-
-exports.linter = function (html, rules) {
-
-	if (!rules) exports.config;
-
-	var errors = [];
-	var helpers;
-	errors = parse(html);
-	if (errors.length) return errors;
-	var ast = errors;
-	var nodes = ast.body || ast;
-	helpers = filterHelpersNodes(nodes, rules);
-	errors = lintHelpers(helpers, rules);
-
-	return errors;
 };
