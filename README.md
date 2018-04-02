@@ -2,33 +2,40 @@
 
 > Under active development.
 
-Validating Handlebars helpers syntax using handlebars AST tokens for purpose of inclusion in custom handlebars linters. However, you can use it to lint the built-in Handlebars helpers.
+Linting templates with Handlebars syntax. Supports:
+- Configurable Handlebars helpers and params to support built-in and your helpers and their params.
+  - **Named:** the helper is using named parameters.
+  - **Positional:** the helper is using ordered position of parameters.
+- Fields
 
-Helper parameters are either:
-- **Named:** the helper is using named parameters.
-- **Positional:** the helper is using ordered position of parameters.
+Lints via:
+- Handlebars exception message parsing,
+- Handlebars AST tokens validation.
+
+The purpose of this module is to make custom handlebars linters.
+
 
 # Install
 ```js
 npm install provejs-handlebars --save
 ```
 
-
 # Usage
-You would invoke the module like:
+
+In Node.js:
 ```js
-var html = '{{helper1 foobar='goo'}}\n{{helper2 'zoo' 'goo'}}';
-var Handlebars = require('handlebars');
-var Prove = require('provejs-handlebars');
-var ast = Handlebars.parse(html);  // could throw an error
-var errors = Prove(config, ast);
+var Linter = require('provejs-handlebars').linter;
+var html = '{{#foo}}{{/bar}}';
+var config = {...};
+var errors = Linter(config, html);
 ```
-The error output will be something like:
+
+The errors output will be something like:
 ```js
 [ { severity: 'error',
-    message: 'The `nest` helper requires a named parameter of `template`, but non was found.',
-    start: { line: 1, column: 7 },
-    end: { line: 1, column: 23 } } ]
+    message: 'The `foo` helper has a mismatched closing block.',
+    start: { line: 0, column: 0 },
+    end: { line: 0, column: 23 } } ]
 ```
 
 # Configuration
