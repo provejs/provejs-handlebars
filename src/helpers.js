@@ -246,5 +246,20 @@ exports.config = {
 				formats: false
 			}
 		}
+	},
+	with: {
+		block: true,
+		params: {
+			value: {
+				selector: 'positional(0)',
+				required: 1
+			},
+			extraneous: {
+				selector: '!',
+				severity: 'warning',
+				message: 'The {{#with}} helper only supports a single parameter. This parameter should be removed.',
+				formats: false
+			}
+		}
 	}
 };
