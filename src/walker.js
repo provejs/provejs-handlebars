@@ -1,18 +1,24 @@
 'use strict';
 
+var includes = require('lodash.includes');
 
-exports.helpers = function(nodes, names) {
+function isHelper(node, names) {
+	if (node.type !== 'MustacheStatement' && node.type !== 'BlockStatement') return false;
+	if (node.params.length > 0) return true;
+	if (node.hash !== undefined) return true;
+	if (includes(names, node.path.original)) return true; // helper with no hash or params
+	return false;
+}
 
-	console.log('nodes', JSON.stringify(nodes));
+exports.helpers = function(tree, names, helpers) {
 
-	var helpers = nodes.filter(function(node) {
-		if (node.type !== 'MustacheStatement' && node.type !== 'BlockStatement') return false;
-		if (node.params.length > 0) return true;
-		if (node.hash !== undefined) return true;
-		if (includes(names, node.path.original)) return true; // helper with no hash or params
-		return false;
+	var nodes = tree.body || tree;
+
+	// loop each parent nodes
+	nodes.forEach(function(node) {
+		// if helper push to helpers array
+		if (isHelper(node, names)) helpers.push(node);
+		// if child nodes recursively call this method
+		if (node.program) exports.helpers(node.program, names, helpers);
 	});
-
-	helpers = helpers.map(pruneHelpers);
-	return helpers;
 };

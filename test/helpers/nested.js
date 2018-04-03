@@ -4,7 +4,7 @@ var Assert = require('assert');
 var Linter = require('../../index').linter;
 
 describe('Nested block linting', function () {
-	it.only('checking param value formats is optional', function () {
+	it('checking param value formats is optional', function () {
 		var html = '{{#if a}}{{helper1 42}}{{/if}}';
 		var config = {
 			helpers: {

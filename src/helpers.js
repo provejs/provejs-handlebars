@@ -7,7 +7,7 @@ var isFunction = require('lodash.isfunction');
 var isObject = require('lodash.isobject');
 var forOwn = require('lodash.forown');
 var keys = require('lodash.keys');
-var includes = require('lodash.includes');
+
 
 function pruneHelpers(node) {
 
@@ -173,8 +173,10 @@ function lintHelpers(helpers, rules) {
 }
 
 exports.linter = function (nodes, rules) {
+	var helpers = [];
 	var names = keys(rules.helpers);
-	var helpers = Walker.helpers(nodes, names);
+	Walker.helpers(nodes, names, helpers);
+	helpers = helpers.map(pruneHelpers);
 	var errors = lintHelpers(helpers, rules);
 	return errors;
 };
