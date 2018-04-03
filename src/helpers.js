@@ -2,6 +2,7 @@
 
 var Selectors = require('./selectors');
 var Formats = require('./formats');
+var Walker = require('./walker');
 var isFunction = require('lodash.isfunction');
 var isObject = require('lodash.isobject');
 var forOwn = require('lodash.forown');
@@ -171,23 +172,9 @@ function lintHelpers(helpers, rules) {
 	return errors;
 }
 
-function filterHelpersNodes(nodes, rules) {
-	var helperNames = keys(rules.helpers);
-
-	var helpers = nodes.filter(function(node) {
-		if (node.type !== 'MustacheStatement' && node.type !== 'BlockStatement') return false;
-		if (node.params.length > 0) return true;
-		if (node.hash !== undefined) return true;
-		if (includes(helperNames, node.path.original)) return true; // helper with no hash or params
-		return false;
-	});
-
-	helpers = helpers.map(pruneHelpers);
-	return helpers;
-}
-
 exports.linter = function (nodes, rules) {
-	var helpers = filterHelpersNodes(nodes, rules);
+	var names = keys(rules.helpers);
+	var helpers = Walker.helpers(nodes, names);
 	var errors = lintHelpers(helpers, rules);
 	return errors;
 };
