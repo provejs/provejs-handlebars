@@ -1,11 +1,11 @@
 {
   "name": "provejs-handlebars",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Handlebars linter. Under active development.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
-    "build": "browserify index.js -s ProveHandlebars> dist/provejs-handlebars.js"
+    "build": "browserify index.js -s HandlebarsProve> dist/provejs-handlebars.js"
   },
   "repository": {
     "type": "git",

@@ -42,7 +42,7 @@ In browser:
 <script src="dist/handlebars-linter.js"></script>
 <script>
 var html = "{{helper param1=xxx}}";
-var errors = ProveHandlebars.linter(html);
+var errors = HandlebarsProve.linter(html);
 </script>
 ```
 
@@ -55,7 +55,7 @@ The linter function accepts two params:
 The default config lints the built-in handlebars helpers. The default config can be accessed:
 ```js
 console.log(Linter.config); // node.js
-console.log(ProveHandlebars.config); // browser
+console.log(HandlebarsProve.config); // browser
 ```
 
 # Helpers Configuration
