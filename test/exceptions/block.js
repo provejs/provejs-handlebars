@@ -23,6 +23,6 @@ describe('Block Problems', function () {
 	it('mismatched block helpers', function () {
 		var html = '{{foo}}{{/foo}}';
 		var errors = linter(html);
-		assert.equal(1, errors.length);;
+		assert.equal(1, errors.length);
 	});
 });

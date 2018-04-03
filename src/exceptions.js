@@ -17,9 +17,41 @@ function friendlyMessage(message) {
 function getPos(lines, lineNum, code, indicator) {
 
 	var line, min, max, dots = false, prefix = 0;
+	var pos = {};
 
 	console.log('getPos()');
-	console.log('* arguments:', arguments);
+	console.log('* code:', code);
+
+	// handle special cases
+	if (code === '{{{{') {
+		pos.min = 0;
+		pos.max = 4;
+		return pos;
+	} else if (code === '{{{') {
+		pos.min = 0;
+		pos.max = 3;
+		return pos;
+	} else  if (code === '{{') {
+		pos.min = 0;
+		pos.max = 2;
+		return pos;
+	} else if (code.indexOf('{{<') !== -1) {
+		pos.min = lines[lineNum].indexOf('{{<');
+		pos.max = pos.min + 3;
+		return pos;
+	} else if (code === '{{}}') {
+		pos.min = 0;
+		pos.max = 4;
+		return pos;
+	} else if (code.indexOf('{{{}}{') !== -1) {
+		pos.min = lines[lineNum].indexOf('{{{}}}');
+		pos.max = pos.min + 6;
+		return pos;
+	} else if (code.indexOf('{{#}}') !== -1) {
+		pos.min = lines[lineNum].indexOf('{{#}}');
+		pos.max = pos.min + 5;
+		return pos;
+	}
 
 	// trim off extra prefix and suffix from code which
 	// could force us to not find the pos in the line.
