@@ -12905,11 +12905,12 @@ exports.lint = function(rule, param) {
 
 var Selectors = require('./selectors');
 var Formats = require('./formats');
+var Walker = require('./walker');
 var isFunction = require('lodash.isfunction');
 var isObject = require('lodash.isobject');
 var forOwn = require('lodash.forown');
 var keys = require('lodash.keys');
-var includes = require('lodash.includes');
+
 
 function pruneHelpers(node) {
 
@@ -13074,23 +13075,11 @@ function lintHelpers(helpers, rules) {
 	return errors;
 }
 
-function filterHelpersNodes(nodes, rules) {
-	var helperNames = keys(rules.helpers);
-
-	var helpers = nodes.filter(function(node) {
-		if (node.type !== 'MustacheStatement' && node.type !== 'BlockStatement') return false;
-		if (node.params.length > 0) return true;
-		if (node.hash !== undefined) return true;
-		if (includes(helperNames, node.path.original)) return true; // helper with no hash or params
-		return false;
-	});
-
-	helpers = helpers.map(pruneHelpers);
-	return helpers;
-}
-
 exports.linter = function (nodes, rules) {
-	var helpers = filterHelpersNodes(nodes, rules);
+	var helpers = [];
+	var names = keys(rules.helpers);
+	Walker.helpers(nodes, names, helpers);
+	helpers = helpers.map(pruneHelpers);
 	var errors = lintHelpers(helpers, rules);
 	return errors;
 };
@@ -13163,7 +13152,7 @@ exports.config = {
 	}
 };
 
-},{"./formats":55,"./selectors":57,"lodash.forown":37,"lodash.includes":38,"lodash.isfunction":39,"lodash.isobject":40,"lodash.keys":42}],57:[function(require,module,exports){
+},{"./formats":55,"./selectors":57,"./walker":58,"lodash.forown":37,"lodash.isfunction":39,"lodash.isobject":40,"lodash.keys":42}],57:[function(require,module,exports){
 'use strict';
 
 var find = require('lodash.find');
@@ -13257,5 +13246,31 @@ exports.positional = function(astHelper, num) {
 	return params[num];
 };
 
-},{"lodash.find":36}]},{},[4])(4)
+},{"lodash.find":36}],58:[function(require,module,exports){
+'use strict';
+
+var includes = require('lodash.includes');
+
+function isHelper(node, names) {
+	if (node.type !== 'MustacheStatement' && node.type !== 'BlockStatement') return false;
+	if (node.params.length > 0) return true;
+	if (node.hash !== undefined) return true;
+	if (includes(names, node.path.original)) return true; // helper with no hash or params
+	return false;
+}
+
+exports.helpers = function(tree, names, helpers) {
+
+	var nodes = tree.body || tree;
+
+	// loop each parent nodes
+	nodes.forEach(function(node) {
+		// if helper push to helpers array
+		if (isHelper(node, names)) helpers.push(node);
+		// if child nodes recursively call this method
+		if (node.program) exports.helpers(node.program, names, helpers);
+	});
+};
+
+},{"lodash.includes":38}]},{},[4])(4)
 });
