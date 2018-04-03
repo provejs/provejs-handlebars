@@ -4,7 +4,8 @@
   "description": "Handlebars linter. Under active development.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "build": "browserify index.js -s ProveHandlebars> dist/provejs-handlebars.js"
   },
   "repository": {
     "type": "git",

@@ -279,8 +279,7 @@ grunt
 
 Building for use in browser:
 ```bash
-npm install browserify -g
-browserify index.js -s ProveHandlebars> dist/provejs-handlebars.js
+npm run build
 ```
 
 Test:
