@@ -10,57 +10,19 @@ describe('Block Problems', function () {
 		var errors = linter(html);
 		assert.equal(0, errors.length);
 	});
-
 	it('block mismatched', function () {
 		var html = '{{#foo}}{{/bar}}';
 		var errors = linter(html);
-		assert.deepEqual({
-			start: {
-				line: 0,
-				column: 2
-			},
-			end: {
-				line: 0,
-				column: 2
-			},
-			message: 'foo doesn\'t match bar',
-			severity: 'error'
-		}, errors[0]);
+		assert.equal(1, errors.length);
 	});
 	it('mismatched block helpers with newline', function () {
-
 		var html = '{{#foo}}\n{{/bar}}';
 		var errors = linter(html);
-
-		assert.deepEqual({
-			start: {
-				line: 0,
-				column: 2
-			},
-			end: {
-				line: 0,
-				column: 2
-			},
-			message: 'foo doesn\'t match bar',
-			severity: 'error'
-		}, errors[0]);
+		assert.equal(1, errors.length);
 	});
 	it('mismatched block helpers', function () {
 		var html = '{{foo}}{{/foo}}';
 		var errors = linter(html);
-
-		assert.deepEqual({
-			start: {
-				line: 0,
-				column: 0
-			},
-			end: {
-				line: 0,
-				column: 7
-			},
-			message: 'invalid closing block, check opening block',
-			severity: 'error'
-		}, errors[0]);
-
+		assert.equal(1, errors.length);;
 	});
 });

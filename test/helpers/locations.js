@@ -78,4 +78,67 @@ describe('Testing locations', function () {
 		Assert.equal(error.start.column, 0);
 		Assert.equal(error.end.column, 10);
 	});
+
+	it.skip('empty handlebars expression', function () {
+		var html = '<h1>   \n{{}}</h1>';
+		var errors = Linter(html);
+		var error = errors[0];
+		Assert.equal(error.start.line, 1);
+		Assert.equal(error.end.line, 1);
+		Assert.equal(error.start.column, 0);
+		Assert.equal(error.end.column, 4);
+	});
+
+	it('block mismatched', function () {
+		var html = '{{#foo}}{{/bar}}';
+		var errors = Linter(html);
+		Assert.deepEqual({
+			start: {
+				line: 0,
+				column: 2
+			},
+			end: {
+				line: 0,
+				column: 2
+			},
+			message: 'foo doesn\'t match bar',
+			severity: 'error'
+		}, errors[0]);
+	});
+	it('mismatched block helpers with newline', function () {
+
+		var html = '{{#foo}}\n{{/bar}}';
+		var errors = Linter(html);
+
+		Assert.deepEqual({
+			start: {
+				line: 0,
+				column: 2
+			},
+			end: {
+				line: 0,
+				column: 2
+			},
+			message: 'foo doesn\'t match bar',
+			severity: 'error'
+		}, errors[0]);
+	});
+	it('mismatched block helpers', function () {
+		var html = '{{foo}}{{/foo}}';
+		var errors = Linter(html);
+
+		Assert.deepEqual({
+			start: {
+				line: 0,
+				column: 0
+			},
+			end: {
+				line: 0,
+				column: 7
+			},
+			message: 'invalid closing block, check opening block',
+			severity: 'error'
+		}, errors[0]);
+	});
 });
+

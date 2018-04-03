@@ -14,7 +14,43 @@ function friendlyMessage(message) {
 	return message;
 }
 
-var parser = function (e, html) {
+function getPos(lines, lineNum, code, indicator) {
+
+	var line, min, max, dots = false, prefix = 0;
+
+	console.log('getPos()');
+	console.log('* arguments:', arguments);
+
+	// trim off extra prefix and suffix from code which
+	// could force us to not find the pos in the line.
+	code = code.substring(0, indicator.length);
+	code = code.replace('...', function() {
+		dots = true;
+		return '';
+	});
+
+	prefix = code.indexOf('{{');
+	line = lines[lineNum];
+	min = line.indexOf(code);
+	min = min + prefix;
+	max = (!dots)
+		? min + indicator.length - 1
+		: min + indicator.length - 4;
+
+	if (min === -1) {
+		return {
+			min: 0,
+			max: 0
+		};
+	} else {
+		return {
+			min: min,
+			max: max
+		};
+	}
+}
+
+exports.parser = function (e, html) {
 	var parsed = {};
 	var lines;
 	if (!e) return;
@@ -23,45 +59,12 @@ var parser = function (e, html) {
 
 	lines = html.split('\n');
 
-	function getPos(lineNum, code, indicator) {
-
-		var line, min, max, dots = false, prefix = 0;
-
-		// trim off extra prefix and suffix from code which
-		// could force us to not find the pos in the line.
-		code = code.substring(0, indicator.length);
-		code = code.replace('...', function() {
-			dots = true;
-			return '';
-		});
-
-		prefix = code.indexOf('{{');
-		line = lines[lineNum];
-		min = line.indexOf(code);
-		min = min + prefix;
-		max = (!dots)
-			? min + indicator.length - 1
-			: min + indicator.length - 4;
-
-		if (min === -1) {
-			return {
-				min: 0,
-				max: 0
-			};
-		} else {
-			return {
-				min: min,
-				max: max
-			};
-		}
-	}
-
 	e.message.replace(regex1, function (match, lineNum, code, indicator, message) {
 
 		var pos;
 		lineNum = +lineNum;
 		lineNum = lineNum - 1;
-		pos = getPos(lineNum, code, indicator);
+		pos = getPos(lines, lineNum, code, indicator);
 
 		//console.log('pos:', pos);
 
@@ -98,5 +101,3 @@ var parser = function (e, html) {
 	});
 	return parsed;
 };
-
-exports.parser = parser;
