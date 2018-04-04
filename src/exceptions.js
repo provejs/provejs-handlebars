@@ -95,7 +95,7 @@ exports.parser = function (e, html) {
 			line: lineNum,
 			column: pos.max
 		};
-		parsed.message = Messages.parser(message);
+		parsed.message = Messages.parser(message, code, message);
 		parsed.severity = 'error';
 		return '';
 	});
@@ -114,7 +114,7 @@ exports.parser = function (e, html) {
 			line: parsed.start.line,
 			column: parsed.start.column
 		};
-		parsed.message = Messages.parser(message);
+		parsed.message = Messages.parser(message, null, message);
 		parsed.severity = 'error';
 		return '';
 	});

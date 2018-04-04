@@ -66,7 +66,7 @@ describe('Testing blocks', function () {
 			var html = '{{#foo}}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = "Missing closing Handlebars expression.";
+			var message = "Missing closing Handlebars expression for {{#foo}}.";
 			Assert.equal(error.message, message);
 		});
 		it('{{#foo}}{{/bar}}', function () {
