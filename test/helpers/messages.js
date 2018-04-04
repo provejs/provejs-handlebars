@@ -66,14 +66,14 @@ describe('Testing blocks', function () {
 			var html = '{{#foo}}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = "Missing closing expression for code near `{{#foo}}`.";
+			var message = "Missing closing expression near `{{#foo}}`.";
 			Assert.equal(error.message, message);
 		});
 		it('<h1 class="foobar">{{#if \'hello world\'}}</h1>', function () {
 			var html = '<h1 class="foobar">{{#if \'hello world\'}}</h1>';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = "Missing block closing expression for code near `...'hello world'}}</h1>`.";
+			var message = "Missing block closing expression near `...'hello world'}}</h1>`.";
 			Assert.equal(error.message, message);
 		});
 

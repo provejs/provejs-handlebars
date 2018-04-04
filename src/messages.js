@@ -35,40 +35,44 @@ function errorParamMissing(rule, params) {
 	return message;
 }
 
+function near(code) {
+	return 'near `' + code + '`';
+}
+
 exports.parser = function (str, code) {
 	// console.log('parser()');
 	// console.log('* str:', str);
 	// console.log('* code:', code);
 
 	if (str.indexOf("got 'INVALID'") !== -1)
-		str = 'Invalid or incomplete Handlebars expression near `' + code + '`.';
+		str = 'Invalid or incomplete Handlebars expression ' + near(code) + '.';
 
 	if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'")
-		str = 'Empty or incomplete Handlebars expression near `' + code + '`.';
+		str = 'Empty or incomplete Handlebars expression ' + near(code) + '.';
 
 	if (str === "Expecting 'EOF', got 'OPEN_ENDBLOCK'")
-		str = 'Invalid closing block, check opening block near `' + code + '`.';
+		str = 'Invalid closing block, check opening block ' + near(code) + '.';
 
 	if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'")
-		str = 'Empty expression near `' + code + '`.';
+		str = 'Empty expression ' + near(code) + '.';
 
 	if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_UNESCAPED'")
-		str = 'Empty expression near `' + code + '`.';
+		str = 'Empty expression ' + near(code) + '.';
 
 	if (str === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'")
-		str = 'Invalid expression near `' + code + '`.';
+		str = 'Invalid expression ' + near(code) + '.';
 
 	if (str === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'")
-		str = 'Invalid expression near `' + code + '`.';
+		str = 'Invalid expression ' + near(code) + '.';
 
 	if (str.indexOf("Expecting 'OPEN_INVERSE_CHAIN', 'INVERSE', 'OPEN_ENDBLOCK', got 'EOF'") !== -1)
-		str = 'Missing block closing expression for code near `' + code + '`.';
+		str = 'Missing block closing expression ' + near(code) + '.';
 
 	if (str.indexOf("', got 'EOF'") !== -1)
-		str = 'Missing closing expression for code near `' + code + '`.';
+		str = 'Missing closing expression ' + near(code) + '.';
 
 	if (str.indexOf("', got '") !== -1)
-		str = 'Invalid expression near `' + code + '`.';
+		str = 'Invalid expression ' + near(code) + '.';
 
 	if (str.indexOf("doesn't match") !== -1)
 		str = 'The opening and closing expressions do not match. Specifically, ' + mismatch(str) + '.';
