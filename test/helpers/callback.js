@@ -3,8 +3,12 @@
 var Assert = require('assert');
 var Linter = require('../../index');
 
-function callback(posParms, namParams, loc) {
-	if (posParms.length !== 7) {
+function paramsCallback(posParams, namParams, loc) {
+
+	Assert.equal(Array.isArray(posParams), true);
+	Assert.equal(Array.isArray(namParams), true);
+
+	if (posParams.length !== 7) {
 		return {
 			severity: 'error',
 			message: 'Your custom linter error message here.',
@@ -14,13 +18,13 @@ function callback(posParms, namParams, loc) {
 	}
 }
 
-describe('Linting helper callback parameters', function () {
+describe('Linting helper params params callback', function () {
 	it('callback success', function () {
 		var html = "{{#ifCompound param1 '=' 42 'AND' param2 '!=' 42}}{{else}}{{/ifCompound}}";
 		var config = {
 			helpers: {
 				ifCompound: {
-					params: callback
+					params: paramsCallback
 				}
 			}
 		};
@@ -32,7 +36,7 @@ describe('Linting helper callback parameters', function () {
 		var config = {
 			helpers: {
 				ifCompound: {
-					params: callback
+					params: paramsCallback
 				}
 			}
 		};

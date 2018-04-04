@@ -45,6 +45,9 @@ exports.lint = function(rule, param) {
 		ok = includes(allowed, type, param);
 		return ok;
 	} else if (isFunction(formats)) {
+
+		// todo: offset the loc lines to zero based.
+		// can we do this for all loc objects?
 		return formats(value, type, param);
 	} else {
 		return false;
