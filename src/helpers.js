@@ -58,8 +58,8 @@ function lint(rule, param) {
 				column: param.loc.end.column
 			}
 		};
-	} else if (ok.severity) {
-		// formats callback can return an error object which
+	} else if (ok && ok.severity) {
+		// formats callback can return an error object
 		error = ok;
 	}
 	return error;
