@@ -24,9 +24,9 @@ npm install provejs-handlebars --save
 
 In Node.js:
 ```js
-var Linter = require('provejs-handlebars').linter;
+var Linter = require('provejs-handlebars');
 var html = '{{#foo}}{{/bar}}';
-var errors = Linter(html);
+var errors = Linter.verify(html);
 ```
 
 The errors output will be something like:
