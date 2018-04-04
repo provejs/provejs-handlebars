@@ -28,40 +28,46 @@ function errorBlock(rule) {
 function errorParams(rule, params) {
 	var message = (rule.required === true)
 		? exports.format('The {{@helper.name}} helper requires ' + words(rule.required) + ' `@rule.name` params, but only ' + params.length + ' were found.', rule)
-		: exports.format('The {{@helper.name}} helper requires a named parameter of `@rule.name`, but non was found.', rule);
+		: exports.format('The {{@helper.name}} helper requires a `@rule.name` parameter, but non was found.', rule);
 	return message;
 }
 
+// todo: can we pass in the regex matched code to improve these messages?
 exports.parser = function (message) {
 	// console.log('parser()');
 	// console.log(message);
 
 	if (message.indexOf("got 'INVALID'") !== -1)
-		return 'Invalid Handlebars expression.';
+		message = 'Invalid or incomplete Handlebars expression.';
 
 	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'")
-		return 'Empty or incomplete Handlebars expression.';
+		message = 'Empty or incomplete Handlebars expression.';
 
 	if (message === "Expecting 'EOF', got 'OPEN_ENDBLOCK'")
-		return 'Invalid closing block, check opening block.';
+		message = 'Invalid closing block, check opening block.';
 
 	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'")
-		return 'Empty Handlebars expression.';
+		message = 'Empty Handlebars expression.';
+
+	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_UNESCAPED'")
+		message = 'Empty Handlebars expression.';
 
 	if (message === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'")
-		return 'Invalid Handlebars expression.';
+		message = 'Invalid Handlebars expression.';
 
 	if (message === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'")
-		return 'Invalid Handlebars expression.';
+		message = 'Invalid Handlebars expression.';
 
 	if (message.indexOf("', got 'EOF'") !== -1)
-		return 'Missing closing Handlebars expression.';
+		message = 'Missing closing Handlebars expression.';
 
 	if (message.indexOf("', got '") !== -1)
-		return 'Invalid Handlebars expression.';
+		message = 'Invalid Handlebars expression.';
 
 	if (message.indexOf("doesn't match") !== -1)
-		return 'The opening and closing expressions do not match. Specifically, ' + message + '.';
+		message = 'The opening and closing expressions do not match. Specifically, ' + message + '.';
+
+	// console.log(message);
 
 	return message;
 };

@@ -26,11 +26,39 @@ describe('Testing blocks', function () {
 			var message = 'Empty or incomplete Handlebars expression.';
 			Assert.equal(error.message, message);
 		});
-		it('{{}}', function () {
-			var html = '{{';
+		it('{{{#', function () {
+			var html = '{{#';
 			var errors = Linter.verify(html);
 			var error = errors[0];
 			var message = 'Empty or incomplete Handlebars expression.';
+			Assert.equal(error.message, message);
+		});
+		it('{{}', function () {
+			var html = '{{}';
+			var errors = Linter.verify(html);
+			var error = errors[0];
+			var message = 'Invalid or incomplete Handlebars expression.';
+			Assert.equal(error.message, message);
+		});
+		it('{{#}', function () {
+			var html = '{{#}';
+			var errors = Linter.verify(html);
+			var error = errors[0];
+			var message = 'Invalid or incomplete Handlebars expression.';
+			Assert.equal(error.message, message);
+		});
+		it('{{}}', function () {
+			var html = '{{}}';
+			var errors = Linter.verify(html);
+			var error = errors[0];
+			var message = 'Empty Handlebars expression.';
+			Assert.equal(error.message, message);
+		});
+		it('{{{}}}', function () {
+			var html = '{{{}}}';
+			var errors = Linter.verify(html);
+			var error = errors[0];
+			var message = 'Empty Handlebars expression.';
 			Assert.equal(error.message, message);
 		});
 

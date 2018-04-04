@@ -12750,17 +12750,7 @@ define(function (require, exports, module) {
 
 var regex1 = /^Parse error on line ([0-9]+)+:\n([^\n].*)\n([^\n].*)\n(.*)$/;
 var regex2 = /^(.*) - ([0-9]+):([0-9]+)$/;
-
-function friendlyMessage(message) {
-	if (message.indexOf("got 'INVALID'") !== -1) return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'EOF', got 'OPEN_ENDBLOCK'") return 'Invalid closing block, check opening block.';
-	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'") return 'Empty Handlebars expression.';
-	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'") return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'") return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'") return 'Invalid Handlebars expression.';
-	if (message.indexOf("', got '") !== -1) return 'Invalid Handlebars expression.';
-	return message;
-}
+var Messages = require('./messages');
 
 function getPos(lines, lineNum, code, indicator) {
 
@@ -12853,7 +12843,7 @@ exports.parser = function (e, html) {
 			line: lineNum,
 			column: pos.max
 		};
-		parsed.message = friendlyMessage(message);
+		parsed.message = Messages.parser(message);
 		parsed.severity = 'error';
 		return '';
 	});
@@ -12872,14 +12862,14 @@ exports.parser = function (e, html) {
 			line: parsed.start.line,
 			column: parsed.start.column
 		};
-		parsed.message = friendlyMessage(message);
+		parsed.message = Messages.parser(message);
 		parsed.severity = 'error';
 		return '';
 	});
 	return parsed;
 };
 
-},{}],55:[function(require,module,exports){
+},{"./messages":57}],55:[function(require,module,exports){
 'use strict';
 
 var includes = require('lodash.includes');
@@ -12995,10 +12985,22 @@ function lint(rule, param) {
 	return error;
 }
 
-function lintHelperParam(astHelper, rule, ruleKey, block) {
+function hasMissingParams(rule, params) {
+	if (rule.required === true && params.length === 0) return true;
+	if (rule.required > params.length) return true;
+	return false;
+}
+
+function hasWrongBlock(astHelper, rule) {
+	return rule.block !== astHelper.block;
+}
+
+function lintHelperParam(astHelper, rule, ruleKey) {
 	var error;
 	var selector = rule.selector;
 	var params = Selectors.params(astHelper, selector, ruleKey);
+	var isMissingParams = hasMissingParams(rule, params);
+	var isWrongBlock = hasWrongBlock(astHelper, rule);
 
 	// lint each param against the config rule
 	params.forEach(function(param) {
@@ -13012,7 +13014,7 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 	if (rule.required === 0) return;
 
 	// lint block and non-block helpers
-	if (block !== astHelper.block) {
+	if (isWrongBlock) {
 		return {
 			severity: 'error',
 			message: Messages.get('block', rule),
@@ -13025,23 +13027,10 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 				column: astHelper.loc.end.column
 			}
 		};
-	} else if (rule.required === true && params.length === 0) {  /// lint missing params
+	} else if (isMissingParams) {
 		return {
 			severity: rule.severity,
-			message: Messages.get('param1', rule, params),
-			start: {
-				line: astHelper.loc.start.line - 1,
-				column: astHelper.loc.start.column
-			},
-			end: {
-				line: astHelper.loc.end.line - 1,
-				column: astHelper.loc.end.column
-			}
-		};
-	} else if (rule.required > params.length) {
-		return {
-			severity: rule.severity,
-			message: Messages.get('param2', rule, params),
+			message: Messages.get('param', rule, params),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column
@@ -13072,9 +13061,10 @@ function lintHelper(astHelper, objRules) {
 			if (!rule.name) rule.name = ruleKey;
 			if (!rule.helper) rule.helper = astHelper.name;
 			if (!rule.severity) rule.severity = 'error';
+			rule.block = block;
 
 			if (error) return false; // break loop
-			error = lintHelperParam(astHelper, rule, ruleKey, block);
+			error = lintHelperParam(astHelper, rule, ruleKey);
 		});
 	}
 
@@ -13202,11 +13192,9 @@ function words(val) {
 }
 
 function errorFormats(rule) {
-
 	var message = (rule.block)
 		? 'The {{#@helper.name}} helper parameter `@rule.name` has an invalid value format.'
 		: 'The {{@helper.name}} helper parameter `@rule.name` has an invalid value format.';
-
 	return exports.format(message, rule);
 }
 
@@ -13217,24 +13205,57 @@ function errorBlock(rule) {
 	return message;
 }
 
-
-// todo: merge this tow params related error messages into a single function Messages.get('param', rule, messages);
-function errorParams1(rule) {
-	var message = exports.format('The {{@helper.name}} helper requires a named parameter of `@rule.name`, but non was found.', rule);
+function errorParams(rule, params) {
+	var message = (rule.required === true)
+		? exports.format('The {{@helper.name}} helper requires ' + words(rule.required) + ' `@rule.name` params, but only ' + params.length + ' were found.', rule)
+		: exports.format('The {{@helper.name}} helper requires a `@rule.name` parameter, but non was found.', rule);
 	return message;
 }
 
-function errorParams2(rule, params) {
-	var message = exports.format('The {{@helper.name}} helper requires ' + words(rule.required) + ' `@rule.name` params, but only ' + params.length + ' were found.', rule);
-	return message;
-}
+// todo: can we pass in the regex matched code to improve these messages?
+exports.parser = function (message) {
+	// console.log('parser()');
+	// console.log(message);
 
+	if (message.indexOf("got 'INVALID'") !== -1)
+		message = 'Invalid or incomplete Handlebars expression.';
+
+	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'")
+		message = 'Empty or incomplete Handlebars expression.';
+
+	if (message === "Expecting 'EOF', got 'OPEN_ENDBLOCK'")
+		message = 'Invalid closing block, check opening block.';
+
+	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'")
+		message = 'Empty Handlebars expression.';
+
+	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_UNESCAPED'")
+		message = 'Empty Handlebars expression.';
+
+	if (message === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'")
+		message = 'Invalid Handlebars expression.';
+
+	if (message === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'")
+		message = 'Invalid Handlebars expression.';
+
+	if (message.indexOf("', got 'EOF'") !== -1)
+		message = 'Missing closing Handlebars expression.';
+
+	if (message.indexOf("', got '") !== -1)
+		message = 'Invalid Handlebars expression.';
+
+	if (message.indexOf("doesn't match") !== -1)
+		message = 'The opening and closing expressions do not match. Specifically, ' + message + '.';
+
+	// console.log(message);
+
+	return message;
+};
 
 exports.get = function(type, rule, params) {
 	if (type === 'block') return errorBlock(rule);
 	if (type === 'formats') return errorFormats(rule);
-	if (type === 'params1') return errorParams1(rule);
-	if (type === 'params2') return errorParams2(rule, params);
+	if (type === 'params') return errorParams(rule, params);
 };
 
 exports.format = function(message, rule) {
