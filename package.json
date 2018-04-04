@@ -1,7 +1,7 @@
 {
   "name": "provejs-handlebars",
-  "version": "0.0.23",
-  "description": "Handlebars linter. Under active development.",
+  "version": "0.0.24",
+  "description": "Handlebars linter.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
