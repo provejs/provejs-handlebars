@@ -181,6 +181,10 @@ exports.verify = function (nodes, rules) {
 	return errors;
 };
 
+exports.register = function(name, config) {
+	exports.configs[name] = config;
+};
+
 
 exports.configs = {
 	if: {

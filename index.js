@@ -36,9 +36,7 @@ exports.verify = function (html, rules) {
 	return errors;
 };
 
-exports.register = function(name, config) {
-	Helpers.configs[name] = config;
-};
+exports.register = Helpers.register;
 
 exports._configs = {
 	helpers: Helpers.configs
