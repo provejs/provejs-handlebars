@@ -39,7 +39,11 @@ function lint(rule, param) {
 	var error, message;
 	var ok = Formats.lint(rule, param);
 
+	// todo: the formats callback function should be able to return
+	// its own error object.
+
 	if (!ok) {
+		// todo: the Messages.get() should allow the overriding of the message via rule.message
 		message = (rule.message)
 			? Messages.format(rule.message, rule)
 			: Messages.get('formats', rule);
