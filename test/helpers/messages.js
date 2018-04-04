@@ -113,7 +113,7 @@ describe('Testing blocks', function () {
 
 		var errors = Linter.verify(html, config);
 		var error = errors[0];
-		var message = 'The {{helper1}} helper requires one `param1` parameter, but which was not.';
+		var message = 'The {{helper1}} helper requires one `param1` parameter, which was not found.';
 		Assert.equal(error.message, message);
 	});
 
