@@ -12843,7 +12843,7 @@ exports.parser = function (e, html) {
 			line: lineNum,
 			column: pos.max
 		};
-		parsed.message = Messages.parser(message, code, message);
+		parsed.message = Messages.parser(message, code);
 		parsed.severity = 'error';
 		return '';
 	});
@@ -12862,7 +12862,7 @@ exports.parser = function (e, html) {
 			line: parsed.start.line,
 			column: parsed.start.column
 		};
-		parsed.message = Messages.parser(message, null, message);
+		parsed.message = Messages.parser(message);
 		parsed.severity = 'error';
 		return '';
 	});
@@ -13212,7 +13212,7 @@ function errorParams(rule, params) {
 	return message;
 }
 
-exports.parser = function (str, code, message) {
+exports.parser = function (str, code) {
 	// console.log('parser()');
 	// console.log('* str:', str);
 	// console.log('* code:', code);
@@ -13227,30 +13227,37 @@ exports.parser = function (str, code, message) {
 		str = 'Invalid closing block, check opening block.';
 
 	if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'")
-		str = 'Empty Handlebars expression.';
+		str = 'Empty expression.';
 
 	if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_UNESCAPED'")
-		str = 'Empty Handlebars expression.';
+		str = 'Empty expression.';
 
 	if (str === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'")
-		str = 'Invalid Handlebars expression.';
+		str = 'Invalid expression.';
 
 	if (str === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'")
-		str = 'Invalid Handlebars expression.';
+		str = 'Invalid expression.';
+
+	if (str.indexOf("Expecting 'OPEN_INVERSE_CHAIN', 'INVERSE', 'OPEN_ENDBLOCK', got 'EOF'") !== -1)
+		str = 'Missing block closing expression for code near ' + code + '.';
 
 	if (str.indexOf("', got 'EOF'") !== -1)
-		str = 'Missing closing Handlebars expression for ' + code + '.';
+		str = 'Missing closing expression for code near ' + code + '.';
 
 	if (str.indexOf("', got '") !== -1)
-		str = 'Invalid Handlebars expression.';
+		str = 'Invalid expression.';
 
 	if (str.indexOf("doesn't match") !== -1)
-		str = 'The opening and closing expressions do not match. Specifically, ' + str + '.';
+		str = 'The opening and closing expressions do not match. Specifically, ' + mismatch(str) + '.';
 
 	// console.log(str);
 
 	return str;
 };
+
+function mismatch(str) {
+	return '{{' + str.replace(" doesn't match ", "}} doesn't match {{/") + '}}';
+}
 
 exports.get = function(type, rule, params) {
 	if (type === 'block') return errorBlock(rule);

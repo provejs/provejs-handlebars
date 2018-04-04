@@ -83,7 +83,7 @@ describe('Testing blocks', function () {
 			var html = '{{#foo}}{{/bar}}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = "The opening and closing expressions do not match. Specifically, foo doesn't match bar.";
+			var message = "The opening and closing expressions do not match. Specifically, {{foo}} doesn't match {{/bar}}.";
 			Assert.equal(error.message, message);
 		});
 		it('{{foo}}{{/foo}}', function () {

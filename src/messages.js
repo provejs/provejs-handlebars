@@ -68,12 +68,16 @@ exports.parser = function (str, code) {
 		str = 'Invalid expression.';
 
 	if (str.indexOf("doesn't match") !== -1)
-		str = 'The opening and closing expressions do not match. Specifically, ' + str + '.';
+		str = 'The opening and closing expressions do not match. Specifically, ' + mismatch(str) + '.';
 
 	// console.log(str);
 
 	return str;
 };
+
+function mismatch(str) {
+	return '{{' + str.replace(" doesn't match ", "}} doesn't match {{/") + '}}';
+}
 
 exports.get = function(type, rule, params) {
 	if (type === 'block') return errorBlock(rule);
