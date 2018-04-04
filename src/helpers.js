@@ -172,7 +172,7 @@ function lintHelpers(helpers, rules) {
 	return errors;
 }
 
-exports.linter = function (nodes, rules) {
+exports.verify = function (nodes, rules) {
 	var helpers = [];
 	var names = keys(rules.helpers);
 	Walker.helpers(nodes, names, helpers);
@@ -182,7 +182,7 @@ exports.linter = function (nodes, rules) {
 };
 
 
-exports.config = {
+exports.configs = {
 	if: {
 		block: true,
 		params: {

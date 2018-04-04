@@ -19,9 +19,10 @@ function isErrors(ast) {
 	return !!ast.length;
 }
 
-exports.linter = function (html, rules) {
+exports.verify = function (html, rules) {
 
-	if (!rules) rules = exports.config;
+	// todo: extend defaults
+	if (!rules) rules = exports._configs;
 
 	var errors;
 	var ast = parse(html);
@@ -31,11 +32,15 @@ exports.linter = function (html, rules) {
 		return errors;
 	}
 	var nodes = ast.body || ast;
-	errors = Helpers.linter(nodes, rules);
+	errors = Helpers.verify(nodes, rules);
 	return errors;
 };
 
-exports.config = {
-	helpers: Helpers.config
+exports.register = function(name, config) {
+	Helpers.configs[name] = config;
+};
+
+exports._configs = {
+	helpers: Helpers.configs
 };
 

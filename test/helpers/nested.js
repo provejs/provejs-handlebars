@@ -1,7 +1,7 @@
 'use strict';
 
 var Assert = require('assert');
-var Linter = require('../../index').linter;
+var Linter = require('../../index');
 
 describe('Nested block linting', function () {
 	it('checking param value formats is optional', function () {
@@ -18,7 +18,7 @@ describe('Nested block linting', function () {
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 1);
 	});
 });

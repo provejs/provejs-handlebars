@@ -42,20 +42,37 @@ In browser:
 <script src="dist/handlebars-linter.js"></script>
 <script>
 var html = "{{helper param1=xxx}}";
-var errors = HandlebarsProve.linter(html);
+var errors = HandlebarsProve.verify(html);
 </script>
 ```
 
-# Linter Signature
+# Linter Methods
 
-The linter function accepts two params:
+There are two methods exposed from the linter:
+- Linter.verify(): verifies handlebars syntax.
+- Linter.register(): allows your regiser custom linter configurations.
+
+
+## Linter Verify Method
+
+The verify function accepts two params:
 - html (**html**): required html template string.
 - config (**object**): optional config object which is defined below. If the config is undefined than a default config is used.
 
-The default config lints the built-in handlebars helpers. The default config can be accessed:
 ```js
-console.log(Linter.config); // node.js
-console.log(HandlebarsProve.config); // browser
+var html = '...';
+var errors = Linter.verify(html);
+```
+
+## Linter Register Method
+
+The linter comes preconfigured for the built-in handlebars helpers. However, you can add your own helper configurations or override the built-in helpers.
+- name (**html**): required html template string.
+- config (**object**): optional config object which is defined below.
+
+```js
+var config = {...};
+Linter.registerHelper('myHelper', config);
 ```
 
 # Helpers Configuration

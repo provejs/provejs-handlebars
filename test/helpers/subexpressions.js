@@ -1,7 +1,7 @@
 'use strict';
 
 var Assert = require('assert');
-var Linter = require('../../index').linter;
+var Linter = require('../../index');
 
 describe('Linting helper params with subexpressions', function () {
 	it('should support subexpressions', function () {
@@ -19,7 +19,7 @@ describe('Linting helper params with subexpressions', function () {
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 0);
 	});
 });

@@ -1,7 +1,7 @@
 'use strict';
 
 var Assert = require('assert');
-var Linter = require('../../index').linter;
+var Linter = require('../../index');
 
 describe('Linting unlinted params', function () {
 	it('Linting unlinted named params', function () {
@@ -23,7 +23,7 @@ describe('Linting unlinted params', function () {
 				}
 			}
 		};
-		var errors = Linter(html, config);
+		var errors = Linter.verify(html, config);
 		var error = errors[0];
 		Assert.equal(errors.length, 1);
 		Assert.equal(error.severity, 'warning');

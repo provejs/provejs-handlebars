@@ -1,7 +1,7 @@
 'use strict';
 
 var Assert = require('assert');
-var Linter = require('../../index').linter;
+var Linter = require('../../index');
 
 function callback(posParms, namParams, loc) {
 	if (posParms.length !== 7) {
@@ -24,7 +24,7 @@ describe('Linting helper callback parameters', function () {
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.deepEqual(actual.length, 0);
 	});
 	it('callback invalid', function () {
@@ -36,7 +36,7 @@ describe('Linting helper callback parameters', function () {
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.deepEqual(actual.length, 1);
 	});
 });

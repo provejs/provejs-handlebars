@@ -1,7 +1,7 @@
 'use strict';
 
 var Assert = require('assert');
-var Linter = require('../../index').linter;
+var Linter = require('../../index');
 
 describe('Linting helper positional parameters', function () {
 	it('empty html should not generate any errors', function () {
@@ -14,7 +14,7 @@ describe('Linting helper positional parameters', function () {
 			}
 		};
 
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		var expected = [];
 		Assert.deepEqual(actual, expected);
 	});
@@ -33,7 +33,7 @@ describe('Linting helper positional parameters', function () {
 			}
 		};
 
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		var expected = [];
 		Assert.deepEqual(actual, expected);
 	});
@@ -52,7 +52,7 @@ describe('Linting helper positional parameters', function () {
 			}
 		};
 
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 1);
 	});
 	it('missing optional helper positional parameter should NOT generate error', function () {
@@ -70,7 +70,7 @@ describe('Linting helper positional parameters', function () {
 			}
 		};
 
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('missing second optional helper positional parameter should NOT generate error', function () {
@@ -92,7 +92,7 @@ describe('Linting helper positional parameters', function () {
 			}
 		};
 
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('helper positional parameter with wrong value format should generate error', function () {
@@ -111,7 +111,7 @@ describe('Linting helper positional parameters', function () {
 			}
 		};
 
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 1);
 	});
 	it('block helper positional parameter with wrong value format should generate error', function () {
@@ -130,7 +130,7 @@ describe('Linting helper positional parameters', function () {
 			}
 		};
 
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 1);
 	});
 });

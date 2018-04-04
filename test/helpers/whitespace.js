@@ -1,7 +1,7 @@
 'use strict';
 
 var Assert = require('assert');
-var Linter = require('../../index').linter;
+var Linter = require('../../index');
 
 describe('Linting helper whitespace around parameters', function () {
 	it('should ignore whitespace around helpers and params by default', function () {
@@ -18,7 +18,7 @@ describe('Linting helper whitespace around parameters', function () {
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 0);
 	});
 });

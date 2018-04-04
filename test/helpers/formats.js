@@ -1,7 +1,7 @@
 'use strict';
 
 var Assert = require('assert');
-var Linter = require('../../index').linter;
+var Linter = require('../../index');
 
 describe('Linting helper params without checking param value formats', function () {
 	it('checking param value formats is optional', function () {
@@ -18,7 +18,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('checking param value formats=true', function () {
@@ -36,7 +36,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('checking param value formats=false', function () {
@@ -54,7 +54,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 1);
 	});
 	it('checking param value formats=function', function () {
@@ -74,7 +74,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var actual = Linter(html, config);
+		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 0);
 	});
 });
