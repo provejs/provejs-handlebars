@@ -13220,7 +13220,7 @@ function errorParamMissing(rule, params) {
 }
 
 function near(code) {
-	return 'near `' + code + '`';
+	return 'near `' + code.trim() + '`';
 }
 
 exports.parser = function (str, code) {
