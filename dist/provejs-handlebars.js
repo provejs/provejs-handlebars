@@ -12949,11 +12949,30 @@ function pruneHelpers(node) {
 
 	var helper = {
 		name: name,
-		params: params,
-		hash: hash,
+		params: params || [],
+		hash: hash || {
+			pairs: []
+		},
 		loc: node.loc,
 		block: (node.type === 'BlockStatement')
 	};
+
+	// zero-base location lines
+	helper.loc.start.line = helper.loc.start.line - 1;
+	helper.loc.end.line = helper.loc.end.line - 1;
+
+	// zero-base named params location lines
+	helper.params.forEach(function(param) {
+		param.loc.start.line = param.loc.start.line - 1;
+		param.loc.end.line = param.loc.end.line - 1;
+	});
+
+	// zero-base positional params location lines
+	helper.hash.pairs.forEach(function(param) {
+		param.loc.start.line = param.loc.start.line - 1;
+		param.loc.end.line = param.loc.end.line - 1;
+	});
+
 	return helper;
 }
 
@@ -12961,39 +12980,30 @@ function lintHelperCallback(astHelper, callback) {
 	var posParams = Selectors.allPositional(astHelper);
 	var namParams = Selectors.allNamed(astHelper);
 	var loc = astHelper.loc;
-
 	return callback(posParams, namParams, loc);
 }
 
 function lint(rule, param) {
 
-	var error, message;
 	var ok = Formats.lint(rule, param);
 
-	// console.log('ok', ok);
-
 	if (ok === false) {
-		// todo: the Messages.get() should allow the overriding of the message via rule.message
-		message = (rule.message)
-			? Messages.format(rule.message, rule)
-			: Messages.get('formats', rule);
-		error = {
+		return {
 			severity: rule.severity,
-			message: message,
+			message: Messages.get('formats', rule),
 			start: {
-				line: param.loc.start.line - 1,
+				line: param.loc.start.line,
 				column: param.loc.start.column
 			},
 			end: {
-				line: param.loc.end.line - 1,
+				line: param.loc.end.line,
 				column: param.loc.end.column
 			}
 		};
-	} else if (ok.severity) {
-		// formats callback can return an error object which
-		error = ok;
+	} else if (ok && ok.severity) {
+		// custom callback can return an error object
+		return ok;
 	}
-	return error;
 }
 
 function hasMissingParams(rule, params) {
@@ -13032,11 +13042,11 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 			severity: 'error',
 			message: Messages.get('block', rule),
 			start: {
-				line: astHelper.loc.start.line - 1,
+				line: astHelper.loc.start.line,
 				column: astHelper.loc.start.column
 			},
 			end: {
-				line: astHelper.loc.end.line - 1,
+				line: astHelper.loc.end.line,
 				column: astHelper.loc.end.column
 			}
 		};
@@ -13045,11 +13055,11 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 			severity: rule.severity,
 			message: Messages.get('param-missing', rule, params),
 			start: {
-				line: astHelper.loc.start.line - 1,
+				line: astHelper.loc.start.line,
 				column: astHelper.loc.start.column
 			},
 			end: {
-				line: astHelper.loc.end.line - 1,
+				line: astHelper.loc.end.line,
 				column: astHelper.loc.end.column
 			}
 		};
@@ -13205,6 +13215,10 @@ function errorFormats(rule) {
 	var message = (rule.block)
 		? 'The {{#@helper.name}} helper parameter `@rule.name` has an invalid value format.'
 		: 'The {{@helper.name}} helper parameter `@rule.name` has an invalid value format.';
+
+	// allow override message via rule.message
+	message = (rule.message)? rule.message : message;
+
 	return exports.format(message, rule);
 }
 
@@ -13212,6 +13226,10 @@ function errorBlock(rule) {
 	var message = (rule.block)
 		? exports.format('The {{#@helper.name}} block helper requires a `#` before its name.', rule)
 		: exports.format('The {{@helper.name}} non-block helper should not have a `#` before its name.', rule);
+
+	// allow override message via rule.message
+	message = (rule.message)? rule.message : message;
+
 	return message;
 }
 
@@ -13224,6 +13242,10 @@ function errorParamMissing(rule, params) {
 	} else {
 		message = exports.format('The {{@helper.name}} helper requires ' + word(rule.required) + ' `@rule.name` parameters, but ' + word(params.length) + ' were found.', rule);
 	}
+
+	// allow override message via rule.message
+	message = (rule.message)? rule.message : message;
+
 	return message;
 }
 

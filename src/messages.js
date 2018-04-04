@@ -12,6 +12,10 @@ function errorFormats(rule) {
 	var message = (rule.block)
 		? 'The {{#@helper.name}} helper parameter `@rule.name` has an invalid value format.'
 		: 'The {{@helper.name}} helper parameter `@rule.name` has an invalid value format.';
+
+	// allow override message via rule.message
+	message = (rule.message)? rule.message : message;
+
 	return exports.format(message, rule);
 }
 
@@ -19,6 +23,10 @@ function errorBlock(rule) {
 	var message = (rule.block)
 		? exports.format('The {{#@helper.name}} block helper requires a `#` before its name.', rule)
 		: exports.format('The {{@helper.name}} non-block helper should not have a `#` before its name.', rule);
+
+	// allow override message via rule.message
+	message = (rule.message)? rule.message : message;
+
 	return message;
 }
 
@@ -31,6 +39,10 @@ function errorParamMissing(rule, params) {
 	} else {
 		message = exports.format('The {{@helper.name}} helper requires ' + word(rule.required) + ' `@rule.name` parameters, but ' + word(params.length) + ' were found.', rule);
 	}
+
+	// allow override message via rule.message
+	message = (rule.message)? rule.message : message;
+
 	return message;
 }
 

@@ -57,7 +57,7 @@ describe('Linting helper params without checking param value formats', function 
 		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 1);
 	});
-	it('checking param value formats=function', function () {
+	it('checking param value formats=callback', function () {
 		var html = '{{helper1 param1=42}}';
 		var config = {
 			helpers: {
@@ -105,8 +105,8 @@ describe('Linting helper params without checking param value formats', function 
 		var error = errors[0];
 		Assert.equal(error.severity, 'foobar1');
 		Assert.equal(error.message, 'foobar2');
-		Assert.equal(error.start.line, 1);
-		Assert.equal(error.end.line, 1);
+		Assert.equal(error.start.line, 0);
+		Assert.equal(error.end.line, 0);
 		Assert.equal(error.start.column, 10);
 		Assert.equal(error.end.column, 19);
 	});
