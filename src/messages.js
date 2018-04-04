@@ -52,41 +52,34 @@ function near(code) {
 
 exports.parser = function (str, code) {
 
-	if (str === "Expecting 'EQUALS', got 'CLOSE'")
+	// console.log(str);
+	// console.log(code);
+
+	if (str.indexOf("Expecting 'EQUALS', got") !== -1) {
 		str = 'Invalid expression near ' + near(code) + '. Named parameters should only be placed after positional parameters.';
-
-	if (str.indexOf("got 'INVALID'") !== -1)
+	} else if (str.indexOf("got 'INVALID'") !== -1) {
 		str = 'Invalid or incomplete Handlebars expression ' + near(code) + '.';
-
-	if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'")
+	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'") {
 		str = 'Empty or incomplete Handlebars expression ' + near(code) + '.';
-
-	if (str === "Expecting 'EOF', got 'OPEN_ENDBLOCK'")
+	} else if (str === "Expecting 'EOF', got 'OPEN_ENDBLOCK'") {
 		str = 'Invalid closing block, check opening block ' + near(code) + '.';
-
-	if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'")
+	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'") {
 		str = 'Empty expression ' + near(code) + '.';
-
-	if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_UNESCAPED'")
+	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_UNESCAPED'") {
 		str = 'Empty expression ' + near(code) + '.';
-
-	if (str === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'")
+	} else if (str === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'") {
 		str = 'Invalid expression ' + near(code) + '.';
-
-	if (str === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'")
+	} else if (str === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'") {
 		str = 'Invalid expression ' + near(code) + '.';
-
-	if (str.indexOf("Expecting 'OPEN_INVERSE_CHAIN', 'INVERSE', 'OPEN_ENDBLOCK', got 'EOF'") !== -1)
+	} else if (str.indexOf("Expecting 'OPEN_INVERSE_CHAIN', 'INVERSE', 'OPEN_ENDBLOCK', got 'EOF'") !== -1) {
 		str = 'Missing block closing expression ' + near(code) + '.';
-
-	if (str.indexOf("', got 'EOF'") !== -1)
+	} else if (str.indexOf("', got 'EOF'") !== -1) {
 		str = 'Missing closing expression ' + near(code) + '.';
-
-	if (str.indexOf("', got '") !== -1)
+	} else if (str.indexOf("', got '") !== -1) {
 		str = 'Invalid expression ' + near(code) + '.';
-
-	if (str.indexOf("doesn't match") !== -1)
+	} else if (str.indexOf("doesn't match") !== -1) {
 		str = 'The opening and closing expressions do not match. Specifically, ' + mismatch(str) + '.';
+	}
 
 	// console.log(str);
 

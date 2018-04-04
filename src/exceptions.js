@@ -58,6 +58,8 @@ function getPos(lines, lineNum, code, indicator) {
 		? min + indicator.length - 1
 		: min + indicator.length - 4;
 
+	if (min === max) max++;
+
 	if (min === -1) {
 		return {
 			min: 0,
@@ -106,7 +108,6 @@ exports.parser = function (e, html) {
 		lineNum = +lineNum;
 		lineNum = lineNum - 1;
 		columnNum = +columnNum;
-		columnNum = columnNum - 1;
 
 		parsed.start = {
 			line: lineNum,
@@ -114,7 +115,7 @@ exports.parser = function (e, html) {
 		};
 		parsed.end = {
 			line: parsed.start.line,
-			column: parsed.start.column
+			column: parsed.start.column + 1
 		};
 		parsed.message = Messages.parser(message);
 		parsed.severity = 'error';

@@ -132,4 +132,18 @@ describe('Testing blocks', function () {
 		var message = "Invalid expression near near `{{assign a=b c}}`. Named parameters should only be placed after positional parameters.";
 		Assert.equal(error.message, message);
 	});
+	it('positional param after named param', function () {
+		var html = '{{#each a=b c}}{{else}}{{/each}}';
+		var errors = Linter.verify(html);
+		var error = errors[0];
+		var message = "Invalid expression near near `{{#each a=b c}}{{else}}{{/each}}`. Named parameters should only be placed after positional parameters.";
+		Assert.equal(error.message, message);
+	});
+	it('positional param after named param', function () {
+		var html = '{{#each a=b c d}}{{else}}{{/each}}';
+		var errors = Linter.verify(html);
+		var error = errors[0];
+		var message = "Invalid expression near near `{{#each a=b c d}}{{else}}{{/each}}`. Named parameters should only be placed after positional parameters.";
+		Assert.equal(error.message, message);
+	});
 });

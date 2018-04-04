@@ -121,11 +121,10 @@ describe('Testing locations', function () {
 		var html = '{{#foo}}{{/bar}}';
 		var errors = Linter.verify(html);
 		var error = errors[0];
-		// todo: this seems wrong or unattainable?
 		Assert.equal(error.start.line, 0);
-		Assert.equal(error.start.column, 2);
+		Assert.equal(error.start.column, 3);
 		Assert.equal(error.end.line, 0);
-		Assert.equal(error.end.column, 2);
+		Assert.equal(error.end.column, 4);
 	});
 	it('mismatched block helpers with newline', function () {
 
@@ -133,9 +132,9 @@ describe('Testing locations', function () {
 		var errors = Linter.verify(html);
 		var error = errors[0];
 		Assert.equal(error.start.line, 0);
-		Assert.equal(error.start.column, 2);
+		Assert.equal(error.start.column, 3);
 		Assert.equal(error.end.line, 0);
-		Assert.equal(error.end.column, 2);
+		Assert.equal(error.end.column, 4);
 	});
 	it('mismatched block helpers', function () {
 		var html = '{{foo}}{{/foo}}';
