@@ -23,7 +23,6 @@ function errorBlock(rule) {
 }
 
 function errorParamMissing(rule, params) {
-	console.log('errorParamMissing()');
 	var message;
 	if (rule.required === true && params.length === 0) {
 		message = exports.format('The {{@helper.name}} helper requires a `@rule.name` parameter, which was not found.', rule);
