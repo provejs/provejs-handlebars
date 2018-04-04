@@ -87,6 +87,8 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 	if (rule.required === false) return;
 	if (rule.required === 0) return;
 
+
+
 	// lint block and non-block helpers
 	if (isWrongBlock) {
 		return {

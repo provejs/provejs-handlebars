@@ -96,6 +96,27 @@ describe('Testing blocks', function () {
 	});
 
 
+	it('missing required helper positional parameter', function () {
+		var html = "{{helper1}}";
+		var config = {
+			helpers: {
+				helper1: {
+					params: {
+						param1: {
+							selector: 'positional(0)',
+							required: 1
+						}
+					}
+				}
+			}
+		};
+
+		var errors = Linter.verify(html, config);
+		var error = errors[0];
+		var message = 'The {{helper1}} helper requires a `param1` parameter, but non was found.';
+		Assert.equal(error.message, message);
+	});
+
 	it('wrong block', function () {
 		var html = '{{if a}}';
 		var errors = Linter.verify(html);
