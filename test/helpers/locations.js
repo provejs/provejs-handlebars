@@ -85,7 +85,7 @@ describe('Testing locations', function () {
 		var error = errors[0];
 		Assert.equal(error.start.line, 1);
 		Assert.equal(error.end.line, 1);
-		// todo: something is wrong with the columns here.
+		// todo: columns seems wrong or unattainable?
 		// Assert.equal(error.start.column, 0);
 		// Assert.equal(error.end.column, 0);
 	});
@@ -121,7 +121,7 @@ describe('Testing locations', function () {
 		var html = '{{#foo}}{{/bar}}';
 		var errors = Linter.verify(html);
 		var error = errors[0];
-		// todo: this seems wrong?
+		// todo: this seems wrong or unattainable?
 		Assert.equal(error.start.line, 0);
 		Assert.equal(error.start.column, 2);
 		Assert.equal(error.end.line, 0);
@@ -229,6 +229,15 @@ describe('Testing locations', function () {
 		Assert.equal(error.start.column, 19);
 		Assert.equal(error.end.line, 0);
 		Assert.equal(error.end.column, 39);
+	});
+	it('{{#if a}}\\n {{{f7}}\\n{{/if}}', function () {
+		var html = "{{#if a}}\n {{{f7}}\n{{/if}}";
+		var errors = Linter.verify(html);
+		var error = errors[0];
+		Assert.equal(error.start.line, 1);
+		Assert.equal(error.start.column, 0);
+		Assert.equal(error.end.line, 1);
+		Assert.equal(error.end.column, 1);
 	});
 });
 

@@ -9,56 +9,56 @@ describe('Testing blocks', function () {
 			var html = '{{';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = 'Empty or incomplete Handlebars expression.';
+			var message = 'Empty or incomplete Handlebars expression near `{{`.';
 			Assert.equal(error.message, message);
 		});
 		it('{{#', function () {
 			var html = '{{#';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = 'Empty or incomplete Handlebars expression.';
+			var message = 'Empty or incomplete Handlebars expression near `{{#`.';
 			Assert.equal(error.message, message);
 		});
 		it('{{{', function () {
-			var html = '{{';
+			var html = '{{{';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = 'Empty or incomplete Handlebars expression.';
+			var message = 'Empty or incomplete Handlebars expression near `{{{`.';
 			Assert.equal(error.message, message);
 		});
 		it('{{{#', function () {
-			var html = '{{#';
+			var html = '{{{#';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = 'Empty or incomplete Handlebars expression.';
+			var message = 'Invalid or incomplete Handlebars expression near `{{{#`.';
 			Assert.equal(error.message, message);
 		});
 		it('{{}', function () {
 			var html = '{{}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = 'Invalid or incomplete Handlebars expression.';
+			var message = 'Invalid or incomplete Handlebars expression near `{{}`.';
 			Assert.equal(error.message, message);
 		});
 		it('{{#}', function () {
 			var html = '{{#}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = 'Invalid or incomplete Handlebars expression.';
+			var message = 'Invalid or incomplete Handlebars expression near `{{#}`.';
 			Assert.equal(error.message, message);
 		});
 		it('{{}}', function () {
 			var html = '{{}}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = 'Empty expression.';
+			var message = 'Empty expression near `{{}}`.';
 			Assert.equal(error.message, message);
 		});
 		it('{{{}}}', function () {
 			var html = '{{{}}}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = 'Empty expression.';
+			var message = 'Empty expression near `{{{}}}`.';
 			Assert.equal(error.message, message);
 		});
 
@@ -66,14 +66,14 @@ describe('Testing blocks', function () {
 			var html = '{{#foo}}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = "Missing closing expression for code near {{#foo}}.";
+			var message = "Missing closing expression for code near `{{#foo}}`.";
 			Assert.equal(error.message, message);
 		});
 		it('<h1 class="foobar">{{#if \'hello world\'}}</h1>', function () {
 			var html = '<h1 class="foobar">{{#if \'hello world\'}}</h1>';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = "Missing block closing expression for code near ...'hello world'}}</h1>.";
+			var message = "Missing block closing expression for code near `...'hello world'}}</h1>`.";
 			Assert.equal(error.message, message);
 		});
 
@@ -90,7 +90,7 @@ describe('Testing blocks', function () {
 			var html = '{{foo}}{{/foo}}';
 			var errors = Linter.verify(html);
 			var error = errors[0];
-			var message = "Invalid closing block, check opening block.";
+			var message = "Invalid closing block, check opening block near `{{foo}}{{/foo}}`.";
 			Assert.equal(error.message, message);
 		});
 	});
@@ -113,7 +113,7 @@ describe('Testing blocks', function () {
 
 		var errors = Linter.verify(html, config);
 		var error = errors[0];
-		var message = 'The {{helper1}} helper requires a `param1` parameter, but non was found.';
+		var message = 'The {{helper1}} helper requires one `param1` parameter, but which was not.';
 		Assert.equal(error.message, message);
 	});
 

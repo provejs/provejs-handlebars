@@ -9,6 +9,8 @@ function getPos(lines, lineNum, code, indicator) {
 	var line, min, max, dots = false, prefix = 0;
 	var pos = {};
 
+	// console.log('code', code);
+
 	// handle special cases
 	if (code === '{{{{') {
 		pos.min = 0;
@@ -59,7 +61,7 @@ function getPos(lines, lineNum, code, indicator) {
 	if (min === -1) {
 		return {
 			min: 0,
-			max: 0
+			max: 1
 		};
 	} else {
 		return {
@@ -85,7 +87,7 @@ exports.parser = function (e, html) {
 		lineNum = lineNum - 1;
 		pos = getPos(lines, lineNum, code, indicator);
 
-		//console.log('pos:', pos);
+		// console.log('pos:', pos);
 
 		parsed.start = {
 			line: lineNum,

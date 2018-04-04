@@ -106,7 +106,7 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 	} else if (isMissingParams) {
 		return {
 			severity: rule.severity,
-			message: Messages.get('param', rule, params),
+			message: Messages.get('param-missing', rule, params),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column
@@ -209,7 +209,7 @@ exports.configs = {
 	each: {
 		block: true,
 		params: {
-			arrValue: {
+			'array': {
 				selector: 'positional(0)',
 				required: 1
 			},
