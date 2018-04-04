@@ -36,16 +36,13 @@ function lintHelperCallback(astHelper, callback) {
 
 function lint(rule, param) {
 
-	var error;
+	var error, message;
 	var ok = Formats.lint(rule, param);
-	var message = (rule.block)
-		? 'The {{#@helper.name}} helper parameter `@rule.name` has an invalid value format.'
-		: 'The {{@helper.name}} helper parameter `@rule.name` has an invalid value format.';
-
-	message = rule.message || message;
 
 	if (!ok) {
-		message = Messages.format(message, rule);
+		message = (rule.message)
+			? Messages.format(rule.message, rule)
+			: Messages.get('formats', rule);
 		error = {
 			severity: rule.severity,
 			message: message,
@@ -80,12 +77,9 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 
 	// lint block and non-block helpers
 	if (block !== astHelper.block) {
-		var message = (block)
-			? Messages.format('The {{#@helper.name}} block helper requires a `#` before its name.', rule)
-			: Messages.format('The {{@helper.name}} non-block helper should not have a `#` before its name.', rule);
 		return {
 			severity: 'error',
-			message: message,
+			message: Messages.get('block', rule),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column
@@ -96,10 +90,9 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 			}
 		};
 	} else if (rule.required === true && params.length === 0) {  /// lint missing params
-
 		return {
 			severity: rule.severity,
-			message: Messages.format('The {{@helper.name}} helper requires a named parameter of `@rule.name`, but non was found.', rule),
+			message: Messages.get('param1', rule, params),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column
@@ -112,7 +105,7 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 	} else if (rule.required > params.length) {
 		return {
 			severity: rule.severity,
-			message: Messages.format('The {{@helper.name}} helper requires ' + words(rule.required) + ' `@rule.name` params, but only ' + words(params.length) + ' were found.', rule),
+			message: Messages.get('param2', rule, params),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column
@@ -125,15 +118,6 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 	}
 }
 
-function words(val) {
-	if (val === false) return 'an optional';
-	if (val === true) return 'one';
-	if (val === 0) return 'an optional';
-	if (val === 1) return 'one';
-	if (val === 2) return 'two';
-	if (val === 3) return 'three';
-	return val;
-}
 
 function lintHelper(astHelper, objRules) {
 
