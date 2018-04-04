@@ -13013,6 +13013,8 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 	if (rule.required === false) return;
 	if (rule.required === 0) return;
 
+
+
 	// lint block and non-block helpers
 	if (isWrongBlock) {
 		return {
@@ -13206,6 +13208,7 @@ function errorBlock(rule) {
 }
 
 function errorParams(rule, params) {
+	console.log('errorParams()');
 	var message = (rule.required === true)
 		? exports.format('The {{@helper.name}} helper requires ' + words(rule.required) + ' `@rule.name` params, but only ' + params.length + ' were found.', rule)
 		: exports.format('The {{@helper.name}} helper requires a `@rule.name` parameter, but non was found.', rule);
@@ -13262,7 +13265,7 @@ function mismatch(str) {
 exports.get = function(type, rule, params) {
 	if (type === 'block') return errorBlock(rule);
 	if (type === 'formats') return errorFormats(rule);
-	if (type === 'params') return errorParams(rule, params);
+	if (type === 'param') return errorParams(rule, params);
 };
 
 exports.format = function(message, rule) {
