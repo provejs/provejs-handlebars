@@ -124,4 +124,12 @@ describe('Testing blocks', function () {
 		var message = "The {{#if}} block helper requires a `#` before its name.";
 		Assert.equal(error.message, message);
 	});
+
+	it('positional param after named param', function () {
+		var html = '{{assign a=b c}}';
+		var errors = Linter.verify(html);
+		var error = errors[0];
+		var message = "Invalid expression near near `{{assign a=b c}}`. Named parameters should only be placed after positional parameters.";
+		Assert.equal(error.message, message);
+	});
 });
