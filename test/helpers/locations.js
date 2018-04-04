@@ -152,7 +152,6 @@ describe('Testing locations', function () {
 		var html = '{{';
 		var errors = Linter.verify(html);
 		var error = errors[0];
-
 		Assert.equal(error.start.line, 0);
 		Assert.equal(error.start.column, 0);
 		Assert.equal(error.end.line, 0);
@@ -162,38 +161,22 @@ describe('Testing locations', function () {
 	it('open and closed empty expression', function () {
 		var html = '{{}}';
 		var errors = Linter.verify(html);
-		Assert.deepEqual({
-			start: {
-				line: 0,
-				column: 0
-			},
-			end: {
-				line: 0,
-				column: 4
-			},
-			message: 'Empty Handlebars expression.',
-			severity: 'error'
-		}, errors[0]);
-
+		var error = errors[0];
+		Assert.equal(error.start.line, 0);
+		Assert.equal(error.start.column, 0);
+		Assert.equal(error.end.line, 0);
+		Assert.equal(error.end.column, 4);
 	});
 
 	it('open block empty expression', function () {
 
 		var html = '{{#';
 		var errors = Linter.verify(html);
-		Assert.deepEqual({
-			start: {
-				line: 0,
-				column: 0
-			},
-			end: {
-				line: 0,
-				column: 3
-			},
-			message: 'Invalid Handlebars expression.',
-			severity: 'error'
-		}, errors[0]);
-
+		var error = errors[0];
+		Assert.equal(error.start.line, 0);
+		Assert.equal(error.start.column, 0);
+		Assert.equal(error.end.line, 0);
+		Assert.equal(error.end.column, 3);
 	});
 
 	it('two open empty expression', function () {
@@ -209,75 +192,42 @@ describe('Testing locations', function () {
 
 		var html = '{{foo';
 		var errors = Linter.verify(html);
-		Assert.deepEqual({
-			start: {
-				line: 0,
-				column: 0
-			},
-			end: {
-				line: 0,
-				column: 2
-			},
-			message: 'Invalid Handlebars expression.',
-			severity: 'error'
-		}, errors[0]);
-
+		var error = errors[0];
+		Assert.equal(error.start.line, 0);
+		Assert.equal(error.start.column, 0);
+		Assert.equal(error.end.line, 0);
+		Assert.equal(error.end.column, 2);
 	});
 
 	it('open helper expression with dots prefix', function () {
 
 		var html = "<h1 class='foobar'>{{echo 'hello world'}</h1>\n<div>\n\tThis is an invalid div.";
 		var errors = Linter.verify(html);
-		Assert.deepEqual({
-			start: {
-				line: 0,
-				column: 19
-			},
-			end: {
-				line: 0,
-				column: 39
-			},
-			message: 'Invalid Handlebars expression.',
-			severity: 'error'
-		}, errors[0]);
-
+		var error = errors[0];
+		Assert.equal(error.start.line, 0);
+		Assert.equal(error.start.column, 19);
+		Assert.equal(error.end.line, 0);
+		Assert.equal(error.end.column, 39);
 	});
 	it('open helper expression with dots prefix', function () {
 
 		var html = "<h1 class='foobar'>{{foo {{echo 'hello world'}</h1>\n<div>\n\tThis is an invalid div.";
 		var errors = Linter.verify(html);
-		Assert.deepEqual({
-			start: {
-				line: 0,
-				column: 19
-			},
-			end: {
-				line: 0,
-				column: 39
-			},
-			message: 'Invalid Handlebars expression.',
-			severity: 'error'
-		}, errors[0]);
-
+		var error = errors[0];
+		Assert.equal(error.start.line, 0);
+		Assert.equal(error.start.column, 19);
+		Assert.equal(error.end.line, 0);
+		Assert.equal(error.end.column, 39);
 	});
 	it('open helper expression with dots prefix', function () {
 
 		var html = "<h1 class='foobar'>{{foo}}}} {{echo 'hello world'}</h1>\n<div>\n\tThis is an invalid div.";
 		var errors = Linter.verify(html);
-		Assert.deepEqual({
-			start: {
-				line: 0,
-				column: 19
-			},
-			end: {
-				line: 0,
-				column: 39
-			},
-			message: 'Invalid Handlebars expression.',
-			severity: 'error'
-		}, errors[0]);
-
+		var error = errors[0];
+		Assert.equal(error.start.line, 0);
+		Assert.equal(error.start.column, 19);
+		Assert.equal(error.end.line, 0);
+		Assert.equal(error.end.column, 39);
 	});
-
 });
 

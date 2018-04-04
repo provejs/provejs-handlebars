@@ -65,16 +65,16 @@ function hasMissingParams(rule, params) {
 	return false;
 }
 
-function hasWrongBlock(astHelper, block) {
-	return block !== astHelper.block;
+function hasWrongBlock(astHelper, rule) {
+	return rule.block !== astHelper.block;
 }
 
-function lintHelperParam(astHelper, rule, ruleKey, block) {
+function lintHelperParam(astHelper, rule, ruleKey) {
 	var error;
 	var selector = rule.selector;
 	var params = Selectors.params(astHelper, selector, ruleKey);
 	var isMissingParams = hasMissingParams(rule, params);
-	var isWrongBlock = hasWrongBlock(astHelper, block);
+	var isWrongBlock = hasWrongBlock(astHelper, rule);
 
 	// lint each param against the config rule
 	params.forEach(function(param) {
@@ -135,9 +135,10 @@ function lintHelper(astHelper, objRules) {
 			if (!rule.name) rule.name = ruleKey;
 			if (!rule.helper) rule.helper = astHelper.name;
 			if (!rule.severity) rule.severity = 'error';
+			rule.block = block;
 
 			if (error) return false; // break loop
-			error = lintHelperParam(astHelper, rule, ruleKey, block);
+			error = lintHelperParam(astHelper, rule, ruleKey);
 		});
 	}
 

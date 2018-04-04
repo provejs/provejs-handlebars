@@ -12,11 +12,9 @@ function words(val) {
 }
 
 function errorFormats(rule) {
-
 	var message = (rule.block)
 		? 'The {{#@helper.name}} helper parameter `@rule.name` has an invalid value format.'
 		: 'The {{@helper.name}} helper parameter `@rule.name` has an invalid value format.';
-
 	return exports.format(message, rule);
 }
 
@@ -35,13 +33,36 @@ function errorParams(rule, params) {
 }
 
 exports.parser = function (message) {
-	if (message.indexOf("got 'INVALID'") !== -1) return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'EOF', got 'OPEN_ENDBLOCK'") return 'Invalid closing block, check opening block.';
-	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'") return 'Empty Handlebars expression.';
-	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'") return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'") return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'") return 'Invalid Handlebars expression.';
-	if (message.indexOf("', got '") !== -1) return 'Invalid Handlebars expression.';
+	// console.log('parser()');
+	// console.log(message);
+
+	if (message.indexOf("got 'INVALID'") !== -1)
+		return 'Invalid Handlebars expression.';
+
+	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'")
+		return 'Empty or incomplete Handlebars expression.';
+
+	if (message === "Expecting 'EOF', got 'OPEN_ENDBLOCK'")
+		return 'Invalid closing block, check opening block.';
+
+	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'")
+		return 'Empty Handlebars expression.';
+
+	if (message === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'")
+		return 'Invalid Handlebars expression.';
+
+	if (message === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'")
+		return 'Invalid Handlebars expression.';
+
+	if (message.indexOf("', got 'EOF'") !== -1)
+		return 'Missing closing Handlebars expression.';
+
+	if (message.indexOf("', got '") !== -1)
+		return 'Invalid Handlebars expression.';
+
+	if (message.indexOf("doesn't match") !== -1)
+		return 'The opening and closing expressions do not match. Specifically, ' + message + '.';
+
 	return message;
 };
 
