@@ -14,6 +14,11 @@ Works via:
 
 The purpose of this module is to make custom handlebars linters.
 
+# Demo
+
+You can see this linter integrated with CodeMirror:
+https://dhollenbeck.github.io/codemirror-examples/
+
 
 # Install
 ```js
