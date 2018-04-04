@@ -2,17 +2,7 @@
 
 var regex1 = /^Parse error on line ([0-9]+)+:\n([^\n].*)\n([^\n].*)\n(.*)$/;
 var regex2 = /^(.*) - ([0-9]+):([0-9]+)$/;
-
-function friendlyMessage(message) {
-	if (message.indexOf("got 'INVALID'") !== -1) return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'EOF', got 'OPEN_ENDBLOCK'") return 'Invalid closing block, check opening block.';
-	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'") return 'Empty Handlebars expression.';
-	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'") return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'") return 'Invalid Handlebars expression.';
-	if (message === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'") return 'Invalid Handlebars expression.';
-	if (message.indexOf("', got '") !== -1) return 'Invalid Handlebars expression.';
-	return message;
-}
+var Messages = require('./messages');
 
 function getPos(lines, lineNum, code, indicator) {
 
@@ -105,7 +95,7 @@ exports.parser = function (e, html) {
 			line: lineNum,
 			column: pos.max
 		};
-		parsed.message = friendlyMessage(message);
+		parsed.message = Messages.parser(message);
 		parsed.severity = 'error';
 		return '';
 	});
@@ -124,7 +114,7 @@ exports.parser = function (e, html) {
 			line: parsed.start.line,
 			column: parsed.start.column
 		};
-		parsed.message = friendlyMessage(message);
+		parsed.message = Messages.parser(message);
 		parsed.severity = 'error';
 		return '';
 	});

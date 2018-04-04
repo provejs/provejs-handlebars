@@ -59,10 +59,22 @@ function lint(rule, param) {
 	return error;
 }
 
+function hasMissingParams(rule, params) {
+	if (rule.required === true && params.length === 0) return true;
+	if (rule.required > params.length) return true;
+	return false;
+}
+
+function hasWrongBlock(astHelper, block) {
+	return block !== astHelper.block;
+}
+
 function lintHelperParam(astHelper, rule, ruleKey, block) {
 	var error;
 	var selector = rule.selector;
 	var params = Selectors.params(astHelper, selector, ruleKey);
+	var isMissingParams = hasMissingParams(rule, params);
+	var isWrongBlock = hasWrongBlock(astHelper, block);
 
 	// lint each param against the config rule
 	params.forEach(function(param) {
@@ -76,7 +88,7 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 	if (rule.required === 0) return;
 
 	// lint block and non-block helpers
-	if (block !== astHelper.block) {
+	if (isWrongBlock) {
 		return {
 			severity: 'error',
 			message: Messages.get('block', rule),
@@ -89,23 +101,10 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 				column: astHelper.loc.end.column
 			}
 		};
-	} else if (rule.required === true && params.length === 0) {  /// lint missing params
+	} else if (isMissingParams) {
 		return {
 			severity: rule.severity,
-			message: Messages.get('param1', rule, params),
-			start: {
-				line: astHelper.loc.start.line - 1,
-				column: astHelper.loc.start.column
-			},
-			end: {
-				line: astHelper.loc.end.line - 1,
-				column: astHelper.loc.end.column
-			}
-		};
-	} else if (rule.required > params.length) {
-		return {
-			severity: rule.severity,
-			message: Messages.get('param2', rule, params),
+			message: Messages.get('param', rule, params),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column

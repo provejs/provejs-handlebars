@@ -27,24 +27,28 @@ function errorBlock(rule) {
 	return message;
 }
 
-
-// todo: merge this tow params related error messages into a single function Messages.get('param', rule, messages);
-function errorParams1(rule) {
-	var message = exports.format('The {{@helper.name}} helper requires a named parameter of `@rule.name`, but non was found.', rule);
+function errorParams(rule, params) {
+	var message = (rule.required === true)
+		? exports.format('The {{@helper.name}} helper requires ' + words(rule.required) + ' `@rule.name` params, but only ' + params.length + ' were found.', rule)
+		: exports.format('The {{@helper.name}} helper requires a named parameter of `@rule.name`, but non was found.', rule);
 	return message;
 }
 
-function errorParams2(rule, params) {
-	var message = exports.format('The {{@helper.name}} helper requires ' + words(rule.required) + ' `@rule.name` params, but only ' + params.length + ' were found.', rule);
+exports.parser = function (message) {
+	if (message.indexOf("got 'INVALID'") !== -1) return 'Invalid Handlebars expression.';
+	if (message === "Expecting 'EOF', got 'OPEN_ENDBLOCK'") return 'Invalid closing block, check opening block.';
+	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'") return 'Empty Handlebars expression.';
+	if (message === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'") return 'Invalid Handlebars expression.';
+	if (message === "Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'OPEN'") return 'Invalid Handlebars expression.';
+	if (message === "Expecting 'CLOSE', 'OPEN_SEXPR', 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_RAW_BLOCK'") return 'Invalid Handlebars expression.';
+	if (message.indexOf("', got '") !== -1) return 'Invalid Handlebars expression.';
 	return message;
-}
-
+};
 
 exports.get = function(type, rule, params) {
 	if (type === 'block') return errorBlock(rule);
 	if (type === 'formats') return errorFormats(rule);
-	if (type === 'params1') return errorParams1(rule);
-	if (type === 'params2') return errorParams2(rule, params);
+	if (type === 'params') return errorParams(rule, params);
 };
 
 exports.format = function(message, rule) {
