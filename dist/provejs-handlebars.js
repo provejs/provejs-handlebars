@@ -12970,6 +12970,8 @@ function lint(rule, param) {
 	var error, message;
 	var ok = Formats.lint(rule, param);
 
+	// console.log('ok', ok);
+
 	if (ok === false) {
 		// todo: the Messages.get() should allow the overriding of the message via rule.message
 		message = (rule.message)
@@ -13328,6 +13330,13 @@ exports.params = function(astHelper, selector, ruleKey) {
 	} else if (selector === 'named()') {
 		param = exports.named(astHelper, ruleKey);
 		if (param) params.push(param);
+	} else if (selector === 'named(!)') {
+		params = exports.allNamed(astHelper);
+		params = params.filter(notLinted);
+	} else if (selector.indexOf('named(') === 0) {
+		num = getSelectorNum(selector);
+		param = exports.namedNth(astHelper, num);
+		if (param) params.push(param);
 	} else if (selector.indexOf('positionalGreaterThan(') === 0) {
 		num = getSelectorNum(selector);
 		params = exports.positionalGreaterThan(astHelper, num);
@@ -13338,9 +13347,7 @@ exports.params = function(astHelper, selector, ruleKey) {
 	} else if (selector === '!') {
 		params = exports.all(astHelper);
 		params = params.filter(notLinted);
-	} else if (selector === 'named(!)') {
-		params = exports.allNamed(astHelper);
-		params = params.filter(notLinted);
+
 	} else if (selector === 'positional(!)') {
 		params = exports.allPositional(astHelper);
 		params = params.filter(notLinted);
@@ -13351,7 +13358,6 @@ exports.params = function(astHelper, selector, ruleKey) {
 
 	return params;
 };
-
 
 exports.all = function(astHelper) {
 	var arr1 = exports.allPositional(astHelper);
@@ -13373,6 +13379,13 @@ exports.named = function(astHelper, named) {
 	var hash = astHelper.hash || {};
 	var pairs = hash.pairs || [];
 	var pair = find(pairs, {key: named});
+	return pair;
+};
+
+exports.namedNth = function(astHelper, nth) {
+	var hash = astHelper.hash || {};
+	var pairs = hash.pairs || [];
+	var pair = pairs[nth];
 	return pair;
 };
 

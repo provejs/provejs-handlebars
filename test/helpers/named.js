@@ -165,4 +165,27 @@ describe('Linting helper named parameters', function () {
 		var actual = Linter.verify(html, config);
 		Assert.equal(actual.length, 1);
 	});
+
+	it('helper nth named parameter', function () {
+		var html = "{{assign param1=42}}";
+		var config = {
+			helpers: {
+				assign: {
+					params: {
+						assignment: {
+							selector: 'named(0)',
+							formats: function(param1) {
+								Assert.equal(param1, 42);
+								return true;
+							},
+							required: true
+						}
+					}
+				}
+			}
+		};
+
+		var errors = Linter.verify(html, config);
+		Assert.equal(errors.length, 0);
+	});
 });

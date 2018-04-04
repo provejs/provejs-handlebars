@@ -113,6 +113,7 @@ When the params config is an object:
   - **'*'**: all parameters including both positional and named parameters
   - **'named(*)'**: all named parameters
   - **'named()'**: a named parameter as identified by the param rule key
+  - **'named(nth)'**: named nth parmeter
   - **'positional(*)'**: all positional parameters
   - **'positional(nth)'**: positional nth parameter
   - **'positionalGreaterThan(nth)'**: greater than nth parameter

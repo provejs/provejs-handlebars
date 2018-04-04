@@ -39,6 +39,8 @@ function lint(rule, param) {
 	var error, message;
 	var ok = Formats.lint(rule, param);
 
+	// console.log('ok', ok);
+
 	if (ok === false) {
 		// todo: the Messages.get() should allow the overriding of the message via rule.message
 		message = (rule.message)
