@@ -45,7 +45,7 @@ exports.lint = function(rule, param) {
 		ok = includes(allowed, type, param);
 		return ok;
 	} else if (isFunction(formats)) {
-		return formats(type, value, param);
+		return formats(value, type, param);
 	} else {
 		return false;
 	}

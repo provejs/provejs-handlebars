@@ -65,7 +65,7 @@ describe('Linting helper params without checking param value formats', function 
 					params: {
 						param1: {
 							selector: 'named()',
-							formats: function(type, value, param) {
+							formats: function(value, type, param) {
 								return (param && value === 42 && type === 'number');
 							},
 							required: true
