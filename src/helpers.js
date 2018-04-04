@@ -3,6 +3,7 @@
 var Selectors = require('./selectors');
 var Formats = require('./formats');
 var Walker = require('./walker');
+var Messages = require('./messages');
 var isFunction = require('lodash.isfunction');
 var isObject = require('lodash.isobject');
 var forOwn = require('lodash.forown');
@@ -25,12 +26,6 @@ function pruneHelpers(node) {
 	return helper;
 }
 
-function popMsg(str, helperName, hashName) {
-	return str
-		.replace('@helperName', helperName)
-		.replace('@hashName', hashName);
-}
-
 function lintHelperCallback(astHelper, callback) {
 	var posParams = Selectors.allPositional(astHelper);
 	var namParams = Selectors.allNamed(astHelper);
@@ -41,12 +36,16 @@ function lintHelperCallback(astHelper, callback) {
 
 function lint(rule, param) {
 
-
-	var ok = Formats.lint(rule, param);
-	var message = rule.message || 'The `@helperName` helper positional parameter `@hashName` has an invalid value format.';
 	var error;
+	var ok = Formats.lint(rule, param);
+	var message = (rule.block)
+		? 'The {{#@helper.name}} helper parameter `@rule.name` has an invalid value format.'
+		: 'The {{@helper.name}} helper parameter `@rule.name` has an invalid value format.';
+
+	message = rule.message || message;
+
 	if (!ok) {
-		message = popMsg(message, rule.helper, rule.name);
+		message = Messages.format(message, rule);
 		error = {
 			severity: rule.severity,
 			message: message,
@@ -82,8 +81,8 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 	// lint block and non-block helpers
 	if (block !== astHelper.block) {
 		var message = (block)
-			? popMsg('The `@helperName` block helper requires a `#` before its name.', rule.helper)
-			: popMsg('The `@helperName` non-block helper should not have a `#` before its name.', rule.helper);
+			? Messages.format('The {{#@helper.name}} block helper requires a `#` before its name.', rule)
+			: Messages.format('The {{@helper.name}} non-block helper should not have a `#` before its name.', rule);
 		return {
 			severity: 'error',
 			message: message,
@@ -100,7 +99,7 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 
 		return {
 			severity: rule.severity,
-			message: popMsg('The `@helperName` helper requires a positional parameter of `@hashName`, but non was found.', rule.helper, rule.name),
+			message: Messages.format('The {{@helper.name}} helper requires a named parameter of `@rule.name`, but non was found.', rule),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column
@@ -113,7 +112,7 @@ function lintHelperParam(astHelper, rule, ruleKey, block) {
 	} else if (rule.required > params.length) {
 		return {
 			severity: rule.severity,
-			message: popMsg('The `@helperName` helper requires ' + words(rule.required) + ' `@hashName` params, but only ' + params.length + ' were found.', rule.helper, rule.name),
+			message: Messages.format('The {{@helper.name}} helper requires ' + words(rule.required) + ' `@rule.name` params, but only ' + words(params.length) + ' were found.', rule),
 			start: {
 				line: astHelper.loc.start.line - 1,
 				column: astHelper.loc.start.column
@@ -197,7 +196,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#if}} helper only supports a single condition parameter. This parameter should be removed.',
+				message: 'The {{@helper.name}} block helper only supports a single parameter. The hightlighted parameter should be removed.',
 				formats: false
 			}
 		}
@@ -216,7 +215,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#lookup}} helper only supports two parameters. This parameter should be removed.',
+				message: 'The {{@helper.name}} helper only supports two parameters. The highlighted parameter should be removed.',
 				formats: false
 			}
 		}
@@ -231,7 +230,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#each}} helper only supports a single parameter and should be an array value. This parameter should be removed.',
+				message: 'The {{@helper.name}} block helper only supports a single parameter and should be an array value. The highlighted parameter should be removed.',
 				formats: false
 			}
 		}
@@ -246,7 +245,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#unless}} helper only supports a single parameter. This parameter should be removed.',
+				message: 'The {{@helper.name}} block helper only supports a single parameter. The hightlighted parameter should be removed.',
 				formats: false
 			}
 		}
@@ -261,7 +260,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{#with}} helper only supports a single parameter. This parameter should be removed.',
+				message: 'The {{@helper.name}} helper only supports a single parameter. The highlighted parameter should be removed.',
 				formats: false
 			}
 		}
