@@ -12856,7 +12856,6 @@ exports.parser = function (e, html) {
 		lineNum = +lineNum;
 		lineNum = lineNum - 1;
 		columnNum = +columnNum;
-		columnNum = columnNum - 1;
 
 		parsed.start = {
 			line: lineNum,
