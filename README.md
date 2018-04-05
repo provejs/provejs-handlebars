@@ -31,7 +31,7 @@ In Node.js:
 ```js
 var Linter = require('provejs-handlebars');
 var html = '{{#foo}}{{/bar}}';
-var errors = Linter.verify(html);
+var errors = Linter.verifySync(html);
 ```
 
 The errors output will be something like:
@@ -54,24 +54,43 @@ var errors = HandlebarsProve.verify(html);
 # Linter Methods
 
 There are two methods exposed from the linter:
-- Linter.verify(): verifies handlebars syntax.
-- Linter.register(): allows your regiser custom linter configurations.
+- Linter.verifySync(): synchronous verifies handlebars syntax.
+- Linter.verify(): asynchronous verifies handlebars syntax with callback support.
+- Linter.registerHelper(): allows your regiser custom linter configurations.
 
 
-## Linter Verify Method
+## Linter.verifySync() Method
 
-The verify function accepts two params:
+An syncronous method used to lint your tempalates via Node.js or browser.
+
+Params:
 - html (**html**): required html template string.
-- config (**object**): optional config object which is defined below. If the config is undefined than a default config is used.
+- config (**object**): optional config object which is defined below. If the config is undefined than a default config which supports the built-in Handlebars helpers is used.
 
 ```js
 var html = '...';
-var errors = Linter.verify(html);
+var issues = Linter.verifySync(html);
 ```
 
-## Linter Register Method
+## Linter.verify() Method
 
-The linter comes preconfigured for the built-in handlebars helpers. However, you can add your own helper configurations or override the built-in helpers.
+An asyncronous method used to lint your tempalates via Node.js.
+
+Params:
+- html (**html**): required html template string.
+- callback (**function**): callback.
+
+```js
+var html = '...';
+Linter.verify(html, function(err, issues) {
+  if (err) throw err;
+  console.log('linter errors:', issues);
+});
+```
+
+## Linter.register() Method
+
+The linter comes preconfigured for the built-in handlebars helpers. However, you can add your own helper configurations or override the built-in helper configs.
 - name (**html**): required html template string.
 - config (**object**): optional config object which is defined below.
 
@@ -80,7 +99,7 @@ var config = {...};
 Linter.registerHelper('myHelper', config);
 ```
 
-# Helpers Configuration
+# Helper Configuration
 
 Consider you have the following helpers with a single named param:
 ```hbs

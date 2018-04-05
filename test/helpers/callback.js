@@ -21,26 +21,18 @@ function paramsCallback(posParams, namParams, loc) {
 describe('Linting helper params params callback', function () {
 	it('callback success', function () {
 		var html = "{{#ifCompound param1 '=' 42 'AND' param2 '!=' 42}}{{else}}{{/ifCompound}}";
-		var config = {
-			helpers: {
-				ifCompound: {
-					params: paramsCallback
-				}
-			}
-		};
-		var actual = Linter.verify(html, config);
+		Linter.registerHelper('ifCompound', {
+			params: paramsCallback
+		});
+		var actual = Linter.verifySync(html);
 		Assert.deepEqual(actual.length, 0);
 	});
 	it('callback invalid', function () {
 		var html = "{{#ifCompound param1 '=' 42 'AND' param2 '!='}}{{else}}{{/ifCompound}}";
-		var config = {
-			helpers: {
-				ifCompound: {
-					params: paramsCallback
-				}
-			}
-		};
-		var actual = Linter.verify(html, config);
+		Linter.registerHelper('ifCompound', {
+			params: paramsCallback
+		});
+		var actual = Linter.verifySync(html);
 		Assert.deepEqual(actual.length, 1);
 	});
 });

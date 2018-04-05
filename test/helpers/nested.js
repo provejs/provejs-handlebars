@@ -18,7 +18,7 @@ describe('Nested block linting', function () {
 				}
 			}
 		};
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 1);
 	});
 });

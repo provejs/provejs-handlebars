@@ -19,7 +19,7 @@ describe('Linting helper named parameters', function () {
 				}
 			}
 		};
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		var expected = [];
 		Assert.deepEqual(actual, expected);
 	});
@@ -39,7 +39,7 @@ describe('Linting helper named parameters', function () {
 			}
 		};
 
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		var expected = [];
 		Assert.deepEqual(actual, expected);
 	});
@@ -58,7 +58,7 @@ describe('Linting helper named parameters', function () {
 			}
 		};
 
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.notEqual(actual.length, 0);
 	});
 	it('missing optional helper named parameter should NOT generate error', function () {
@@ -76,7 +76,7 @@ describe('Linting helper named parameters', function () {
 			}
 		};
 
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('missing second optional helper named parameter should NOT generate error', function () {
@@ -100,7 +100,7 @@ describe('Linting helper named parameters', function () {
 			}
 		};
 
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('2 named parameter should generate error', function () {
@@ -124,7 +124,7 @@ describe('Linting helper named parameters', function () {
 			}
 		};
 
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 1);
 	});
 	it('helper named parameter with wrong value format should generate error', function () {
@@ -143,7 +143,7 @@ describe('Linting helper named parameters', function () {
 			}
 		};
 
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 1);
 	});
 	it('block helper named parameter with wrong value format should generate error', function () {
@@ -162,7 +162,7 @@ describe('Linting helper named parameters', function () {
 			}
 		};
 
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 1);
 	});
 
@@ -185,7 +185,7 @@ describe('Linting helper named parameters', function () {
 			}
 		};
 
-		var errors = Linter.verify(html, config);
+		var errors = Linter.verifySync(html, config);
 		Assert.equal(errors.length, 0);
 	});
 });

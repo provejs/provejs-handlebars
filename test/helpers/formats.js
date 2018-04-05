@@ -18,7 +18,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('checking param value formats=true', function () {
@@ -36,7 +36,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('checking param value formats=false', function () {
@@ -54,7 +54,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 1);
 	});
 	it('checking param value formats=callback', function () {
@@ -74,7 +74,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var actual = Linter.verify(html, config);
+		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 0);
 	});
 	it('checking param value formats=function', function () {
@@ -101,7 +101,7 @@ describe('Linting helper params without checking param value formats', function 
 				}
 			}
 		};
-		var errors = Linter.verify(html, config);
+		var errors = Linter.verifySync(html, config);
 		var error = errors[0];
 		Assert.equal(error.severity, 'foobar1');
 		Assert.equal(error.message, 'foobar2');

@@ -17,19 +17,19 @@ describe('Methods', function () {
 
 	it('register linter config', function () {
 		var html = '{{foo}}';
-		Linter.register('foo', config);
-		var errors = Linter.verify(html);
+		Linter.registerHelper('foo', config);
+		var errors = Linter.verifySync(html);
 		Assert.equal(1, errors.length);
 	});
 	it('unregister linter config', function () {
 		var html = '{{foo}}';
-		Linter.register('foo');
-		var errors = Linter.verify(html);
+		Linter.registerHelper('foo');
+		var errors = Linter.verifySync(html);
 		Assert.equal(0, errors.length);
 	});
 	it('register linter config again', function () {
 		var html = '{{foo}}';
-		var errors = Linter.verify(html, config);
+		var errors = Linter.verifySync(html, config);
 		Assert.equal(0, errors.length);
 	});
 });
