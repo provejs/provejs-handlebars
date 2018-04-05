@@ -104,6 +104,7 @@ function paramNames(params) {
 		} else if (param.original) {
 			return param.original;
 		}
+		return param;
 	});
 	return names;
 }
