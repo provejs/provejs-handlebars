@@ -13123,7 +13123,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{@helper.name}} block helper only supports a single parameter. The hightlighted parameter should be removed.',
+				message: 'The {{@helper.name}} block helper only supports a single parameter. The @param.names parameter(s) should be removed.',
 				formats: false
 			}
 		}
