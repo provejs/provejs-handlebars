@@ -59,7 +59,7 @@ function lint(rule, param) {
 	if (ok === false) {
 		return {
 			severity: rule.severity,
-			message: Messages.get('formats', rule),
+			message: Messages.get('formats', rule, [param]),
 			start: {
 				line: param.loc.start.line,
 				column: param.loc.start.column
@@ -217,7 +217,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{@helper.name}} helper only supports two parameters. The highlighted parameter should be removed.',
+				message: 'The {{@helper.name}} helper only supports two parameters. The @param.names parameter(s) should be removed.',
 				formats: false
 			}
 		}
@@ -232,7 +232,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{@helper.name}} block helper only supports a single parameter and should be an array value. The highlighted parameter should be removed.',
+				message: 'The {{@helper.name}} block helper only supports a single parameter and should be an array value. The @param.names parameter(s) should be removed.',
 				formats: false
 			}
 		}
@@ -247,7 +247,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{@helper.name}} block helper only supports a single parameter. The hightlighted parameter should be removed.',
+				message: 'The {{@helper.name}} block helper only supports a single parameter. The @param.names parameter(s) should be removed.',
 				formats: false
 			}
 		}
@@ -262,7 +262,7 @@ exports.configs = {
 			extraneous: {
 				selector: '!',
 				severity: 'warning',
-				message: 'The {{@helper.name}} helper only supports a single parameter. The highlighted parameter should be removed.',
+				message: 'The {{@helper.name}} helper only supports a single parameter. The @param.names parameter(s) should be removed.',
 				formats: false
 			}
 		}
