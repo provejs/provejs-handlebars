@@ -1,14 +1,14 @@
 'use strict';
 
+var Handlebars = require('handlebars');
 var Selectors = require('./selectors');
 var Formats = require('./formats');
 var Walker = require('./walker');
 var Messages = require('./messages');
-var isFunction = require('lodash.isfunction');
+var isFunction = Handlebars.Utils.isFunction;
 var isObject = require('lodash.isobject');
 var forOwn = require('lodash.forown');
 var keys = require('lodash.keys');
-
 
 function pruneHelpers(node) {
 

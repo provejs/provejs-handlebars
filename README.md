@@ -31,7 +31,10 @@ In Node.js:
 ```js
 var Linter = require('provejs-handlebars');
 var html = '{{#foo}}{{/bar}}';
-var errors = Linter.verifySync(html);
+Linter.verify(html, function(err, issues) {
+  if (err) throw err;
+  console.log(issues);
+});
 ```
 
 The errors output will be something like:
@@ -47,7 +50,7 @@ In browser:
 <script src="dist/handlebars-linter.js"></script>
 <script>
 var html = "{{helper param1=xxx}}";
-var errors = HandlebarsProve.verify(html);
+var errors = HandlebarsProve.verifySync(html);
 </script>
 ```
 

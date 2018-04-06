@@ -1,7 +1,8 @@
 'use strict';
 
+var Handlebars = require('handlebars');
 var includes = require('lodash.includes');
-var isFunction = require('lodash.isfunction');
+var isFunction = Handlebars.Utils.isFunction;
 var isUndefined = require('lodash.isundefined');
 
 function getValueType(param) {

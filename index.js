@@ -10,6 +10,7 @@ function isErrors(ast) {
 exports.verifySync = function (html, rules) {
 
 	// todo: extend defaults
+	// Handlebars.Utils.extend(exports._config, rules);
 	if (!rules) rules = exports._configs;
 
 	var errors;
