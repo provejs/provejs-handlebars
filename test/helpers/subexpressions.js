@@ -33,15 +33,23 @@ describe('Linting helper subexpressions', function () {
 		var errors = Linter.verifySync(html);
 		Assert.equal(errors.length, 1);
 	});
-
 	it('should support deep subexpressions in positional params (valid)', function () {
 		var html = "{{#each (lookup . (lookup . 'foobar'))}}{{/each}}";
 		var errors = Linter.verifySync(html);
 		Assert.equal(errors.length, 0);
 	});
-
 	it('should support deep subexpressions in positional params (invalid)', function () {
 		var html = "{{#each (lookup . (lookup . 'foobar' invalid))}}{{/each}}";
+		var errors = Linter.verifySync(html);
+		Assert.equal(errors.length, 1);
+	});
+	it('should support deep subexpressions in positional params (invalid)', function () {
+		var html = "{{#if (lookup . 'foobar' invalid)}}{{/if}}";
+		var errors = Linter.verifySync(html);
+		Assert.equal(errors.length, 1);
+	});
+	it('should support deep subexpressions in positional params (invalid)', function () {
+		var html = "{{#if a}}{{else if (lookup . 'foobar' invalid)}}{{/if}}";
 		var errors = Linter.verifySync(html);
 		Assert.equal(errors.length, 1);
 	});
