@@ -103,6 +103,8 @@ function paramNames(params) {
 			return param.key;
 		} else if (param.original) {
 			return param.original;
+		} else if (param.path && param.path.original) {
+			return param.path.original;
 		}
 		return param;
 	});

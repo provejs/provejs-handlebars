@@ -10,6 +10,10 @@ var isObject = require('lodash.isobject');
 var forOwn = require('lodash.forown');
 var keys = require('lodash.keys');
 
+function minusOne(val) {
+	return (val)? val - 1 : val;
+}
+
 function pruneHelpers(node) {
 
 	var name = node.path.original;
@@ -27,19 +31,19 @@ function pruneHelpers(node) {
 	};
 
 	// zero-base location lines
-	helper.loc.start.line = helper.loc.start.line - 1;
-	helper.loc.end.line = helper.loc.end.line - 1;
+	helper.loc.start.line = minusOne(helper.loc.start.line);
+	helper.loc.end.line = minusOne(helper.loc.end.line);
 
 	// zero-base named params location lines
 	helper.params.forEach(function(param) {
-		param.loc.start.line = param.loc.start.line - 1;
-		param.loc.end.line = param.loc.end.line - 1;
+		param.loc.start.line = minusOne(param.loc.start.line);
+		param.loc.end.line = minusOne(param.loc.end.line);
 	});
 
 	// zero-base positional params location lines
 	helper.hash.pairs.forEach(function(param) {
-		param.loc.start.line = param.loc.start.line - 1;
-		param.loc.end.line = param.loc.end.line - 1;
+		param.loc.start.line = minusOne(param.loc.start.line);
+		param.loc.end.line = minusOne(param.loc.end.line);
 	});
 
 	return helper;

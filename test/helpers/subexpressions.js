@@ -53,4 +53,9 @@ describe('Linting helper subexpressions', function () {
 		var errors = Linter.verifySync(html);
 		Assert.equal(errors.length, 1);
 	});
+	it('should support subexpressions as extra positional params (invalid)', function () {
+		var html = "{{#each foobars (lookup a b)}}{{/each}}";
+		var errors = Linter.verifySync(html);
+		Assert.equal(errors.length, 1);
+	});
 });
