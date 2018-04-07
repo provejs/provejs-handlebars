@@ -10,7 +10,7 @@ function isHelper(node, knownHelpers) {
 	return false;
 }
 
-exports.helpers3 = function recursive(tree, knowHelpers, res) {
+exports.helpers = function recursive(tree, knowHelpers, res) {
 	var statements = tree.body || tree;
 	var knowns = knowHelpers;
 

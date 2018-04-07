@@ -12948,7 +12948,7 @@ function lintHelpers(helpers, rules) {
 exports.verify = function (nodes, rules) {
 	var helpers = [];
 	var names = keys(rules.helpers);
-	Walker.helpers3(nodes, names, helpers);
+	Walker.helpers(nodes, names, helpers);
 	helpers = helpers.map(pruneHelpers);
 	var errors = lintHelpers(helpers, rules);
 	return errors;
@@ -13303,7 +13303,7 @@ function isHelper(node, knownHelpers) {
 	return false;
 }
 
-exports.helpers3 = function recursive(tree, knowHelpers, res) {
+exports.helpers = function recursive(tree, knowHelpers, res) {
 	var statements = tree.body || tree;
 	var knowns = knowHelpers;
 
