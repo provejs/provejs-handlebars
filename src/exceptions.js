@@ -84,6 +84,9 @@ exports.parser = function (e, html) {
 
 	e.message.replace(regex1, function (match, lineNum, code, indicator, message) {
 
+		// console.log('regex1');
+		// console.log(match);
+
 		var pos;
 		lineNum = +lineNum;
 		lineNum = lineNum - 1;
@@ -104,6 +107,9 @@ exports.parser = function (e, html) {
 		return '';
 	});
 	e.message.replace(regex2, function(match, message, lineNum, columnNum) {
+
+		// console.log('regex2');
+		// console.log(match)
 
 		lineNum = +lineNum;
 		lineNum = lineNum - 1;
