@@ -1,6 +1,6 @@
 {
   "name": "provejs-handlebars",
-  "version": "0.0.42",
+  "version": "0.0.43",
   "description": "Handlebars linter.",
   "main": "index.js",
   "scripts": {

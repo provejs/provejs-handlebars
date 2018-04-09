@@ -5,10 +5,12 @@ var Handlebars = require('handlebars');
 
 exports.ast = function(html) {
 	var ret;
+	var err;
 	try {
 		ret = Handlebars.parse(html);
 	} catch (e) {
-		ret = [Exceptions.parser(e, html)];
+		err = Exceptions.parser(e, html);
+		ret = [err];
 	}
 	return ret;
 };

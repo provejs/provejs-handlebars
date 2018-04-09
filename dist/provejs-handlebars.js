@@ -12644,6 +12644,7 @@ function getPos(lines, lineNum, code, indicator) {
 		? min + indicator.length - 1
 		: min + indicator.length - 4;
 
+	// todo: if (min === max) max = findMax(line, min); // find first ' ' or '}'
 	if (min === max) max++;
 
 	if (min === -1) {
@@ -12670,13 +12671,16 @@ exports.parser = function (e, html) {
 
 	e.message.replace(regex1, function (match, lineNum, code, indicator, message) {
 
+		// console.log('regex1');
+		// console.log(match);
+
 		var pos;
 		lineNum = +lineNum;
 		lineNum = lineNum - 1;
 		pos = getPos(lines, lineNum, code, indicator);
 
 		// console.log('pos:', pos);
-
+		parsed.type = 'EXCEPTION1';
 		parsed.start = {
 			line: lineNum,
 			column: pos.min
@@ -12687,14 +12691,19 @@ exports.parser = function (e, html) {
 		};
 		parsed.message = Messages.parser(message, code);
 		parsed.severity = 'error';
+
 		return '';
 	});
 	e.message.replace(regex2, function(match, message, lineNum, columnNum) {
+
+		// console.log('regex2');
+		// console.log(match)
 
 		lineNum = +lineNum;
 		lineNum = lineNum - 1;
 		columnNum = +columnNum;
 
+		parsed.type = 'EXCEPTION2';
 		parsed.start = {
 			line: lineNum,
 			column: columnNum
@@ -13177,10 +13186,12 @@ var Handlebars = require('handlebars');
 
 exports.ast = function(html) {
 	var ret;
+	var err;
 	try {
 		ret = Handlebars.parse(html);
 	} catch (e) {
-		ret = [Exceptions.parser(e, html)];
+		err = Exceptions.parser(e, html);
+		ret = [err];
 	}
 	return ret;
 };
