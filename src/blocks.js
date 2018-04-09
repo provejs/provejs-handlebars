@@ -21,13 +21,13 @@ function checkOpenBlock(block, lines) {
 	var regex = new RegExp('{{[\\s]{0,}' + block + '[\\s]{0,}');
 	// console.log('checkOpenBlock()');
 	// console.log('* block:', block);
-	// console.log('* regex:', regex);
 
 	lines.forEach(function(line, lineNum) {
 		if (issue) return false;
 		var column = line.search(regex);
 
 		if (column !== -1) {
+			column = column + '{{'.length;
 			issue = {
 				severity: 'error',
 				message: 'The {{' + block + '}} block helper requires a `#` before its name.',
@@ -38,7 +38,7 @@ function checkOpenBlock(block, lines) {
 				},
 				end: {
 					line: lineNum,
-					column: column - '{{'.length + block.length
+					column: column + block.length
 				}
 			};
 		}
