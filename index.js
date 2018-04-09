@@ -14,7 +14,7 @@ exports.verifySync = function (html, rules) {
 	if (!rules) rules = exports._configs;
 
 	var errors;
-	var ast = Parser.ast(html);
+	var ast = Parser.ast(html, rules);
 
 	// parser may not be able to convert to ast.
 	// if so return parser detected errors.
