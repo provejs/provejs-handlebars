@@ -1,6 +1,6 @@
 {
   "name": "provejs-handlebars",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "description": "Handlebars linter.",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,9 @@
     "lodash.includes": "^4.3.0",
     "lodash.isobject": "^3.0.2",
     "lodash.isundefined": "^3.0.1",
-    "lodash.keys": "^4.2.0"
+    "lodash.keys": "^4.2.0",
+    "lodash.padstart": "^4.6.1",
+    "lodash.sortby": "^4.7.0",
+    "lodash.sortedindexby": "^4.6.0"
   }
 }

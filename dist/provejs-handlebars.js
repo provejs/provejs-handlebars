@@ -432,7 +432,7 @@ exports.verifySync = function (html, rules) {
 	if (!rules) rules = exports._configs;
 
 	var errors;
-	var ast = Parser.ast(html);
+	var ast = Parser.ast(html, rules);
 
 	// parser may not be able to convert to ast.
 	// if so return parser detected errors.
@@ -457,7 +457,7 @@ exports._configs = {
 
 
 }).call(this,require('_process'))
-},{"./src/helpers":55,"./src/parser":57,"_process":3}],5:[function(require,module,exports){
+},{"./src/helpers":56,"./src/parser":58,"_process":3}],5:[function(require,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 1.0.1 Copyright (c) 2011-2016, The Dojo Foundation All Rights Reserved.
@@ -12586,6 +12586,75 @@ define(function (require, exports, module) {
 },{"amdefine":5}],53:[function(require,module,exports){
 'use strict';
 
+// var Handlebars = require('handlebars');
+// var includes = require('lodash.includes');
+// var isFunction = Handlebars.Utils.isFunction;
+// var isUndefined = require('lodash.isundefined');
+var forOwn = require('lodash.forown');
+
+function getBlockNames(rules) {
+	var names = [];
+	forOwn(rules.helpers, function(helper, name) {
+		if (helper && helper.block) names.push(name);
+	});
+	return names;
+}
+
+
+function checkOpenBlock(block, lines) {
+
+	var issue;
+	var regex = new RegExp('{{[\\s]{0,}' + block + '[\\s]{0,}');
+	// console.log('checkOpenBlock()');
+	// console.log('* block:', block);
+
+	lines.forEach(function(line, lineNum) {
+		if (issue) return false;
+		var column = line.search(regex);
+
+		if (column !== -1) {
+			column = column + '{{'.length;
+			issue = {
+				severity: 'error',
+				message: 'The {{' + block + '}} block helper requires a `#` before its name.',
+				type: 'BLOCK-OPEN-WRONG',
+				start: {
+					line: lineNum,
+					column: column
+				},
+				end: {
+					line: lineNum,
+					column: column + block.length
+				}
+			};
+		}
+	});
+	// if (issue) console.log('* issue:', issue);
+	return issue;
+}
+
+// check for opening blocks which are missing '#'
+function checkOpenBlocks(blocks, html) {
+	var issues = [];
+	var lines = html.split('\n');
+	blocks.forEach(function(block) {
+		var issue = checkOpenBlock(block, lines);
+		if (issue) issues.push(issue);
+	});
+	return issues;
+}
+
+exports.lint = function(html, rules) {
+	var blocks = getBlockNames(rules);
+	var issues = checkOpenBlocks(blocks, html);
+	return issues;
+};
+
+
+
+},{"lodash.forown":37}],54:[function(require,module,exports){
+'use strict';
+
 var regex1 = /^Parse error on line ([0-9]+)+:\n([^\n].*)\n([^\n].*)\n(.*)$/;
 var regex2 = /^(.*) - ([0-9]+):([0-9]+)$/;
 var Messages = require('./messages');
@@ -12719,7 +12788,7 @@ exports.parser = function (e, html) {
 	return parsed;
 };
 
-},{"./messages":56}],54:[function(require,module,exports){
+},{"./messages":57}],55:[function(require,module,exports){
 'use strict';
 
 var Handlebars = require('handlebars');
@@ -12774,7 +12843,7 @@ exports.lint = function(rule, param) {
 	}
 };
 
-},{"handlebars":35,"lodash.includes":38,"lodash.isundefined":40}],55:[function(require,module,exports){
+},{"handlebars":35,"lodash.includes":38,"lodash.isundefined":40}],56:[function(require,module,exports){
 'use strict';
 
 var Handlebars = require('handlebars');
@@ -13050,7 +13119,7 @@ exports.configs = {
 	}
 };
 
-},{"./formats":54,"./messages":56,"./selectors":58,"./walker":59,"handlebars":35,"lodash.forown":37,"lodash.isobject":39,"lodash.keys":41}],56:[function(require,module,exports){
+},{"./formats":55,"./messages":57,"./selectors":59,"./walker":60,"handlebars":35,"lodash.forown":37,"lodash.isobject":39,"lodash.keys":41}],57:[function(require,module,exports){
 'use strict';
 
 function word(val) {
@@ -13115,7 +13184,7 @@ exports.parser = function (str, code) {
 	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'") {
 		str = 'Empty or incomplete Handlebars expression ' + near(code) + '.';
 	} else if (str === "Expecting 'EOF', got 'OPEN_ENDBLOCK'") {
-		str = 'Invalid closing block, check opening block ' + near(code) + '.';
+		str = 'Invalid closing block, check open/close blocks ' + near(code) + '.';
 	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'") {
 		str = 'Empty expression ' + near(code) + '.';
 	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_UNESCAPED'") {
@@ -13178,25 +13247,28 @@ exports.format = function(message, rule, params) {
 		.replace('@param.names', names);
 };
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 var Exceptions = require('./exceptions');
 var Handlebars = require('handlebars');
+var Blocks = require('./blocks');
 
-exports.ast = function(html) {
+exports.ast = function(html, rules) {
 	var ret;
-	var err;
+	var errParser;
+	var errBlocks;
 	try {
 		ret = Handlebars.parse(html);
 	} catch (e) {
-		err = Exceptions.parser(e, html);
-		ret = [err];
+		errParser = Exceptions.parser(e, html);
+		errBlocks = Blocks.lint(html, rules);
+		ret = (errBlocks.length)? errBlocks : [errParser];
 	}
 	return ret;
 };
 
-},{"./exceptions":53,"handlebars":35}],58:[function(require,module,exports){
+},{"./blocks":53,"./exceptions":54,"handlebars":35}],59:[function(require,module,exports){
 'use strict';
 
 var find = require('lodash.find');
@@ -13301,7 +13373,7 @@ exports.positional = function(astHelper, num) {
 	return params[num];
 };
 
-},{"lodash.find":36}],59:[function(require,module,exports){
+},{"lodash.find":36}],60:[function(require,module,exports){
 'use strict';
 
 var Handlebars = require('handlebars');

@@ -101,7 +101,7 @@ describe('Testing blocks', function () {
 			var html = '{{foo}}{{/foo}}';
 			var errors = Linter.verifySync(html);
 			var error = errors[0];
-			var message = "Invalid closing block, check opening block near `{{foo}}{{/foo}}`.";
+			var message = "Invalid closing block, check open/close blocks near `{{foo}}{{/foo}}`.";
 			Assert.equal(error.message, message);
 			Assert.equal(error.type, 'EXCEPTION1');
 		});

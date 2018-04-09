@@ -62,7 +62,7 @@ exports.parser = function (str, code) {
 	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'EOF'") {
 		str = 'Empty or incomplete Handlebars expression ' + near(code) + '.';
 	} else if (str === "Expecting 'EOF', got 'OPEN_ENDBLOCK'") {
-		str = 'Invalid closing block, check opening block ' + near(code) + '.';
+		str = 'Invalid closing block, check open/close blocks ' + near(code) + '.';
 	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'") {
 		str = 'Empty expression ' + near(code) + '.';
 	} else if (str === "Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE_UNESCAPED'") {
