@@ -4,6 +4,8 @@ var regex1 = /^Parse error on line ([0-9]+)+:\n([^\n].*)\n([^\n].*)\n(.*)$/;
 var regex2 = /^(.*) - ([0-9]+):([0-9]+)$/;
 var Messages = require('./messages');
 
+// todo: look into this issue https://github.com/wycats/handlebars.js/issues/1305
+
 function getPos(lines, lineNum, code, indicator) {
 
 	var line, min, max, dots = false, prefix = 0;
