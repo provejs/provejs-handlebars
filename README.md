@@ -318,17 +318,6 @@ var config = {
 
 # Contributing
 
-Linting:
-```bash
-grunt
-```
-
-Building for use in browser:
-```bash
-npm run build
-```
-
-Test:
-```bash
-npm test
-```
+- Linting: `npm run lint`
+- Building: `npm run build`
+- Testing: `npm test`

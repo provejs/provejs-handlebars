@@ -1,6 +1,6 @@
 {
   "name": "provejs-handlebars",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "description": "Handlebars linter.",
   "main": "index.js",
   "scripts": {
@@ -22,10 +22,7 @@
     "@ravdocs/eslint": "^1.0.9",
     "colors": "^1.2.1",
     "eslint": "^6.1.0",
-    "grunt": "^1.0.1",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-eslint": "^20.1.0",
-    "mocha": "^5.0.0"
+    "mocha": "^6.2.0"
   },
   "dependencies": {
     "handlebars": "^4.0.11",
