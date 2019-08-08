@@ -47,6 +47,7 @@ function getOpens(blocks, lines) {
 	// console.log();
 	return founds;
 }
+
 function getElses(blocks, lines) {
 	var founds = [];
 	var regex = new RegExp('{{[\\s]{0,}else[\\s]{0,}', 'g');
@@ -76,6 +77,7 @@ function getElses(blocks, lines) {
 	// console.log();
 	return founds;
 }
+
 function getCloses(blocks, lines) {
 	var founds = [];
 	var regex = new RegExp('{{/[\\s]{0,}(' + blocks.join('|') + ')[\\s]{0,}', 'g');
@@ -132,5 +134,3 @@ exports.stack = function(html, rules) {
 	});
 	return stack;
 };
-
-

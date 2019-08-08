@@ -63,5 +63,3 @@ exports.lint = function(html, rules) {
 	var issues = checkOpenBlocks(blocks, html);
 	return issues;
 };
-
-

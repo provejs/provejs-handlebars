@@ -41,7 +41,7 @@ function isClose(item, block) {
 }
 
 function isBlock(item, block) {
-	return item.name === block || item.name  ===  '/' + block;
+	return item.name === block || item.name === '/' + block;
 }
 
 function isIgnore(item) {
@@ -57,7 +57,7 @@ function collapseBlock(block, stack) {
 
 
 	stack.forEach(function(item, index) {
-		var name = item.name;
+		// var name = item.name;
 		var isOpenBlock = !isIgnore(item) && isOpen(item) && isBlock(item, block);
 		if (isOpenBlock) collapseBlockItem(block, index, stack);
 	});

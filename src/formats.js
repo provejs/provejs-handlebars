@@ -12,8 +12,9 @@ function getValueType(param) {
 		if (param.value.type === 'PathExpression') return 'variable';
 		if (param.value.type === 'StringLiteral') return 'string';
 		if (param.value.type === 'NumberLiteral') return 'number';
+	} else {
+		return undefined;
 	}
-	return;
 }
 
 function getValue(param) {
@@ -23,8 +24,9 @@ function getValue(param) {
 	} else if (param.data && param.value) {
 		if (param.value.type === 'StringLiteral') return param.value;
 		if (param.value.type === 'NumberLiteral') return param.value;
+	} else {
+		return undefined;
 	}
-	return;
 }
 
 exports.lint = function(rule, param) {

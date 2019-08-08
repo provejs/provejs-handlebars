@@ -22,7 +22,7 @@ function getPos(lines, lineNum, code, indicator) {
 		pos.min = 0;
 		pos.max = 3;
 		return pos;
-	} else  if (code === '{{') {
+	} else if (code === '{{') {
 		pos.min = 0;
 		pos.max = 2;
 		return pos;

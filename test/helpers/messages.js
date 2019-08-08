@@ -87,8 +87,6 @@ describe('Testing blocks', function () {
 			Assert.equal(error.type, 'EXCEPTION1');
 		});
 
-
-
 		it('{{#foo}}{{/bar}}', function () {
 			var html = '{{#foo}}{{/bar}}';
 			var errors = Linter.verifySync(html);

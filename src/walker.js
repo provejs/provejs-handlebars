@@ -10,7 +10,7 @@ function isHelper(node, knownHelpers) {
 	return false;
 }
 
-exports.helpers = function recursive(tree, knowHelpers, res) {
+exports.helpers = function recursive(tree, knowHelpers, res) { // eslint-disable-line func-name-matching
 	var statements = tree.body || tree;
 	var knowns = knowHelpers;
 

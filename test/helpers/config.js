@@ -16,7 +16,6 @@ describe('Linting helper params bogus configs', function () {
 	});
 	it('misconfig helpers array', function () {
 		var html = '{{helper1 param1=42}}';
-
 		var actual = Linter.verifySync(html, {helpers: []});
 		Assert.equal(actual.length, 0);
 	});

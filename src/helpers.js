@@ -86,7 +86,16 @@ function hasMissingParams(rule, params) {
 }
 
 function hasWrongBlock(astHelper, rule) {
-	return rule.block !== astHelper.block;
+	var wrong = false;
+
+	if (rule.block && rule.inline) {
+		// helper as both block AND inline expression
+		wrong = false;
+	} else {
+		// helper as either block OR inline expression
+		wrong = rule.block !== astHelper.block;
+	}
+	return wrong;
 }
 
 function lintHelperParam(astHelper, rule, ruleKey) {
@@ -106,8 +115,6 @@ function lintHelperParam(astHelper, rule, ruleKey) {
 	if (error) return error;
 	if (rule.required === false) return;
 	if (rule.required === 0) return;
-
-
 
 	// lint block and non-block helpers
 	if (isWrongBlock) {
@@ -147,6 +154,7 @@ function lintHelper(astHelper, objRules) {
 	var error;
 	var params = objRules.params;
 	var block = objRules.block || false;
+	var inline = objRules.inline || false;
 
 	if (isFunction(params)) {
 		error = lintHelperCallback(astHelper, params);
@@ -158,6 +166,7 @@ function lintHelper(astHelper, objRules) {
 			if (!rule.helper) rule.helper = astHelper.name;
 			if (!rule.severity) rule.severity = 'error';
 			rule.block = block;
+			rule.inline = inline;
 
 			if (error) return false; // break loop
 			error = lintHelperParam(astHelper, rule, ruleKey);
@@ -194,6 +203,7 @@ exports.register = function(name, config) {
 exports.configs = {
 	if: {
 		block: true,
+		inline: false,
 		params: {
 			value: {
 				selector: 'positional(0)',
@@ -209,6 +219,7 @@ exports.configs = {
 	},
 	lookup: {
 		block: false,
+		inline: true,
 		params: {
 			haystack: {
 				selector: 'positional(0)',
@@ -228,8 +239,9 @@ exports.configs = {
 	},
 	each: {
 		block: true,
+		inline: false,
 		params: {
-			'array': {
+			array: {
 				selector: 'positional(0)',
 				required: 1
 			},
@@ -243,6 +255,7 @@ exports.configs = {
 	},
 	unless: {
 		block: true,
+		inline: false,
 		params: {
 			value: {
 				selector: 'positional(0)',
@@ -258,6 +271,7 @@ exports.configs = {
 	},
 	with: {
 		block: true,
+		inline: false,
 		params: {
 			value: {
 				selector: 'positional(0)',

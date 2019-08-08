@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
+    "lint": "node_modules/.bin/eslint --rulesdir node_modules/@ravdocs/eslint/rules .",
     "build": "browserify index.js -s HandlebarsProve> dist/provejs-handlebars.js"
   },
   "repository": {
@@ -18,8 +19,9 @@
   },
   "homepage": "https://github.com/provejs/provejs-handlebars#readme",
   "devDependencies": {
+    "@ravdocs/eslint": "^1.0.9",
     "colors": "^1.2.1",
-    "@esscorp/eslint": "^2.2.4",
+    "eslint": "^6.1.0",
     "grunt": "^1.0.1",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-eslint": "^20.1.0",

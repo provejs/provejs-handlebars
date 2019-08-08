@@ -1,7 +1,5 @@
 # provejs-handlebars
 
-> Under active development.
-
 Linting templates with Handlebars syntax. Supports:
 - Configurable Handlebars helpers and params to support built-in and your helpers and their params.
   - **Named:** the helper is using named parameters.
@@ -146,7 +144,10 @@ When the params config is an object:
 - required (**boolean**|**number**): required indicator of if the number of params that are required.
 - message (**string**): custom linter message.
 - severity (**string**): optional severity of the linting error. Either 'error' or 'warning'. Defaults to 'error'.
-- block (**boolean**): optional indicator of if the helper should be a block helper or not. Defaults to false;
+- block (**boolean**): helper can be a block helper.
+- inline (**boolean**): helper can be a inline helper.
+
+A helper can be either a block helper, inline helper or both.
 
 ## Example: one or more positional params
 ```hbs
