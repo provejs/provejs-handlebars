@@ -321,3 +321,4 @@ var config = {
 - Linting: `npm run lint`
 - Building: `npm run build`
 - Testing: `npm test`
+- Publish (owner): `npm publish`
