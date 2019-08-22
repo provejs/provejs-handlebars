@@ -31,7 +31,7 @@ describe('Testing blocks', function () {
 				}
 			}
 		};
-		var html = "{{poly param1='xxx'}}";
+		var html = "{{poly param1='xxx'}}{{#poly param1='xxx'}}{{/poly}}";
 		var actual = Linter.verifySync(html, config);
 		Assert.equal(actual.length, 0);
 	});
