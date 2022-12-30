@@ -22,7 +22,7 @@
     "@ravdocs/eslint": "^1.0.9",
     "colors": "^1.2.1",
     "eslint": "^6.1.0",
-    "mocha": "^6.2.0"
+    "mocha": "^10.2.0"
   },
   "dependencies": {
     "handlebars": "^4.0.11",
